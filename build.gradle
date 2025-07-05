@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
 }
 
 group = 'com.example'
@@ -36,9 +37,38 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    testRuntimeOnly 'com.h2database:h2'
+    testImplementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+def jacocoExcludePatterns = [
+        'com/ixi_U/IxiUApplication.class',
+        '**/common/**',
+        '**/exception/**',
+        '**/dto/**',
+        '**/config/**',
+        '**/test/**'
+]
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, excludes: jacocoExcludePatterns)
+    }))
+}
+
+clean {
+    delete file('src/main/generated')
 }
