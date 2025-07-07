@@ -10,13 +10,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "follows")
+@Table(                     //중복된 팔로우를 해결할 수 있다.
+        name = "follows",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"follower_user_id", "following_user_id"})
+)
 @Getter
 @Builder
 @NoArgsConstructor

@@ -27,7 +27,7 @@ public class FcmToken {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "fcm", nullable = false, length = 255)
+    @Column(name = "fcm", nullable = false, length = 4096)
     private String fcm;
 
     @ManyToOne(fetch = FetchType.LAZY)
