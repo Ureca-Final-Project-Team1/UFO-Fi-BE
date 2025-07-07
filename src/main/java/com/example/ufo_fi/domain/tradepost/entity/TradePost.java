@@ -58,7 +58,7 @@ public class TradePost {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    @Column(name = "report_count", nullable = false, columnDefinition = "INT DEFAULT 1")
+    @Column(name = "report_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer reportCount;
 
     @Enumerated(EnumType.STRING)
