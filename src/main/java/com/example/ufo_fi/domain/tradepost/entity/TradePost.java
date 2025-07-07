@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -37,8 +38,9 @@ public class TradePost {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "mobile_data_type", nullable = false, length = 255)  //MySQL에서 256부터 2Byte를 사용하기에 255를 써준다.
-    private String mobileDataType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mobile_data_type", nullable = false)  //MySQL에서 256부터 2Byte를 사용하기에 255를 써준다.
+    private MobileDataType mobileDataType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "carrier", nullable = false)

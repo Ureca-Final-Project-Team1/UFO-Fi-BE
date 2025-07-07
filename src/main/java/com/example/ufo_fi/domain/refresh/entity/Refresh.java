@@ -32,10 +32,10 @@ public class Refresh {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Refresh of(Long userId, String token){
+    public static Refresh of(User user, String token){
         return Refresh.builder()
-                .id(userId)
                 .token(token)
+                .user(user)
                 .build();
     }
 }
