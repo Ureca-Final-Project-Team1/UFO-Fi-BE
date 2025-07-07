@@ -1,0 +1,9 @@
+package com.example.ufo_fi.domain.trade_post;
+
+public enum PostStatus {
+    SELLING,        // 판매 중
+    SOLD_OUT,       // 판매 완료
+    REPORTED,       // 신고 완료
+    EXPIRED,        // 판매 종료
+    DELETED         // 삭제
+}
