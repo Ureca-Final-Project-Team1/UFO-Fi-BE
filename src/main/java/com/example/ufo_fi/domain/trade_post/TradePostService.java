@@ -12,14 +12,10 @@ public class TradePostService {
     private final TradePostRepository tradePostRepository;
 
 
-    /**
-     * 1. 유저 상세 정보가 없으면 exception을 터트린다.
-     * 2. id 반환
-     */
     @Transactional
     public TradePostCommonResponse save(TradePostCreateRequest tradePostCreateRequest, User user) {
 
-        TradePost tradePost = tradePostCreateRequest.toTradePost(user);
+        TradePost tradePost = TradePost.from(tradePostCreateRequest, user);
         TradePost savedTradePost = tradePostRepository.save(tradePost);
 
         return new TradePostCommonResponse(savedTradePost.getId());

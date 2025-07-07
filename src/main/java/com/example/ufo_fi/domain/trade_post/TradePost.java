@@ -68,15 +68,14 @@ public class TradePost {
     @Column(name = "created_at", updatable = false)
     private LocalDate createdAt;
 
-    public static TradePost of(User user, CarrierType carrier, MobileDataType mobileDataType,
-        int capacity, String title, int price) {
+    public static TradePost from(TradePostCreateRequest request, User user) {
         return TradePost.builder()
             .user(user)
-            .carrier(carrier)
-            .mobileDataType(mobileDataType)
-            .sellMobileDataCapacityGb(capacity)
-            .title(title)
-            .price(price)
+            .carrier(request.getCarrierType())
+            .mobileDataType(request.getMobileDataType())
+            .sellMobileDataCapacityGb(request.getCapacity())
+            .title(request.getTitle())
+            .price(request.getPrice())
             .reportCount(0)
             .postStatus(PostStatus.SELLING)
             .isUpdate(false)
