@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "fcm_token")
+@Table(name = "fcm_tokens")
 @Getter
 @Builder
 @NoArgsConstructor

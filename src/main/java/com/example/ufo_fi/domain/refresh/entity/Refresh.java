@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.follow.entity;
+package com.example.ufo_fi.domain.refresh.entity;
 
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -8,30 +8,34 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "follows")
+@Table(name = "refresh")
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Follow {
+public class Refresh {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_user_id", nullable = false)
-    private User followerUser;
+    @Column(name = "token")
+    private String token;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_user_id", nullable = false)
-    private User followingUser;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public static Refresh of(Long userId, String token){
+        return Refresh.builder()
+                .id(userId)
+                .token(token)
+                .build();
+    }
 }
