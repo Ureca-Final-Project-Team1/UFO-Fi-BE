@@ -6,16 +6,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "refresh")
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class Refresh {
     @Id
@@ -27,13 +30,13 @@ public class Refresh {
     private String token;
 
     @OneToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public static Refresh of(Long userId, String token){
+    public static Refresh of(User user, String token){
         return Refresh.builder()
-                .id(userId)
                 .token(token)
+                .user(user)
                 .build();
     }
 }

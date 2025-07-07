@@ -33,7 +33,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest); //1
         OAuth2Response oAuth2Response = OAuth2Response.of(userRequest.getClientRegistration(), oAuth2User);  //2
-        User existUser = userRepository.findByKakaoId(oAuth2Response.getProviderId());  //3
+        User existUser = userRepository.findByKakaoId(oAuth2Response.getProviderId().toString());  //3
         if(existUser != null) return login(existUser);  //4-1
         return signup(oAuth2Response);  //4-2
     }

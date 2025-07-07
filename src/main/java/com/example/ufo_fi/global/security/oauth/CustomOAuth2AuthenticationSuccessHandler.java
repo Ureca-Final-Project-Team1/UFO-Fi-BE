@@ -1,5 +1,7 @@
 package com.example.ufo_fi.global.security.oauth;
 
+import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
 import com.example.ufo_fi.global.security.principal.CustomOAuth2User;
 import com.example.ufo_fi.global.security.refresh.entity.Refresh;
@@ -25,6 +27,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
     private final RefreshUtil refreshUtil;
+    private final UserRepository userRepository;
     private final RefreshRepository refreshRepository;
 
     /**
@@ -58,7 +61,8 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
     //리프레시 토큰 저장
     private void saveRefreshToken(CustomOAuth2User customOAuth2User, String refresh) {
-        refreshRepository.save(Refresh.of(customOAuth2User.getId(), refresh));
+        User userProxy = userRepository.getReferenceById(customOAuth2User.getId());
+        refreshRepository.save(Refresh.of(userProxy, refresh));
     }
 
     //응답 헤더에 jwt와 refresh 토큰 담기(Authorization, refresh-token이 header의 키이다.)
