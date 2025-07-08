@@ -6,6 +6,6 @@ import lombok.Getter;
 public enum Role {
     ROLE_USER,
     ROLE_ADMIN,
-    ROLE_NO_INFO    //NO_INFO를 가진 사용자일 경우 온보딩으로 redirect 해줘야함
+    ROLE_NO_INFO,    //NO_INFO인 사용자일 경우 온보딩으로 redirect 해줘야함
     ;
 }
