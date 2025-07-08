@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.user.entity;
 
+import com.example.ufo_fi.domain.onboard.dto.request.SignupReq;
 import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import jakarta.persistence.Column;
@@ -59,10 +60,16 @@ public class User {
     @JoinColumn(name = "user_plan_id")
     private UserPlan userPlan;
 
+    public void signup(SignupReq signupReq) {
+        this.name = signupReq.getName();
+        this.phoneNumber = signupReq.getPhoneNumber();
+    }
+
     /*
      * 첫 회원가입 시 사용하는 정적 팩터리 메서드
      * role은 ROLE_NO_INFO 이다.
      */
+
     public static User of(OAuth2Response oAuth2Response, Role noInfo){
         return User.builder()
                 .email(oAuth2Response.getEmail())

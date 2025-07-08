@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.userplan.entity;
 
+import com.example.ufo_fi.domain.onboard.dto.request.UserPlanCreateReq;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.user.entity.User;
@@ -7,13 +8,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,7 +49,18 @@ public class UserPlan {
     @Column(name = "sellable_data_amount")
     private Integer sellableDataAmount;
 
-    @OneToMany(mappedBy = "userPlan")
-    @Builder.Default
-    private List<User> users = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
+    private User user;
+
+    public static UserPlan of(UserPlanCreateReq userPlanCreateReq, User user){
+        return UserPlan.builder()
+                .carrier(userPlanCreateReq.getCarrier())
+                .planName(userPlanCreateReq.getPlanName())
+                .mobileDataType(userPlanCreateReq.getMobileDataType())
+                .sellMobileDataCapacityGb(userPlanCreateReq.getSellMobileDataCapacityGb())
+                .sellableDataAmount(userPlanCreateReq.getSellMobileDataCapacityGb())    //초기 세팅은 sellMobileDataCapacityGB와 같다.
+                .user(user)
+                .build();
+    }
 }
