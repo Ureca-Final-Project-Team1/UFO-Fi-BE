@@ -2,6 +2,7 @@ package com.example.ufo_fi.global.security.refresh.service;
 
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
+import com.example.ufo_fi.global.security.oauth.CookieUtil;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.global.security.refresh.RefreshUtil;
 import com.example.ufo_fi.global.security.refresh.dto.response.RefreshReissueRes;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class RefreshService {
     private final JwtUtil jwtUtil;
     private final RefreshUtil refreshUtil;
+    private final CookieUtil cookieUtil;
 
     /**
      * 토큰 재발급
@@ -34,13 +36,17 @@ public class RefreshService {
      * 1. XSS 공부 후 HTTPONLY + COOKIE에 리프레시 토큰을 저장하는 방식
      * 2. STATELESS 방식에서 STATEFUL 방식으로 업그레이드/ 리프레시 토큰 또한 갱신 가능
      */
-    public RefreshReissueRes reissueJwt(
-            DefaultUserPrincipal principal,
-            HttpServletRequest request,
-            HttpServletResponse response) {
+    public RefreshReissueRes reissueJwt(DefaultUserPrincipal principal, HttpServletRequest request, HttpServletResponse response) {
         String refresh = request.getHeader("refresh-token");
         refreshUtil.validateRefresh(refresh);
-        response.addHeader("Authorization", jwtUtil.generateJwt(principal.getId(), principal.getRole()));
+
+        cookieUtil.setResponseBasicCookie(
+                "Authorization",
+                jwtUtil.generateJwt(principal.getId(), principal.getRole()),
+                506000,
+                response
+        );
+
         return RefreshReissueRes.from(true);
     }
 }

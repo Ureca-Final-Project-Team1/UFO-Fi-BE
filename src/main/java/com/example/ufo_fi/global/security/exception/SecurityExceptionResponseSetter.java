@@ -1,5 +1,6 @@
 package com.example.ufo_fi.global.security.exception;
 
+import com.example.ufo_fi.global.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,30 +14,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SecurityExceptionResponseSetter {
-    private static final String IDENTITY = "security : ";
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     private static final String CODE = "code";
     private static final String MESSAGE = "message";
+    private static final String IDENTITY = "security ";
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    //CustomAuthenticationEntryPoint에 사용됨
-    public void setResponse(HttpServletResponse response, HttpStatus httpStatus, Exception authException) throws IOException {
+    public void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setContentType(CONTENT_TYPE);
-        response.setStatus(httpStatus.value());
-        setExceptionBody(response, httpStatus, authException.getMessage());
-    }
-
-    //CustomAuthenticationEntryPoint에 사용됨
-    public void setResponse(HttpServletResponse response, HttpStatus httpStatus, String message) throws IOException {
-        response.setContentType(CONTENT_TYPE);
-        response.setStatus(httpStatus.value());
-        setExceptionBody(response, httpStatus, message);
-    }
-
-    private void setExceptionBody(HttpServletResponse response, HttpStatus httpStatus, String message) throws IOException {
-        Map<Object, Object> errorBody = new HashMap<>();
-        errorBody.put(CODE, httpStatus.value());
-        errorBody.put(MESSAGE, IDENTITY + message);
-        objectMapper.writeValue(response.getWriter(), errorBody);
+        response.setStatus(errorCode.getStatus().value());
+        Map<String, Object> body = new HashMap<>();
+        body.put(CODE, errorCode.getStatus().value());
+        body.put(MESSAGE, IDENTITY + errorCode.getMessage());
+        objectMapper.writeValue(response.getWriter(), body);
     }
 }

@@ -28,7 +28,7 @@ public class DefaultUserPrincipal implements UserPrincipal {
     //타입 파싱은 암묵적으로 각 필드와 동일하다고 가정한다.(타입 체크 생략. 후에 리팩토링 시 추가 예정)
     public static DefaultUserPrincipal from(Claims claims){
         return DefaultUserPrincipal.builder()
-                .id((Long) claims.get("id"))
+                .id(Long.parseLong(claims.get("id").toString()))
                 .role(Role.valueOf((String) claims.get("role")))
                 .build();
     }

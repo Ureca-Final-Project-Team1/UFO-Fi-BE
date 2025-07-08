@@ -26,6 +26,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
     private final RefreshUtil refreshUtil;
     private final UserRepository userRepository;
     private final RefreshRepository refreshRepository;
@@ -42,11 +43,11 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         String jwt = generateJwt(customOAuth2User);             //jwt 생성
         String refresh = generateRefresh(customOAuth2User);     //refresh token 생성
         saveRefreshToken(customOAuth2User, refresh);            //리프레시 토큰을 저장
+        setCookieJwt(jwt, response);                            //jwt 토큰 쿠키 저장
+        setCookieRefresh(refresh, response);                    //refresh 토큰 쿠키 저장
 
         log.info("JWT {}", jwt);
         log.info("Refresh-Token {}", refresh);
-
-        setResponseHeader(response, jwt, refresh);
     }
 
     //jwt 토큰 생성
@@ -65,9 +66,13 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         refreshRepository.save(Refresh.of(userProxy, refresh));
     }
 
-    //응답 헤더에 jwt와 refresh 토큰 담기(Authorization, refresh-token이 header의 키이다.)
-    private void setResponseHeader(HttpServletResponse response, String jwt, String refreshToken) {
-        response.addHeader("Authorization", jwt);
-        response.addHeader("refresh-token", refreshToken);
+    //쿠키에 jwt 토큰 세팅
+    private void setCookieJwt(String jwt, HttpServletResponse response) {
+        cookieUtil.setResponseBasicCookie("Authorization", jwt, 50010000, response);
+    }
+
+    //쿠키에 리프레시 토큰 세팅
+    private void setCookieRefresh(String refresh, HttpServletResponse response){
+        cookieUtil.setResponseBasicCookie("Refresh", refresh, 604800000, response);
     }
 }

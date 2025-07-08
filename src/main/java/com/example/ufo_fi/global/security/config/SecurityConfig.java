@@ -1,11 +1,10 @@
 package com.example.ufo_fi.global.security.config;
 
 import com.example.ufo_fi.domain.user.repository.UserRepository;
-import com.example.ufo_fi.global.security.exception.CustomAccessDeniedHandler;
-import com.example.ufo_fi.global.security.exception.CustomAuthenticationEntryPoint;
 import com.example.ufo_fi.global.security.exception.SecurityExceptionResponseSetter;
 import com.example.ufo_fi.global.security.jwt.JwtFilter;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
+import com.example.ufo_fi.global.security.oauth.CookieUtil;
 import com.example.ufo_fi.global.security.oauth.CustomOAuth2AuthenticationSuccessHandler;
 import com.example.ufo_fi.global.security.oauth.CustomOAuth2UserService;
 import com.example.ufo_fi.global.security.refresh.RefreshUtil;
@@ -33,11 +32,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     @Value("${cors.allowed-origin}")
     private String corsOrigin;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final RefreshUtil refreshUtil;
     private final JwtUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+    private final CookieUtil cookieUtil;
+    private final RefreshUtil refreshUtil;
     private final UserRepository userRepository;
+    private final RefreshRepository refreshRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final SecurityExceptionResponseSetter securityExceptionResponseSetter;
 
     @Bean
@@ -65,33 +65,19 @@ public class SecurityConfig {
                         .requestMatchers("/refresh").permitAll()
                         .anyRequest().authenticated());
 
-        http    //예외 발생시 예외 처리 핸들러들
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint())
-                        .accessDeniedHandler(customAccessDeniedHandler()));
-
         return http.build();
     }
 
     @Bean
     public JwtFilter jwtFilter(){
-        return new JwtFilter(jwtUtil);
-    }
-
-    @Bean
-    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
-        return new CustomAuthenticationEntryPoint(securityExceptionResponseSetter);
-    }
-
-    @Bean
-    public AccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler(securityExceptionResponseSetter);
+        return new JwtFilter(jwtUtil, cookieUtil);
     }
 
     @Bean
     public CustomOAuth2AuthenticationSuccessHandler customOAuth2SuccessHandler() {
         return new CustomOAuth2AuthenticationSuccessHandler(
                 jwtUtil,
+                cookieUtil,
                 refreshUtil,
                 userRepository,
                 refreshRepository

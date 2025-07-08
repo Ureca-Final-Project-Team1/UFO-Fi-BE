@@ -1,6 +1,8 @@
 package com.example.ufo_fi.global.security.jwt;
 
 import com.example.ufo_fi.domain.user.entity.Role;
+import com.example.ufo_fi.global.security.exception.SecurityErrorCode;
+import com.example.ufo_fi.global.security.exception.SecurityExceptionResponseSetter;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.global.security.principal.PrincipalKey;
 import io.jsonwebtoken.Claims;
@@ -9,6 +11,9 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +41,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
+    private final SecurityExceptionResponseSetter securityExceptionResponseSetter;
+
     @Value("${jwt.secret}")
     private String secretKey;
-
     @Value("${jwt.access-token-validity-ms}")
     private long jwtTokenValidityMs;
     private SecretKey key;
@@ -91,43 +97,38 @@ public class JwtUtil {
     /**
      * jwt 토큰을 검사한다.
      * 1.Authorization 헤더에 값이 있는지 검증
-     * 2.Authorization 헤더에 "Bearer "가 붙어있는지 검증
-     * 3.jwt를 헤더에서 추출(Bearer를 뺀 순수 jwt)
-     * 4.토큰 만료와, 유효성 검사(with key)
+     * 2.jwt를 헤더에서 추출(Bearer를 뺀 순수 jwt)
+     * 3.토큰 만료와, 유효성 검사(with key)
      */
-    public void validate(String authorization) throws AuthenticationException {
-        validateNotNullAuthorization(authorization);        // 1
-        validateBearer(authorization);                      // 2
-        String jwt = extractJwt(authorization);             // 3
-        validateJwt(jwt);                                   // 4
+    public void validate(Cookie cookie, HttpServletResponse response) throws AuthenticationException, IOException {
+        validateNotNullAuthorization(cookie, response);               // 1
+        String jwt = extractJwt(cookie, response);                    // 3
+        validateJwt(jwt, response);                                   // 4
     }
 
     // 1.Authorization 헤더에 값이 있는지 검증
-    private void validateNotNullAuthorization(String authorization) throws AuthenticationException {
-        if(authorization == null){
-            throw new AuthenticationCredentialsNotFoundException("헤더에 Authorization이 없습니다.");
+    private void validateNotNullAuthorization(Cookie cookie, HttpServletResponse response)
+            throws AuthenticationException, IOException {
+        if(cookie == null){
+            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.AUTHORIZATION_COOKIE_NOT_FOUND);
+            throw new AuthenticationCredentialsNotFoundException("쿠키에 Authorization이 없습니다.");
         }
     }
 
-    // 2.Authorization 헤더에 "Bearer "가 붙어있는지 검증
-    private void validateBearer(String jwt) {
-        if(jwt.startsWith("Bearer ")){
-            throw new AuthenticationCredentialsNotFoundException("Authorization 헤더 값은 Bearer 를 포함해야 합니다.");
-        }
+    // 2.jwt를 헤더에서 추출(Bearer를 뺀 순수 jwt)
+    private String extractJwt(Cookie cookie, HttpServletResponse response) {
+        return cookie.getValue();
     }
 
-    // 3.jwt를 헤더에서 추출(Bearer를 뺀 순수 jwt)
-    private String extractJwt(String authorization) {
-        return authorization.replace("Bearer ", "").trim();
-    }
-
-    // 4.토큰 만료와, 유효성 검사(with key)
-    private void validateJwt(String jwt) {
+    // 3.토큰 만료와, 유효성 검사(with key)
+    private void validateJwt(String jwt, HttpServletResponse response) throws IOException {
         try{
             Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt).getPayload();
         }catch (ExpiredJwtException e){
+            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_EXPIRED);
             throw new AuthenticationServiceException("JWT 토큰이 만료되었습니다.");
         }catch (JwtException e){
+            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_INVALID);
             throw new AuthenticationServiceException("JWT 토큰 형식이 이상합니다.");
         }
     }

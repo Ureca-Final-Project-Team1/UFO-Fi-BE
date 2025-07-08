@@ -1,5 +1,6 @@
 package com.example.ufo_fi.global.security.jwt;
 
+import com.example.ufo_fi.global.security.oauth.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+         String uri = request.getRequestURI();
+         return uri.startsWith("/login") || uri.startsWith("/oauth2") || uri.startsWith("/auth") || uri.startsWith("/refresh");
+    }
 
     /**
      * JWT 필터의 동작
@@ -32,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws AuthenticationException, ServletException, IOException {
-        jwtUtil.validate(request.getHeader("Authorization"));
+        jwtUtil.validate(cookieUtil.getCookie("Authorization", request), response);
         String jwt = resolveToken(request);
         setSecurityContextHolder(jwt);
         filterChain.doFilter(request, response);
@@ -40,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     //request의 header에서 jwt를 빼온다.
     private String resolveToken(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
+        String authorization = cookieUtil.getCookie("Authorization", request).getValue();
         return authorization.replace("Bearer ", "").trim();
     }
 
