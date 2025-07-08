@@ -1,9 +1,9 @@
 package com.example.ufo_fi.global.security.config;
 
 import com.example.ufo_fi.domain.user.repository.UserRepository;
-import com.example.ufo_fi.global.security.exception.SecurityExceptionResponseSetter;
 import com.example.ufo_fi.global.security.jwt.JwtFilter;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
+import com.example.ufo_fi.global.security.noinfo.NoInfoRoleFilter;
 import com.example.ufo_fi.global.security.oauth.CookieUtil;
 import com.example.ufo_fi.global.security.oauth.CustomOAuth2AuthenticationSuccessHandler;
 import com.example.ufo_fi.global.security.oauth.CustomOAuth2UserService;
@@ -18,9 +18,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,7 +37,6 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final RefreshRepository refreshRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final SecurityExceptionResponseSetter securityExceptionResponseSetter;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -71,6 +69,11 @@ public class SecurityConfig {
     @Bean
     public JwtFilter jwtFilter(){
         return new JwtFilter(jwtUtil, cookieUtil);
+    }
+
+    @Bean
+    public NoInfoRoleFilter noInfoRoleFilter(){
+        return new NoInfoRoleFilter();
     }
 
     @Bean

@@ -31,7 +31,7 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "kakao_id", nullable = false)
+    @Column(name = "kakao_id")
     private String kakaoId;
 
     @Column(name = "name")
@@ -46,11 +46,11 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_active", columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isActive;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private Role role;
 
     @Column(name = "profile_photo_url")
