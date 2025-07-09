@@ -11,13 +11,19 @@ public class ResponseBody<T> {
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T data;
+    private T content;
 
-    //예외가 없을 시 사용되는 생성자
-    public ResponseBody(T data) {
+    //성공 시 생성자
+    public ResponseBody(T content) {
         this.statusCode = HttpStatus.OK;
         this.message = HttpStatus.OK.getReasonPhrase();
-        this.data = data;
+        this.content = content;
+    }
+
+    //No-Content 생성자
+    public ResponseBody(){
+        this.statusCode = HttpStatus.NO_CONTENT;
+        this.message = HttpStatus.NO_CONTENT.getReasonPhrase();
     }
 
     //에러 코드를 반환하는 생성자
@@ -27,8 +33,13 @@ public class ResponseBody<T> {
     }
 
     //성공 시 컨트롤러에서 DTO(data)를 ResponseEntity<ResponseBody>로 변환해 반환한다.
-    public static <T> ResponseBody<T> success(T data) {
-        return new ResponseBody<>(data);
+    public static <T> ResponseBody<T> success(T content) {
+        return new ResponseBody<>(content);
+    }
+
+    //아무 응답값도 없을 시 사용한다.
+    public static ResponseBody<Void> noContent(){
+        return new ResponseBody<>();
     }
 
     //에러 코드를 GlobalExceptionHandler에서 받아 ResponseEntity<ResponseBody>로 변환해 반환한다.
