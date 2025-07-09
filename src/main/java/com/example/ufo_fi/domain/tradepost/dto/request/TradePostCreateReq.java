@@ -1,8 +1,7 @@
-package com.example.ufo_fi.domain.trade_post;
+package com.example.ufo_fi.domain.tradepost.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class TradePostCreateRequest {
+public class TradePostCreateReq {
 
     @NotBlank(message = "제목은 필수입니다.")
     @Size(min = 1, max = 15, message = "제목은 1~15자 이내여야 합니다.")
@@ -22,11 +21,5 @@ public class TradePostCreateRequest {
     private int price;
 
     @Min(value = 1, message = "용량은 1GB 이상이어야 됩니다.")
-    private int capacity;
-
-    @NotNull
-    private CarrierType carrierType;
-
-    @NotNull
-    private MobileDataType mobileDataType;
+    private int sellMobileDataCapacityGb;
 }
