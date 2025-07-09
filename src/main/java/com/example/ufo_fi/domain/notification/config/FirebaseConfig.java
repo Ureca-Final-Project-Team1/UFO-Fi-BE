@@ -33,11 +33,7 @@ public class FirebaseConfig {
             return null;
         }
 
-        try {
-            InputStream serviceAccount = new ClassPathResource(
-                    firebaseConfigPath.replace("classpath:", "").trim()
-            ).getInputStream();
-
+        try (InputStream serviceAccount = new ClassPathResource(firebaseConfigPath.trim()).getInputStream()) {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
