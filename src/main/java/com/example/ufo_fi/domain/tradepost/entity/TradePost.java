@@ -3,6 +3,7 @@ package com.example.ufo_fi.domain.tradepost.entity;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,13 +36,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class TradePost {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)  //MySQL에서 256부터 2Byte를 사용하기에 255를 써준다.
+    @Column(name = "mobile_data_type", nullable = false)
     private MobileDataType mobileDataType;
 
     @Enumerated(EnumType.STRING)
@@ -86,5 +87,26 @@ public class TradePost {
     public void addReport(Report report) {
         this.reports.add(report);
         report.setTradePost(this);
+    }
+
+    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus,
+        Integer reportCount, User user) {
+        return TradePost.builder()
+            .user(user)
+            .title(request.getTitle())
+            .price(request.getPrice())
+            .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
+            .carrier(user.getUserPlan().getCarrier())
+            .mobileDataType(user.getUserPlan().getMobileDataType())
+            .build();
+
+    }
+
+    public void softDelete() {
+        this.isDelete = true;
+    }
+
+    public void statusDelete() {
+        this.tradePostStatus = TradePostStatus.DELETED;
     }
 }

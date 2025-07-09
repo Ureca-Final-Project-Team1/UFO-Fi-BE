@@ -2,7 +2,9 @@ package com.example.ufo_fi.domain.userplan.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPlan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -51,4 +54,15 @@ public class UserPlan {
     @OneToMany(mappedBy = "userPlan")
     @Builder.Default
     private List<User> users = new ArrayList<>();
+
+    public void subtractSellMobileDataCapacityGb(int requestSellData) {
+        if (this.sellMobileDataCapacityGb < requestSellData) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        }
+        this.sellMobileDataCapacityGb -= requestSellData;
+    }
+
+    public void increaseMobileDataCapacityGb(int restore) {
+        this.sellMobileDataCapacityGb += restore;
+    }
 }
