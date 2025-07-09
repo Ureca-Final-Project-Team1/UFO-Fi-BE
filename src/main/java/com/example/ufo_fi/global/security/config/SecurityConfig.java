@@ -1,6 +1,7 @@
 package com.example.ufo_fi.global.security.config;
 
 import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.global.security.exception.SecurityResponseSetter;
 import com.example.ufo_fi.global.security.jwt.JwtFilter;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
 import com.example.ufo_fi.global.security.noinfo.NoInfoRoleFilter;
@@ -36,6 +37,7 @@ public class SecurityConfig {
     private final RefreshUtil refreshUtil;
     private final UserRepository userRepository;
     private final RefreshRepository refreshRepository;
+    private final SecurityResponseSetter securityResponseSetter;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -83,7 +85,8 @@ public class SecurityConfig {
                 cookieUtil,
                 refreshUtil,
                 userRepository,
-                refreshRepository
+                refreshRepository,
+                securityResponseSetter
         );
     }
 

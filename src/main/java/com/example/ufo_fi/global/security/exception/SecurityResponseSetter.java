@@ -6,16 +6,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 /**
  * 예외를 직접 HttpServletResponse에 세팅하는 객체이다.
  */
 @Component
-public class SecurityExceptionResponseSetter {
+public class SecurityResponseSetter {
     private static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     private static final String CODE = "code";
     private static final String MESSAGE = "message";
+    private static final String DATA = "data";
     private static final String IDENTITY = "security ";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -26,6 +29,15 @@ public class SecurityExceptionResponseSetter {
         Map<String, Object> body = new HashMap<>();
         body.put(CODE, errorCode.getStatus().value());
         body.put(MESSAGE, IDENTITY + errorCode.getMessage());
+        objectMapper.writeValue(response.getWriter(), body);
+    }
+
+    public <T> void setResponse(HttpServletResponse response, T data) throws IOException {
+        response.setContentType(CONTENT_TYPE);
+        response.setStatus(HttpStatus.OK.value());
+        Map<String, Object> body = new HashMap<>();
+        body.put(CODE, HttpStatus.OK.value());
+        body.put(DATA, data);
         objectMapper.writeValue(response.getWriter(), body);
     }
 }

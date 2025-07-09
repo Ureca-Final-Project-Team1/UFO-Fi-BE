@@ -2,7 +2,7 @@ package com.example.ufo_fi.global.security.jwt;
 
 import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.global.security.exception.SecurityErrorCode;
-import com.example.ufo_fi.global.security.exception.SecurityExceptionResponseSetter;
+import com.example.ufo_fi.global.security.exception.SecurityResponseSetter;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.global.security.principal.PrincipalKey;
 import io.jsonwebtoken.Claims;
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class JwtUtil {
-    private final SecurityExceptionResponseSetter securityExceptionResponseSetter;
+    private final SecurityResponseSetter securityResponseSetter;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -110,7 +110,7 @@ public class JwtUtil {
     private void validateNotNullAuthorization(Cookie cookie, HttpServletResponse response)
             throws AuthenticationException, IOException {
         if(cookie == null){
-            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.AUTHORIZATION_COOKIE_NOT_FOUND);
+            securityResponseSetter.setResponse(response, SecurityErrorCode.AUTHORIZATION_COOKIE_NOT_FOUND);
             throw new AuthenticationCredentialsNotFoundException("쿠키에 Authorization이 없습니다.");
         }
     }
@@ -125,10 +125,10 @@ public class JwtUtil {
         try{
             Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt).getPayload();
         }catch (ExpiredJwtException e){
-            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_EXPIRED);
+            securityResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_EXPIRED);
             throw new AuthenticationServiceException("JWT 토큰이 만료되었습니다.");
         }catch (JwtException e){
-            securityExceptionResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_INVALID);
+            securityResponseSetter.setResponse(response, SecurityErrorCode.TOKEN_INVALID);
             throw new AuthenticationServiceException("JWT 토큰 형식이 이상합니다.");
         }
     }
