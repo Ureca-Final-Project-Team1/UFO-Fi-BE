@@ -59,9 +59,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.build.result == 'success' }}
 
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
-
     steps:
       - name: EC2 배포(실패 시 롤백)
         uses: appleboy/ssh-action@v1
@@ -72,12 +69,12 @@ jobs:
           script: |
             set -e
             
-            docker pull $DOCKER_USER/ufo_fi_be
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
                         
             docker stop ufo_fi_be || true
             docker rename ufo_fi_be ufo_fi_be_backup || true
             
-            docker run -d --name ufo_fi_be_new -p 8080:8080 $DOCKER_USER/ufo_fi_be
+            docker run -d --name ufo_fi_be_new -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
             
             sleep 60
             
