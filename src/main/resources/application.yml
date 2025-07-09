@@ -6,15 +6,14 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+      ddl-auto: update
     show-sql: true
+
+firebase:
+  config-path: ${FIREBASE_CONFIG_PATH}
 
 ---
 spring:
