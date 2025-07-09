@@ -13,7 +13,7 @@ spring:
     show-sql: true
 
 firebase:
-  config-path: ${FIREBASE_CONFIG_PATH}
+  config-path: ${FIREBASE_CONFIG_PATH:}
 
 ---
 spring:
