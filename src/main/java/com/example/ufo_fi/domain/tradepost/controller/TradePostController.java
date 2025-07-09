@@ -55,7 +55,7 @@ public class TradePostController {
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<? extends ResponseBody<TradePostCommonRes>> deleteTradePost(
+    public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
         @PathVariable Long postId,
         @RequestParam Long userId
     ) {
