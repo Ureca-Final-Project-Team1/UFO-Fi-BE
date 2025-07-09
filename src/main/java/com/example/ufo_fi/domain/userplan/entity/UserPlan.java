@@ -35,18 +35,18 @@ public class UserPlan {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier", nullable = false)
+    @Column(name = "carrier")
     private Carrier carrier;
 
-    @Column(name = "plan_name", nullable = false, length = 255)
+    @Column(name = "plan_name", length = 255)
     private String planName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)
+    @Column(name = "mobile_data_type")
     private MobileDataType mobileDataType;
 
     @Column(name = "sell_mobile_data_capacity_gb")
-    private Integer sellMobileDataCapacityGb;
+    private int sellMobileDataCapacityGb;
 
     @Column(name = "sellable_data_amount")
     private Integer sellableDataAmount;
@@ -55,14 +55,15 @@ public class UserPlan {
     @Builder.Default
     private List<User> users = new ArrayList<>();
 
-    public void subtractSellMobileDataCapacityGb(int requestSellData) {
-        if (this.sellMobileDataCapacityGb < requestSellData) {
-            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
-        }
-        this.sellMobileDataCapacityGb -= requestSellData;
+
+    public void subtractSellableDataAmount(int requestSellData) {
+        this.sellableDataAmount -= requestSellData;
     }
 
-    public void increaseMobileDataCapacityGb(int restore) {
-        this.sellMobileDataCapacityGb += restore;
+    public void increaseSellableDataAmount(int restore) {
+        if (restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        }
+        this.sellableDataAmount += restore;
     }
 }

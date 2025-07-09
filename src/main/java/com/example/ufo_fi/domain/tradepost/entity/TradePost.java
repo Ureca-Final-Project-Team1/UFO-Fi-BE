@@ -43,37 +43,37 @@ public class TradePost {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)
+    @Column(name = "mobile_data_type")
     private MobileDataType mobileDataType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier", nullable = false)
+    @Column(name = "carrier")
     private Carrier carrier;
 
-    @Column(name = "sell_mobile_data_capacity_gb", nullable = false)
-    private Integer sellMobileDataCapacityGb;
+    @Column(name = "sell_mobile_data_capacity_gb")
+    private int sellMobileDataCapacityGb;
 
-    @Column(name = "title", nullable = false, length = 15)
+    @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
 
-    @Column(name = "report_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "report_count")
     private Integer reportCount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private TradePostStatus tradePostStatus;
 
-    @Column(name = "is_update", columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_update")
     private Boolean isUpdate;
 
-    @Column(name = "is_delete", columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_delete")
     private Boolean isDelete;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -89,7 +89,8 @@ public class TradePost {
         report.setTradePost(this);
     }
 
-    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus,
+    public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
+        TradePostStatus tradePostStatus,
         Integer reportCount, User user) {
         return TradePost.builder()
             .user(user)
@@ -98,8 +99,11 @@ public class TradePost {
             .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
             .carrier(user.getUserPlan().getCarrier())
             .mobileDataType(user.getUserPlan().getMobileDataType())
+            .tradePostStatus(tradePostStatus)
+            .reportCount(reportCount)
+            .isUpdate(isUpdate)
+            .isDelete(isDelete)
             .build();
-
     }
 
     public void softDelete() {

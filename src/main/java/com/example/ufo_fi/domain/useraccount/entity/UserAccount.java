@@ -22,21 +22,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAccount {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "bank", nullable = false, length = 255)
+    @Column(name = "bank", length = 255)
     private String bank;
 
-    @Column(name = "bank_account", nullable = false, length = 255)
+    @Column(name = "bank_account", length = 255)
     private String bankAccount;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", length = 255)
     private String password;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 }
