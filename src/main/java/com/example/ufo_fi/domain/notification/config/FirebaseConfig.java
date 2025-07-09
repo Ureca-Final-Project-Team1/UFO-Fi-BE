@@ -1,7 +1,5 @@
 package com.example.ufo_fi.domain.notification.config;
 
-import com.example.ufo_fi.domain.notification.exception.NotificationErrorCode;
-import com.example.ufo_fi.global.exception.GlobalException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -46,7 +44,8 @@ public class FirebaseConfig {
             }
 
         } catch (IOException e) {
-            throw new GlobalException(NotificationErrorCode.FIREBASE_INITIALIZATION_FAILED);
+            e.printStackTrace();
+            return null;
         }
     }
 
