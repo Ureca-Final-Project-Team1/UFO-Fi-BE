@@ -52,10 +52,10 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         setCookieJwt(jwt, response);                            //jwt 토큰 쿠키 저장
         setCookieRefresh(refresh, response);                    //refresh 토큰 쿠키 저장
 
-        securityResponseSetter.setResponse(response, customOAuth2User.getRole());
-
         log.info("JWT {}", jwt);
         log.info("Refresh-Token {}", refresh);
+
+        response.sendRedirect("http://localhost:3000/login/success");
     }
 
     //jwt 토큰 생성
