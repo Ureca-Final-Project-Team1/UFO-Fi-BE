@@ -31,6 +31,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: application-prod.properties 설정
+        run: |
+          touch src/main/resources/application-prod.properties
+          echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
+
       - name: Gradle 권한 부여
         run: chmod +x ./gradlew
 
@@ -53,6 +58,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: ${{ needs.build.result == 'success' }}
+
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
+
     steps:
       - name: EC2 배포(실패 시 롤백)
         uses: appleboy/ssh-action@v1
