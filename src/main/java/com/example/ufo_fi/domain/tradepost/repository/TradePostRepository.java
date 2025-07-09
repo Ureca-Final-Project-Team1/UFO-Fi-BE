@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.tradepost.repositroy;
+package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import java.time.LocalDateTime;

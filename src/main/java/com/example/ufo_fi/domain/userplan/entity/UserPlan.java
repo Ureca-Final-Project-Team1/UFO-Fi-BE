@@ -57,13 +57,18 @@ public class UserPlan {
 
 
     public void subtractSellableDataAmount(int requestSellData) {
+        if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        }
+
         this.sellableDataAmount -= requestSellData;
     }
 
     public void increaseSellableDataAmount(int restore) {
-        if (restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
-            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        if (restore < 0 || restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_RESTORE_CAPACITY);
         }
+
         this.sellableDataAmount += restore;
     }
 }

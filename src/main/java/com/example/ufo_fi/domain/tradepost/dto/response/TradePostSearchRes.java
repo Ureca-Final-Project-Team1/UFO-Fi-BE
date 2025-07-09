@@ -17,7 +17,7 @@ public class TradePostSearchRes {
     private List<TradePostSearchDetailRes> posts;
     private LocalDateTime nextCursor;
 
-    public static TradePostSearchRes from(List<TradePost> tradePosts, LocalDateTime nextCursor) {
+    public static TradePostSearchRes of(List<TradePost> tradePosts, LocalDateTime nextCursor) {
         return TradePostSearchRes.builder()
             .posts(tradePosts.stream()
                 .map(TradePostSearchDetailRes::from)

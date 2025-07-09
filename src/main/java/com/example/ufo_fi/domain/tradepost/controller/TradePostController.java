@@ -27,21 +27,21 @@ public class TradePostController {
     private final TradePostService tradePostService;
 
     @PostMapping("/posts")
-    public ResponseEntity<ResponseBody<TradePostCommonRes>> saveTradePost(
+    public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
         @RequestBody TradePostCreateReq request,
         @RequestParam Long userId
     ) {
         return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.save(request, userId)));
+            .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<ResponseBody<TradePostSearchRes>> getTradePosts(
+    public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
         @ModelAttribute TradePostSearchReq request, // Request param을 안쓴 이유는 이미 바인딩을 시켜놓음
         @RequestParam Long userId
     ) {
         return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.getTradePostList(userId, request)));
+            .body(ResponseBody.success(tradePostService.readTradePostList(userId, request)));
     }
 
     @PutMapping("/posts/{postId}")
@@ -50,20 +50,18 @@ public class TradePostController {
         @RequestParam Long userId
     ) {
         return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.save(request, userId)));
+            .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
 
     }
-    
+
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
+    public ResponseEntity<? extends ResponseBody<TradePostCommonRes>> deleteTradePost(
         @PathVariable Long postId,
         @RequestParam Long userId
     ) {
-//        return ResponseEntity.noContent()
-//            .body(ResponseBody.success(tradePostService.delete(postId, userId)));
 
         return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.delete(postId, userId)));
+            .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
     }
 
 

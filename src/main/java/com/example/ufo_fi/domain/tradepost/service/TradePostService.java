@@ -1,6 +1,5 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
-import com.example.ufo_fi.domain.salehistory.SaleHistoryRepository;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
@@ -8,7 +7,7 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
-import com.example.ufo_fi.domain.tradepost.repositroy.TradePostRepository;
+import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.useraccount.UserAccountRepository;
@@ -28,11 +27,12 @@ public class TradePostService {
     private final TradePostRepository tradePostRepository;
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
-    private final SaleHistoryRepository saleHistoryRepository;
 
-
+    /**
+     * 1. 게시물 생성
+     */
     @Transactional
-    public TradePostCommonRes save(TradePostCreateReq request, Long userId) {
+    public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
         // 판매자를 찾음
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
@@ -44,6 +44,7 @@ public class TradePostService {
 
         int userAvailableData = user.getUserPlan().getSellMobileDataCapacityGb();
         int requestSellData = request.getSellMobileDataCapacityGb();
+
         if (requestSellData > userAvailableData) {
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
@@ -52,14 +53,17 @@ public class TradePostService {
 
         //판매 등록한 용량을 빼준다.
         user.getUserPlan().subtractSellableDataAmount(requestSellData);
-
         TradePost savedTradePost = tradePostRepository.save(tradePost);
 
         return new TradePostCommonRes(savedTradePost.getId());
     }
 
+    /**
+     * 1. 게시물 삭제
+     */
+
     @Transactional
-    public TradePostCommonRes delete(Long postId, Long userId) {
+    public TradePostCommonRes deleteTradePost(Long postId, Long userId) {
         // 사용자 조회
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
@@ -87,9 +91,11 @@ public class TradePostService {
         return new TradePostCommonRes(tradePost.getId());
     }
 
+    /**
+     * 1. 게시물 조회
+     */
+    public TradePostSearchRes readTradePostList(Long userId, TradePostSearchReq request) {
 
-    @Transactional(readOnly = true)
-    public TradePostSearchRes getTradePostList(Long userId, TradePostSearchReq request) {
         Pageable pageable = PageRequest.of(0, request.getSize());
         LocalDateTime nextCursor;
 
@@ -103,6 +109,6 @@ public class TradePostService {
             nextCursor = posts.get(posts.size() - 1).getCreatedAt();
         }
 
-        return TradePostSearchRes.from(posts, nextCursor);
+        return TradePostSearchRes.of(posts, nextCursor);
     }
 }

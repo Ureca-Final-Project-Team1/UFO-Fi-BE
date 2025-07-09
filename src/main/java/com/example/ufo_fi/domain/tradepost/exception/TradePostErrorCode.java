@@ -13,7 +13,7 @@ public enum TradePostErrorCode implements ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
     ALREADY_DELETE(HttpStatus.GONE, "이미 삭제된 게시글입니다."),
     EXCEED_SELL_CAPACITY(HttpStatus.GONE, "판매 가능 용량을 초과했습니다."),
-    EXCEED_RESTORE_CAPACITY(HttpStatus.GONE, "잔여 데이터량과 판매 회수 용량이 판매 가능용량을 초과했습니다."),
+    EXCEED_RESTORE_CAPACITY(HttpStatus.GONE, "회수량과 잔여 데이터량이 판매 가능 용량보다 많습니다."),
     ACCOUNT_NOT_REGISTERED(HttpStatus.FORBIDDEN, "계좌를 입력해야 됩니다."),
     CANNOT_DELETE_NOT_SELLING_POST(HttpStatus.FORBIDDEN, "판매중 게시물만 삭제 가능합니다."),
     NO_AUTHORITY_TO_DELETE(HttpStatus.FORBIDDEN, "본인 게시물만 삭제 가능합니다.");
