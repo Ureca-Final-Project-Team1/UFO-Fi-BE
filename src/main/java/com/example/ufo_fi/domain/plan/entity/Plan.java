@@ -20,16 +20,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Plan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", length = 255)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier", nullable = false)
+    @Column(name = "carrier")
     private Carrier carrier;
 
     @Column(name = "mobile_data_amount")    //무제한 데이터일 시 null
@@ -38,10 +39,10 @@ public class Plan {
     @Column(name = "is_ultimated_amount")   //무제한 데이터가 아닐 시 null
     private Boolean isUltimatedAmount;
 
-    @Column(name = "sell_mobile_data_capacity_gb", nullable = false)
+    @Column(name = "sell_mobile_data_capacity_gb")
     private Integer sellMobileDataCapacityGb;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)
+    @Column(name = "mobile_data_type")
     private MobileDataType mobileDataType;
 }

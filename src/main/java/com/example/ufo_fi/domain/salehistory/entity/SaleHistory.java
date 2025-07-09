@@ -27,16 +27,24 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class SaleHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt; // 판매 일자
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trade_post_id", nullable = false)
+    @JoinColumn(name = "trade_post_id")
     private TradePost tradePost;
+
+
+    public static SaleHistory from(TradePost tradePost) {
+        return SaleHistory.builder()
+            .tradePost(tradePost)
+            .build();
+    }
 }

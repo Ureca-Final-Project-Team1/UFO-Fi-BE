@@ -2,7 +2,9 @@ package com.example.ufo_fi.domain.userplan.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,24 +28,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPlan {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier", nullable = false)
+    @Column(name = "carrier")
     private Carrier carrier;
 
-    @Column(name = "plan_name", nullable = false, length = 255)
+    @Column(name = "plan_name", length = 255)
     private String planName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)
+    @Column(name = "mobile_data_type")
     private MobileDataType mobileDataType;
 
     @Column(name = "sell_mobile_data_capacity_gb")
-    private Integer sellMobileDataCapacityGb;
+    private int sellMobileDataCapacityGb;
 
     @Column(name = "sellable_data_amount")
     private Integer sellableDataAmount;
@@ -51,4 +54,21 @@ public class UserPlan {
     @OneToMany(mappedBy = "userPlan")
     @Builder.Default
     private List<User> users = new ArrayList<>();
+
+
+    public void subtractSellableDataAmount(int requestSellData) {
+        if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        }
+
+        this.sellableDataAmount -= requestSellData;
+    }
+
+    public void increaseSellableDataAmount(int restore) {
+        if (restore < 0 || restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_RESTORE_CAPACITY);
+        }
+
+        this.sellableDataAmount += restore;
+    }
 }

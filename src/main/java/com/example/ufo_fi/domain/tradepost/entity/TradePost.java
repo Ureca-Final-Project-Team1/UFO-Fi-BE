@@ -3,6 +3,7 @@ package com.example.ufo_fi.domain.tradepost.entity;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,43 +36,44 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class TradePost {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type", nullable = false)  //MySQL에서 256부터 2Byte를 사용하기에 255를 써준다.
+    @Column(name = "mobile_data_type")
     private MobileDataType mobileDataType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier", nullable = false)
+    @Column(name = "carrier")
     private Carrier carrier;
 
-    @Column(name = "sell_mobile_data_capacity_gb", nullable = false)
-    private Integer sellMobileDataCapacityGb;
+    @Column(name = "sell_mobile_data_capacity_gb")
+    private int sellMobileDataCapacityGb;
 
-    @Column(name = "title", nullable = false, length = 15)
+    @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
 
-    @Column(name = "report_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "report_count")
     private Integer reportCount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private TradePostStatus tradePostStatus;
 
-    @Column(name = "is_update", columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_update")
     private Boolean isUpdate;
 
-    @Column(name = "is_delete", columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_delete")
     private Boolean isDelete;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -86,5 +87,30 @@ public class TradePost {
     public void addReport(Report report) {
         this.reports.add(report);
         report.setTradePost(this);
+    }
+
+    public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
+        TradePostStatus tradePostStatus,
+        Integer reportCount, User user) {
+        return TradePost.builder()
+            .user(user)
+            .title(request.getTitle())
+            .price(request.getPrice())
+            .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
+            .carrier(user.getUserPlan().getCarrier())
+            .mobileDataType(user.getUserPlan().getMobileDataType())
+            .tradePostStatus(tradePostStatus)
+            .reportCount(reportCount)
+            .isUpdate(isUpdate)
+            .isDelete(isDelete)
+            .build();
+    }
+
+    public void softDelete() {
+        this.isDelete = true;
+    }
+
+    public void statusDelete() {
+        this.tradePostStatus = TradePostStatus.DELETED;
     }
 }
