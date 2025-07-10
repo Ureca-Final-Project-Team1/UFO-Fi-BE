@@ -52,11 +52,13 @@ public class FirebaseConfig {
         }
     }
 
+    /**
+     * FirebaseMessaging Bean 등록 메서드
+     * 1. FCM 서비스를 사용할 수 있게 해주는 FCM 객체
+     * 2. firebaseApp 인스턴스를 받아  firebaseMassaging 인스턴스로 반환
+     */
     @Bean
     public FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
-        if (firebaseApp == null) {
-            return null;
-        }
         return FirebaseMessaging.getInstance(firebaseApp);
     }
 }
