@@ -13,6 +13,8 @@ public enum NotificationErrorCode implements ErrorCode {
 
     // FCM
     FIREBASE_INITIALIZATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 초기화에 실패했습니다."),
+
+    // message
     MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 메시지 전송에 실패했습니다."),
 
     ;

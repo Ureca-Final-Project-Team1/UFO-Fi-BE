@@ -7,6 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -14,22 +15,24 @@ import java.io.InputStream;
 
 /**
  * Firebase 설정 클래스
- * 1. 설정 파일 경로가 주어졌을 경우에만 FirebaseApp을 초기화한다.
- * 2. 이미 초기화된 FirebaseApp이 있다면 기존 인스턴스를 반환한다.
- * 3. FirebaseApp이 정상적으로 초기화된 경우에만 FirebaseMessaging Bean을 등록한다.
- * 그렇지 않으면 null을 반환하여 초기화를 회피하도록 한다.
+ * - Firebase와 연동하기 위한 초기화 작업을 수행하며, Firebase 관련 Bean(FirebaseApp, FirebaseMessaging)을 등록함
+ * - test 환경에서는 로딩되지 않도록 @Profile 적용
  */
+@Profile("!test")
 @Configuration
 public class FirebaseConfig {
 
     @Value("${firebase.config-path:}")
     private String firebaseConfigPath;
 
+    /**
+     * FirebaseApp Bean 등록 메서드
+     * 1. FirebaseApp은 서비스를 사용할 수 있게 해주는 객체임
+     * 2. firebaseConfigPath에 정의된 비밀 키 파일을 읽어 FirebaseApp을 초기화
+     * 3. 이미 초기화된 FirebaseApp 인스턴스가 존재하면 해당 인스턴스를 반환
+     */
     @Bean
     public FirebaseApp firebaseApp() {
-        if (firebaseConfigPath == null || firebaseConfigPath.isBlank()) {
-            return null;
-        }
 
         try (InputStream serviceAccount = new ClassPathResource(firebaseConfigPath.trim()).getInputStream()) {
             FirebaseOptions options = FirebaseOptions.builder()

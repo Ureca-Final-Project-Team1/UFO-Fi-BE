@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class ResponseBody<T> {
-    private final HttpStatus statusCode;
+    private final int statusCode;
     private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -15,20 +15,20 @@ public class ResponseBody<T> {
 
     //성공 시 생성자
     public ResponseBody(T content) {
-        this.statusCode = HttpStatus.OK;
+        this.statusCode = HttpStatus.OK.value();
         this.message = HttpStatus.OK.getReasonPhrase();
         this.content = content;
     }
 
     //No-Content 생성자
     public ResponseBody(){
-        this.statusCode = HttpStatus.NO_CONTENT;
+        this.statusCode = HttpStatus.NO_CONTENT.value();
         this.message = HttpStatus.NO_CONTENT.getReasonPhrase();
     }
 
     //에러 코드를 반환하는 생성자
     public ResponseBody(ErrorCode errorCode) {
-        this.statusCode = errorCode.getStatus();
+        this.statusCode = errorCode.getStatus().value();
         this.message = errorCode.getMessage();
     }
 
