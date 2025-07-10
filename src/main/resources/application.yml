@@ -57,7 +57,7 @@ cloud:
       bucket: ${BUCKET_NAME}
     credentials:
       access-key: ${ACCESS_KEY}
-      secret-key: ${SECRETE_ACCESS_KEY}
+      secret-key: ${SECRET_ACCESS_KEY}
     region:
       static: ap-northeast-2
       auto: false
