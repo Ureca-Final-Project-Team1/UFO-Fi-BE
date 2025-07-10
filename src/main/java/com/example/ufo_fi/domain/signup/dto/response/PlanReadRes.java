@@ -28,6 +28,7 @@ public class PlanReadRes {
                 .isUltimatedAmount(plan.getIsUltimatedAmount())
                 .sellMobileDataCapacityGB(plan.getSellMobileDataCapacityGb())
                 .mobileDataAmount(plan.getMobileDataType())
+                .mobileDataType(plan.getMobileDataType())
                 .build();
     }
 }

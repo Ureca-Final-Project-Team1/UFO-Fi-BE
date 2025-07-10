@@ -1,13 +1,12 @@
 package com.example.ufo_fi.domain.signup.controller;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.response.PlansReadRes;
+import com.example.ufo_fi.domain.signup.dto.response.SignupRes;
 import com.example.ufo_fi.domain.signup.service.SignupService;
 import com.example.ufo_fi.global.response.ResponseBody;
-import lombok.Getter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,21 +24,23 @@ public class SignupController {
      */
     @GetMapping("/plans")
     public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
-            @RequestParam String rawCarrier
+            @RequestParam(value = "carrier") String rawCarrier
     ){
-        return ResponseEntity.ok()
-                .body(ResponseBody.success(signupService.readPlans(rawCarrier)));
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        signupService.readPlans(rawCarrier)));
     }
 
     /**
      * 회원가입 - 요금제 연동을 맡는 API
      */
     @PostMapping("/signup")
-    public ResponseEntity<ResponseBody<Void>> signup(
+    public ResponseEntity<ResponseBody<SignupRes>> signup(
             @RequestParam Long userId,
-            @RequestBody SignupReq signupReq
+            @RequestBody @Valid SignupReq signupReq
     ){
-        signupService.updateUserAndUserPlan(userId, signupReq);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ResponseBody.noContent());
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        signupService.updateUserAndUserPlan(userId, signupReq)));
     }
 }
