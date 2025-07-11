@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -34,7 +34,7 @@ public class FirebaseConfig {
     @Bean
     public FirebaseApp firebaseApp() {
 
-        try (InputStream serviceAccount = new ClassPathResource(firebaseConfigPath.trim()).getInputStream()) {
+        try (InputStream serviceAccount = resolveFirebaseKeyStream(firebaseConfigPath)) {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
@@ -46,7 +46,7 @@ public class FirebaseConfig {
                 return FirebaseApp.getInstance();
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -60,5 +60,16 @@ public class FirebaseConfig {
     @Bean
     public FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
         return FirebaseMessaging.getInstance(firebaseApp);
+    }
+
+
+    /**
+     * 파일 경로 분기 메서드
+     */
+    private InputStream resolveFirebaseKeyStream(String path) throws Exception {
+        if (path.startsWith("file:")) {
+            return new FileInputStream(path.replace("file:", "").trim());
+        }
+        return new ClassPathResource(path.trim()).getInputStream();
     }
 }
