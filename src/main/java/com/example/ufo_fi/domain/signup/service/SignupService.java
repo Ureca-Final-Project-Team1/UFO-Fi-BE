@@ -57,10 +57,10 @@ public class SignupService {
     @Transactional
     public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
         User user = signupUser(userId, signupReq);
-        UserPlan userPlan = registerUserPlan(signupReq, user);
+        registerUserPlan(signupReq, user);
         setNotifications(userId);
 
-        return SignupRes.of(user, userPlan);
+        return SignupRes.from(user);
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
@@ -75,10 +75,10 @@ public class SignupService {
     }
 
     //유저 요금제를 등록/연관관계 등록
-    private UserPlan registerUserPlan(SignupReq signupReq, User user) {
+    private void registerUserPlan(SignupReq signupReq, User user) {
         UserPlan userPlan = UserPlan.from(signupReq.getUserPlanReq());
         user.registerUserPlan(userPlan);
-        return userPlanRepository.save(userPlan);
+        userPlanRepository.save(userPlan);
     }
 
     //알림 설정을 초기화
