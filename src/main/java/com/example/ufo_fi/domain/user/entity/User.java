@@ -32,7 +32,7 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "kakao_id", nullable = false)
+    @Column(name = "kakao_id")
     private String kakaoId;
 
     @Column(name = "name")
@@ -47,11 +47,11 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "is_active", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,11 +62,17 @@ public class User {
     @JoinColumn(name = "user_plan_id")
     private UserPlan userPlan;
 
-    public void signup(UserInfoReq userInfoReq, String randomNickname, ProfilePhoto randomProfilePhoto) {
+    public void signup(UserInfoReq userInfoReq,
+                       String randomNickname,
+                       ProfilePhoto randomProfilePhoto,
+                       boolean activeStatus,
+                       Role roleUser) {
         this.name = userInfoReq.getName();
         this.phoneNumber = userInfoReq.getPhoneNumber();
         this.nickname = randomNickname;
         this.profilePhoto = randomProfilePhoto;
+        this.isActive = activeStatus;
+        this.role = roleUser;
     }
 
     public void registerUserPlan(UserPlan userPlan){

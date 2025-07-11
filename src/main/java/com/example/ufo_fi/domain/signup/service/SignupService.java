@@ -1,5 +1,7 @@
 package com.example.ufo_fi.domain.signup.service;
 
+import com.example.ufo_fi.domain.notification.entity.Notification;
+import com.example.ufo_fi.domain.notification.repository.NotificationRepository;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.plan.repository.PlanRepository;
@@ -9,6 +11,7 @@ import com.example.ufo_fi.domain.signup.dto.response.PlansReadRes;
 import com.example.ufo_fi.domain.signup.dto.response.SignupRes;
 import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.domain.user.UserRepository;
+import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import com.example.ufo_fi.domain.userplan.repository.UserPlanRepository;
@@ -21,10 +24,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SignupService {
+    private static final boolean ACTIVE_STATUS = true;
+
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final UserPlanRepository userPlanRepository;
     private final RandomImageSelector randomImageSelector;
+    private final NotificationRepository notificationRepository;
     private final RandomNicknameGenerator randomNicknameGenerator;
 
     /**
@@ -52,6 +58,7 @@ public class SignupService {
     public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
         User user = signupUser(userId, signupReq);
         UserPlan userPlan = registerUserPlan(signupReq, user);
+        setNotifications(userId);
 
         return SignupRes.of(user, userPlan);
     }
@@ -63,7 +70,7 @@ public class SignupService {
         String randomNickname = randomNicknameGenerator.generate();
         ProfilePhoto randomProfilePhoto = randomImageSelector.select();
 
-        user.signup(signupReq.getUserInfoReq(), randomNickname, randomProfilePhoto);
+        user.signup(signupReq.getUserInfoReq(), randomNickname, randomProfilePhoto, ACTIVE_STATUS, Role.ROLE_USER);
         return user;
     }
 
@@ -72,5 +79,12 @@ public class SignupService {
         UserPlan userPlan = UserPlan.from(signupReq.getUserPlanReq());
         user.registerUserPlan(userPlan);
         return userPlanRepository.save(userPlan);
+    }
+
+    //알림 설정을 초기화
+    private void setNotifications(Long userId) {
+        User user = userRepository.getReferenceById(userId);
+        Notification notification = Notification.from(user);
+        notificationRepository.save(notification);
     }
 }
