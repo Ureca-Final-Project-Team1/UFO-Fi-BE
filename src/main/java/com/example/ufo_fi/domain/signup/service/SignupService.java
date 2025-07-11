@@ -58,7 +58,7 @@ public class SignupService {
     public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
         User user = signupUser(userId, signupReq);
         registerUserPlan(signupReq, user);
-        setNotifications(userId);
+        setNotifications(user);
 
         return SignupRes.from(user);
     }
@@ -82,8 +82,7 @@ public class SignupService {
     }
 
     //알림 설정을 초기화
-    private void setNotifications(Long userId) {
-        User user = userRepository.getReferenceById(userId);
+    private void setNotifications(User user) {
         Notification notification = Notification.from(user);
         notificationRepository.save(notification);
     }

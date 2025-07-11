@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class PlanReadRes {
     private String planName;
     private Carrier carrier;
-    private MobileDataType mobileDataAmount;
+    private Integer mobileDataAmount;
     private Boolean isUltimatedAmount;
     private Integer sellMobileDataCapacityGB;
     private MobileDataType mobileDataType;
@@ -24,10 +24,9 @@ public class PlanReadRes {
         return PlanReadRes.builder()
                 .planName(plan.getName())
                 .carrier(plan.getCarrier())
-                .mobileDataAmount(plan.getMobileDataType())
+                .mobileDataAmount(plan.getMobileDataAmount())
                 .isUltimatedAmount(plan.getIsUltimatedAmount())
                 .sellMobileDataCapacityGB(plan.getSellMobileDataCapacityGb())
-                .mobileDataAmount(plan.getMobileDataType())
                 .mobileDataType(plan.getMobileDataType())
                 .build();
     }
