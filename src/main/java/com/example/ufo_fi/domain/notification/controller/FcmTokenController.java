@@ -12,17 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class FcmTokenController {
+public class FcmTokenController implements FcmControllerApiSpec{
 
     private final FcmTokenService fcmTokenService;
 
-    // GetMapping, 해당 사용자의 FCM 토큰을 저장
-    @PostMapping("v1/fcm/token")
-    public ResponseEntity<ResponseBody<FcmTokenCommonRes>> saveToken(
-            // @AuthenticationPrincipal CustomUserDetails customUserDetails
-            @RequestBody FcmTokenSaveReq request) {
-
-        // TODO: 추후 인증 연동 시 @AuthenticationPrincipal 사용하여 userId 추출
+    @Override
+    public ResponseEntity<ResponseBody<FcmTokenCommonRes>> saveToken(@RequestBody FcmTokenSaveReq request) {
         Long userId = 1L;
 
         return ResponseEntity.ok(ResponseBody.success(fcmTokenService.save(userId, request.getToken())));

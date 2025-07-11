@@ -2,14 +2,19 @@ package com.example.ufo_fi.global.response;
 
 import com.example.ufo_fi.global.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 public class ResponseBody<T> {
+    @Schema(description = "HTTP 상태 코드", example = "200")
     private final int statusCode;
+
+    @Schema(description = "응답 메시지", example = "OK")
     private final String message;
 
+    @Schema(description = "응답 데이터 (성공 시에만 존재)")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T content;
 
