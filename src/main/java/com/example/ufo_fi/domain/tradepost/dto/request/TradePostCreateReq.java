@@ -18,7 +18,7 @@ public class TradePostCreateReq {
     private String title;
 
     @Min(value = 1, message = "가격은 1원 이상이여야 됩니다.")
-    private Integer price;
+    private Integer pricePerUnit;
 
     @Min(value = 1, message = "용량은 1GB 이상이어야 됩니다.")
     private Integer sellMobileDataCapacityGb;
