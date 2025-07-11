@@ -90,6 +90,7 @@ jobs:
               docker stop ufo_fi_be_new
               docker rename ufo_fi_be_new ufo_fi_be
               docker start ufo_fi_be
+              rm -f /home/ubuntu/serviceAccountKey.json
               echo "deploy success"
             else
               echo "health check failed"
