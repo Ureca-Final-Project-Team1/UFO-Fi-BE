@@ -6,13 +6,13 @@ import com.example.ufo_fi.domain.plan.repository.PlanRepository;
 import com.example.ufo_fi.domain.profilephoto.entity.ProfilePhoto;
 import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.response.PlansReadRes;
+import com.example.ufo_fi.domain.signup.dto.response.SignupRes;
 import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.domain.user.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import com.example.ufo_fi.domain.userplan.repository.UserPlanRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
-import com.example.ufo_fi.global.response.ResponseBody;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +36,10 @@ public class SignupService {
         if(rawCarrier.startsWith("LG")){
             rawCarrier = "LGU";
         }
+
         Carrier carrier = Carrier.valueOf(rawCarrier);
         List<Plan> plans = planRepository.findAllByCarrier(carrier);
+
         return PlansReadRes.from(plans);
     }
 
@@ -47,9 +49,11 @@ public class SignupService {
      * 2. 유저 요금제를 등록/연관관계 등록
      */
     @Transactional
-    public void updateUserAndUserPlan(Long userId, SignupReq signupReq) {
+    public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
         User user = signupUser(userId, signupReq);
-        registerUserPlan(signupReq, user);
+        UserPlan userPlan = registerUserPlan(signupReq, user);
+
+        return SignupRes.of(user, userPlan);
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
@@ -64,9 +68,9 @@ public class SignupService {
     }
 
     //유저 요금제를 등록/연관관계 등록
-    private void registerUserPlan(SignupReq signupReq, User user) {
+    private UserPlan registerUserPlan(SignupReq signupReq, User user) {
         UserPlan userPlan = UserPlan.from(signupReq.getUserPlanReq());
         user.registerUserPlan(userPlan);
-        userPlanRepository.save(userPlan);
+        return userPlanRepository.save(userPlan);
     }
 }

@@ -22,7 +22,6 @@ public class RandomImageSelector {
      */
     public ProfilePhoto select() {
         long photoCount = profilePhotoRepository.count();
-
         if(photoCount == 0) throw new GlobalException(SignupErrorCode.NO_PHOTO);
 
         long randomId = autoIncrementRandomIdSelector.select(photoCount);
