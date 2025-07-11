@@ -36,11 +36,6 @@ jobs:
           touch src/main/resources/application-prod.properties
           echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
 
-      - name: Restore Firebase key to resources
-        run: |
-          mkdir -p src/main/resources
-          echo "${{ secrets.FIREBASE_JSON_B64 }}" | base64 --decode > src/main/resources/serviceAccountKey.json
-
       - name: Gradle 권한 부여
         run: chmod +x ./gradlew
 
@@ -74,12 +69,18 @@ jobs:
           script: |
             set -e
             
+            echo "${{ secrets.FIREBASE_JSON_B64 }}" | base64 --decode > /home/ubuntu/serviceAccountKey.json
+            
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
             
             docker stop ufo_fi_be || true
             docker rename ufo_fi_be ufo_fi_be_backup || true
             
-            docker run -d --name ufo_fi_be_new -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
+            docker run -d \
+            --name ufo_fi_be_new \
+            -p 8080:8080 \
+            -v /home/ubuntu/serviceAccountKey.json:/app/resources/serviceAccountKey.json \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
             
             sleep 60
             
