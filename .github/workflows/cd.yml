@@ -2,7 +2,7 @@ name: ufo_fi CD
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: [ "main", "develop" ]
     paths-ignore:
       - 'README.md'
 
@@ -35,6 +35,11 @@ jobs:
         run: |
           touch src/main/resources/application-prod.properties
           echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > src/main/resources/application-prod.properties
+
+      - name: Restore Firebase key to resources
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.FIREBASE_JSON_B64 }}" | base64 --decode > src/main/resources/serviceAccountKey.json
 
       - name: Gradle 권한 부여
         run: chmod +x ./gradlew
@@ -70,7 +75,7 @@ jobs:
             set -e
             
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ufo_fi_be
-                        
+            
             docker stop ufo_fi_be || true
             docker rename ufo_fi_be ufo_fi_be_backup || true
             
