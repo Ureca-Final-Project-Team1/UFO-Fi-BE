@@ -2,11 +2,15 @@ package com.example.ufo_fi.domain.tradepost.controller;
 
 
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,30 +32,43 @@ public class TradePostController {
 
     @PostMapping("/posts")
     public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-        @RequestBody TradePostCreateReq request,
+        @RequestBody @Valid TradePostCreateReq request,
         @RequestParam Long userId
     ) {
-        return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
+
+        return ResponseEntity.ok(
+            ResponseBody.success(tradePostService.createTradePost(request, userId)));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
-        @ModelAttribute TradePostSearchReq request, // Request param을 안쓴 이유는 이미 바인딩을 시켜놓음
+        @ModelAttribute TradePostSearchReq request,
         @RequestParam Long userId
     ) {
-        return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.readTradePostList(userId, request)));
+
+        return ResponseEntity.ok(
+            ResponseBody.success(tradePostService.readTradePostList(request, userId)));
+    }
+
+    @PostMapping("/posts/filter")
+    public ResponseEntity<ResponseBody<TradePostFilterRes>> readFilterPost(
+        @RequestBody TradePostFilterReq request,
+        @RequestParam Long userId
+    ) {
+
+        return ResponseEntity.ok(
+            ResponseBody.success(tradePostService.readFilterList(request, userId)));
     }
 
     @PutMapping("/posts/{postId}")
     public ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-        @RequestBody TradePostCreateReq request,
+        @PathVariable Long postId,
+        @RequestBody @Valid TradePostUpdateReq request,
         @RequestParam Long userId
     ) {
-        return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
 
+        return ResponseEntity.ok(
+            ResponseBody.success(tradePostService.updateTradePost(postId, request, userId)));
     }
 
     @DeleteMapping("/posts/{postId}")
@@ -63,6 +80,4 @@ public class TradePostController {
         return ResponseEntity.ok()
             .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
     }
-
-
 }
