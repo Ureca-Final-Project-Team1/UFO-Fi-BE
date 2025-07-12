@@ -27,9 +27,6 @@ public class Notification {
     @Column(name = "is_sell_agreed")
     private Boolean isSellAgreed;
 
-    @Column(name = "is_purchase_agreed")
-    private Boolean isPurchaseAgreed;
-
     @Column(name = "is_interested_post_agreed")
     private Boolean isInterestedPostAgreed;
 
@@ -48,7 +45,6 @@ public class Notification {
      */
     public void updateTradeGroup(boolean enabled) {
         this.isSellAgreed = enabled;
-        this.isPurchaseAgreed = enabled;
         this.isInterestedPostAgreed = enabled;
         this.isReportedAgreed = enabled;
         this.isFollowerPostAgreed = enabled;
