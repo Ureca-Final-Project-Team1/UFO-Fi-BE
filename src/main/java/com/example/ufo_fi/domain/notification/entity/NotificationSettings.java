@@ -1,8 +1,6 @@
 package com.example.ufo_fi.domain.notification.entity;
 
-import com.example.ufo_fi.domain.notification.exception.NotificationErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "notifications")
+@Table(name = "notification_settings")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notification {
+public class NotificationSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -60,7 +58,6 @@ public class Notification {
             case INTERESTED_POST -> this.isInterestedPostAgreed = enabled;
             case REPORTED -> this.isReportedAgreed = enabled;
             case FOLLOWER_POST -> this.isFollowerPostAgreed = enabled;
-            default -> throw new GlobalException(NotificationErrorCode.INVALID_NOTIFICATION_TYPE);
         }
     }
 }
