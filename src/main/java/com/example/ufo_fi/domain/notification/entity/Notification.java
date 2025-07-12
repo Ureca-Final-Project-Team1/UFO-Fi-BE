@@ -1,15 +1,9 @@
 package com.example.ufo_fi.domain.notification.entity;
 
+import com.example.ufo_fi.domain.notification.exception.NotificationErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.example.ufo_fi.global.exception.GlobalException;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,8 +30,8 @@ public class Notification {
     @Column(name = "is_purchase_agreed")
     private Boolean isPurchaseAgreed;
 
-    @Column(name = "is_interested_plan_agreed")
-    private Boolean isInterestedPlanAgreed;
+    @Column(name = "is_interested_post_agreed")
+    private Boolean isInterestedPostAgreed;
 
     @Column(name = "is_reported_agreed")
     private Boolean isReportedAgreed;
@@ -48,4 +42,29 @@ public class Notification {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    /**
+     * 거래 알림 전체 설정 업데이트
+     */
+    public void updateTradeGroup(boolean enabled) {
+        this.isSellAgreed = enabled;
+        this.isPurchaseAgreed = enabled;
+        this.isInterestedPostAgreed = enabled;
+        this.isReportedAgreed = enabled;
+        this.isFollowerPostAgreed = enabled;
+    }
+
+    /**
+     * 개별 알림 설정 업데이트
+     */
+    public void update(NotificationType type, boolean enabled) {
+        switch (type) {
+            case BENEFIT -> this.isEventAgreed = enabled;
+            case SELL -> this.isSellAgreed = enabled;
+            case INTERESTED_POST -> this.isInterestedPostAgreed = enabled;
+            case REPORTED -> this.isReportedAgreed = enabled;
+            case FOLLOWER_POST -> this.isFollowerPostAgreed = enabled;
+            default -> throw new GlobalException(NotificationErrorCode.INVALID_NOTIFICATION_TYPE);
+        }
+    }
 }
