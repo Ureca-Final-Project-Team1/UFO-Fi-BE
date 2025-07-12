@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.useraccount.entity;
 
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.useraccount.dto.request.AccountCreateReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,4 +41,13 @@ public class UserAccount {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static UserAccount of(User user, AccountCreateReq accountCreateReq) {
+        return UserAccount.builder()
+                .bank(accountCreateReq.getBank())
+                .bankAccount(accountCreateReq.getBankAccount())
+                .password(accountCreateReq.getPassword())
+                .user(user)
+                .build();
+    }
 }
