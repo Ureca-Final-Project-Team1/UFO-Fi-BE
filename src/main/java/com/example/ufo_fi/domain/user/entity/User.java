@@ -47,6 +47,9 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "zet_asset")
+    private Integer zetAsset;
+
     @Column(name = "is_active")
     private Boolean isActive;
 

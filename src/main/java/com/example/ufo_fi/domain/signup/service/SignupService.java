@@ -10,7 +10,7 @@ import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.response.PlansReadRes;
 import com.example.ufo_fi.domain.signup.dto.response.SignupRes;
 import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
-import com.example.ufo_fi.domain.user.UserRepository;
+import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.userplan.entity.UserPlan;
