@@ -41,7 +41,10 @@ public class UserAccountService {
      */
     public AccountCreateRes createAccount(Long userId, AccountCreateReq accountCreateReq) {
         User user = userRepository.getReferenceById(userId);
-        if(userAccountRepository.existsByUser(user)) throw new GlobalException(UserAccountErrorCode.ALREADY_ACCOUNT_EXIST);
+        if(userAccountRepository.existsByUser(user)){
+            throw new GlobalException(UserAccountErrorCode.ALREADY_ACCOUNT_EXIST);
+        }
+
         UserAccount userAccount = UserAccount.of(user, accountCreateReq);
         userAccountRepository.save(userAccount);
 

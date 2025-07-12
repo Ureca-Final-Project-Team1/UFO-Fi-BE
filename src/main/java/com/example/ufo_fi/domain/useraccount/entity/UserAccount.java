@@ -42,7 +42,7 @@ public class UserAccount {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static UserAccount of(User user, AccountCreateReq accountCreateReq) {
+    public static UserAccount of(final User user, final AccountCreateReq accountCreateReq) {
         return UserAccount.builder()
                 .bank(accountCreateReq.getBank())
                 .bankAccount(accountCreateReq.getBankAccount())
