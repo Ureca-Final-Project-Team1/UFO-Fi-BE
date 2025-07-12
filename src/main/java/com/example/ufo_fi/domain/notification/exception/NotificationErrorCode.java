@@ -14,10 +14,12 @@ public enum NotificationErrorCode implements ErrorCode {
     // FCM
     FIREBASE_INITIALIZATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 초기화에 실패했습니다."),
 
-    // message
+    // Message
     MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 메시지 전송에 실패했습니다."),
 
-    ;
+    // Notification
+    NO_NOTIFICATION_SETTINGS(HttpStatus.NOT_FOUND, "알림 목록을 조회할 수 없습니다."),
+    INVALID_NOTIFICATION_TYPE(HttpStatus.NOT_FOUND, "존재하지 않는 알림 타입입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
