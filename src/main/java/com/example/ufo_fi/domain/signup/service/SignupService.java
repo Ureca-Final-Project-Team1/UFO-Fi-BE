@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.signup.service;
 
-import com.example.ufo_fi.domain.notification.entity.Notification;
+import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
 import com.example.ufo_fi.domain.notification.repository.NotificationRepository;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.Plan;
@@ -17,9 +17,10 @@ import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import com.example.ufo_fi.domain.userplan.repository.UserPlanRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class SignupService {
      * 변환된 carrier로 DB에서 조회해온다.
      */
     public PlansReadRes readPlans(String rawCarrier) {
-        if(rawCarrier.startsWith("LG")){
+        if (rawCarrier.startsWith("LG")) {
             rawCarrier = "LGU";
         }
 
@@ -83,7 +84,7 @@ public class SignupService {
 
     //알림 설정을 초기화
     private void setNotifications(User user) {
-        Notification notification = Notification.from(user);
+        NotificationSetting notification = NotificationSetting.from(user);
         notificationRepository.save(notification);
     }
 }
