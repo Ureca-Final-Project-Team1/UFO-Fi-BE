@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long> {
     @Query("select t from TradePost t where t.isDelete = false and t.createdAt < :cursor ORDER BY t.createdAt DESC ")
     List<TradePost> findByCursorPaging(@Param("cursor") LocalDateTime cursor, Pageable pageable);
 
+    boolean existsByUser(User user);
 }
