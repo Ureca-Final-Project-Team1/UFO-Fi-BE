@@ -21,7 +21,6 @@ public interface MyPagePlanApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/plan")
     ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
-            @RequestParam Long userId,
             @RequestParam String carrier
     );
 
