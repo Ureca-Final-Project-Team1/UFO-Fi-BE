@@ -17,6 +17,7 @@ public class NotificationSettingController implements NotificationSettingApiSpec
     private final NotificationSettingService notificationService;
 
     // GetMapping, 알림 설정 목록 Read
+    @Override
     public ResponseEntity<ResponseBody<NotificationSettingReadRes>> readNotificationSettings(
             @RequestParam Long userId) {
         return ResponseEntity.ok(ResponseBody.success(notificationService.getNotificationSettings(userId)));
@@ -24,7 +25,8 @@ public class NotificationSettingController implements NotificationSettingApiSpec
 
     // PatchMapping, 알림 설정 Update
     // TODO 유효하지 않은 알림 들어왔을 경우 예외 처리
-    public ResponseEntity<ResponseBody<Void>> updateNotificationSettingsBenefit(
+    @Override
+    public ResponseEntity<ResponseBody<Void>> updateNotificationSettings(
             Long userId,
             NotificationType type,
             boolean enable) {

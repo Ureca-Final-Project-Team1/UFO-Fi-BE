@@ -22,7 +22,7 @@ public interface NotificationSettingApiSpec {
     @Operation(summary = "마이페이지 알림 ON/OFF API", description = "내 알림을 활성/비활성화 한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PatchMapping("/v1/mypage/notification-settings")
-    ResponseEntity<ResponseBody<Void>> updateNotificationSettingsBenefit(
+    ResponseEntity<ResponseBody<Void>> updateNotificationSettings(
             @RequestParam Long userId,
             @RequestParam NotificationType type,
             @RequestParam boolean enable);
