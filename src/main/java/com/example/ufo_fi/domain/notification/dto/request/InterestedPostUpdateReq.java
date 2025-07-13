@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * 관심 상품 알림 조건 DTO
+ */
 @Getter
 @NoArgsConstructor
 public class InterestedPostUpdateReq {
