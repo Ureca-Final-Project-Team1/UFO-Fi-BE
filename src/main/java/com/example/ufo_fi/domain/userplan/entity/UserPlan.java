@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.userplan.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
@@ -55,7 +56,9 @@ public class UserPlan {
     private Integer sellableDataAmount;
 
     public void subtractSellableDataAmount(int requestSellData) {
+
         if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
+            
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
 
@@ -63,11 +66,21 @@ public class UserPlan {
     }
 
     public void increaseSellableDataAmount(int restore) {
+
         if (restore < 0 || restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
+
             throw new GlobalException(TradePostErrorCode.EXCEED_RESTORE_CAPACITY);
         }
 
         this.sellableDataAmount += restore;
+    }
+
+    public void update(Plan plan) {
+        this.carrier = plan.getCarrier();
+        this.planName = plan.getName();
+        this.mobileDataType = plan.getMobileDataType();
+        this.sellMobileDataCapacityGb = plan.getSellMobileDataCapacityGb();
+        this.sellableDataAmount = plan.getSellMobileDataCapacityGb();
     }
 
     public static UserPlan from(UserPlanReq userPlanReq){
