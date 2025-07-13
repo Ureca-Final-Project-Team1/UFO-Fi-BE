@@ -10,12 +10,7 @@ import lombok.NoArgsConstructor;
 public class TradePostSearchReq {
 
     private LocalDateTime cursor;
-    private int size = 10; //기본 사이즈 10개로 일단 합니다.
+    private Long lastId;
 
-    public LocalDateTime getCursorOrDefault() {
-        if (cursor == null) {
-            return LocalDateTime.now();
-        }
-        return cursor;
-    }
+    private int size = 10; //기본 사이즈 10개로 일단 합니다.
 }

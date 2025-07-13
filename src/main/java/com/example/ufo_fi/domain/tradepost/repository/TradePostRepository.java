@@ -2,17 +2,20 @@ package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
-import java.time.LocalDateTime;
-import java.util.List;
-import org.springframework.data.domain.Pageable;
+import jakarta.persistence.LockModeType;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public interface TradePostRepository extends JpaRepository<TradePost, Long> {
+@Repository
+public interface TradePostRepository extends JpaRepository<TradePost, Long>, TradePostQueryDsl {
 
-    @Query("select t from TradePost t where t.isDelete = false and t.createdAt < :cursor ORDER BY t.createdAt DESC ")
-    List<TradePost> findByCursorPaging(@Param("cursor") LocalDateTime cursor, Pageable pageable);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select tp from TradePost tp where tp.id = :postId")
+    Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
 
     boolean existsByUser(User user);
 }

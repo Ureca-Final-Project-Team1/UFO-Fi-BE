@@ -4,7 +4,10 @@ import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,6 +20,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,13 +56,16 @@ public class TradePost {
     private Carrier carrier;
 
     @Column(name = "sell_mobile_data_capacity_gb")
-    private int sellMobileDataCapacityGb;
+    private Integer sellMobileDataCapacityGb;
 
     @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "price_per_unit")
+    private Integer pricePerUnit;
+
+    @Column(name = "total_price")
+    private Integer totalPrice;
 
     @Column(name = "report_count")
     private Integer reportCount;
@@ -92,10 +100,11 @@ public class TradePost {
     public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
         TradePostStatus tradePostStatus,
         Integer reportCount, User user) {
+
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
-            .price(request.getPrice())
+            .pricePerUnit(request.getPricePerUnit())
             .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
             .carrier(user.getUserPlan().getCarrier())
             .mobileDataType(user.getUserPlan().getMobileDataType())
@@ -106,11 +115,43 @@ public class TradePost {
             .build();
     }
 
-    public void softDelete() {
-        this.isDelete = true;
+    @PrePersist
+    @PreUpdate
+    public void calculateTotalPrice() {
+
+        if (this.pricePerUnit != null && this.sellMobileDataCapacityGb > 0) {
+            this.totalPrice = this.pricePerUnit * this.sellMobileDataCapacityGb;
+        } else {
+            this.totalPrice = 0;
+        }
     }
 
-    public void statusDelete() {
+    public void softDeleteAndStatusDelete() {
+
+        this.isDelete = true;
         this.tradePostStatus = TradePostStatus.DELETED;
+    }
+
+    public void update(TradePostUpdateReq request) {
+
+        if (request.getTitle() != null) {
+            this.title = request.getTitle();
+        }
+
+        if (request.getPricePerUnit() != null) {
+            this.pricePerUnit = request.getPricePerUnit();
+        }
+
+        if (request.getSellMobileDataCapacityGb() != null) {
+            this.sellMobileDataCapacityGb = request.getSellMobileDataCapacityGb();
+        }
+    }
+
+    public void verifyOwner(TradePost tradePost, User user) {
+
+        if (!tradePost.getUser().getId().equals(user.getId())) {
+
+            throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
+        }
     }
 }
