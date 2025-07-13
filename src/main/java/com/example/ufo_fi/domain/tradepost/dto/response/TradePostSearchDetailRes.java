@@ -16,15 +16,16 @@ public class TradePostSearchDetailRes {
 
     private String title;
     private Carrier carrier;
-    private Integer price;
+    private Integer pricePerUnit;
     private MobileDataType mobileDataType;
     private Integer sellMobileDataCapacityGb;
 
     public static TradePostSearchDetailRes from(final TradePost tradePost) {
+
         return TradePostSearchDetailRes.builder()
             .title(tradePost.getTitle())
             .carrier(tradePost.getCarrier())
-            .price(tradePost.getPrice())
+            .pricePerUnit(tradePost.getPricePerUnit())
             .mobileDataType(tradePost.getMobileDataType())
             .sellMobileDataCapacityGb(tradePost.getSellMobileDataCapacityGb())
             .build();
