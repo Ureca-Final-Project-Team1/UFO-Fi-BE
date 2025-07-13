@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "InterestedPost API", description = "관심 상품 알림 API")
 public interface InterestedPostApiSpec {
 
-    @Operation(summary = "fcm 토큰 저장 API", description = "fcm 토큰을 프론트 측에서 받아온다.")
+    @Operation(summary = "관심 상품 등록 조건 설정 API", description = "관심 있는 상품의 알림을 받기 위한 조건을 업데이트합니다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PatchMapping("/v1/notification-filters/interested-post")
     ResponseEntity<ResponseBody<Void>> updateInterestedPost(
