@@ -2,7 +2,7 @@ package com.example.ufo_fi.domain.user.dto.response;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
-import com.example.ufo_fi.domain.userplan.entity.UserPlan;
+import com.example.ufo_fi.domain.user.entity.UserPlan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

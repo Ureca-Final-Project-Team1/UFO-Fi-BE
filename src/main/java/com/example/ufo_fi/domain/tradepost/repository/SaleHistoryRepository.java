@@ -1,7 +1,7 @@
-package com.example.ufo_fi.domain.salehistory;
+package com.example.ufo_fi.domain.tradepost.repository;
 
 
-import com.example.ufo_fi.domain.salehistory.entity.SaleHistory;
+import com.example.ufo_fi.domain.tradepost.entity.SaleHistory;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import org.springframework.data.jpa.repository.JpaRepository;
 

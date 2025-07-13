@@ -1,7 +1,7 @@
 package com.example.ufo_fi.domain.signup.service;
 
-import com.example.ufo_fi.domain.profilephoto.entity.ProfilePhoto;
-import com.example.ufo_fi.domain.profilephoto.repository.ProfilePhotoRepository;
+import com.example.ufo_fi.domain.user.entity.ProfilePhoto;
+import com.example.ufo_fi.domain.user.repository.ProfilePhotoRepository;
 import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;

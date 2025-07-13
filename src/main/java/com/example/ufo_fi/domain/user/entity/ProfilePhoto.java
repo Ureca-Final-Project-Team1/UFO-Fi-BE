@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.nickname.entity;
+package com.example.ufo_fi.domain.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,18 +12,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "nickname")
+@Table(name = "profile_photo")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Nickname {
-
+public class ProfilePhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;  // 닉네임 식별번호
+    @Column(name = "id")
+    private Long id;
 
-    @Column(name = "nickname_adjective", length = 255)
-    private String nicknameAdjective;
+    @Column(name = "profile_photo_url")
+    private String profilePhotoUrl;
 }

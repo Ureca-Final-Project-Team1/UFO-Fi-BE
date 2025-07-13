@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.notification.controller;
+package com.example.ufo_fi.domain.mypage.controller;
 
-import com.example.ufo_fi.domain.notification.controller.api.NotificationSettingApiSpec;
+import com.example.ufo_fi.domain.mypage.controller.api.MyPageNotificationSettingApiSpec;
 import com.example.ufo_fi.domain.notification.dto.response.NotificationSettingReadRes;
 import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.service.NotificationSettingService;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class NotificationSettingController implements NotificationSettingApiSpec {
+public class MyPageNotificationSettingController implements MyPageNotificationSettingApiSpec {
 
     private final NotificationSettingService notificationService;
 

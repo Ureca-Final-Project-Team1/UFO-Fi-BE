@@ -1,8 +1,8 @@
 package com.example.ufo_fi.domain.mypage.controller.api;
 
-import com.example.ufo_fi.domain.useraccount.dto.request.AccountCreateReq;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountCreateRes;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountReadRes;
+import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
+import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
+import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

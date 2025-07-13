@@ -1,7 +1,7 @@
 package com.example.ufo_fi.domain.signup.service;
 
-import com.example.ufo_fi.domain.nickname.entity.Nickname;
-import com.example.ufo_fi.domain.nickname.repository.NicknameRepository;
+import com.example.ufo_fi.domain.user.entity.Nickname;
+import com.example.ufo_fi.domain.user.repository.NicknameRepository;
 import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;

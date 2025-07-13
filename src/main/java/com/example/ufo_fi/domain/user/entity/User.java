@@ -1,8 +1,6 @@
 package com.example.ufo_fi.domain.user.entity;
 
-import com.example.ufo_fi.domain.profilephoto.entity.ProfilePhoto;
 import com.example.ufo_fi.domain.signup.dto.request.UserInfoReq;
-import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,10 +1,10 @@
 package com.example.ufo_fi.domain.mypage.controller;
 
 import com.example.ufo_fi.domain.mypage.controller.api.MyPageAccountApiSpec;
-import com.example.ufo_fi.domain.useraccount.dto.request.AccountCreateReq;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountCreateRes;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountReadRes;
-import com.example.ufo_fi.domain.useraccount.service.UserAccountService;
+import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
+import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
+import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
+import com.example.ufo_fi.domain.user.service.UserAccountService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

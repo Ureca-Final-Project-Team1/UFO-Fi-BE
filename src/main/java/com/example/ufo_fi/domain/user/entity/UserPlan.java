@@ -1,12 +1,10 @@
-package com.example.ufo_fi.domain.userplan.entity;
+package com.example.ufo_fi.domain.user.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
-import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,11 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.notification.controller.api;
+package com.example.ufo_fi.domain.mypage.controller.api;
 
 import com.example.ufo_fi.domain.notification.dto.response.NotificationSettingReadRes;
 import com.example.ufo_fi.domain.notification.entity.NotificationType;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Mypage API", description = "알림 설정 API")
-public interface NotificationSettingApiSpec {
+public interface MyPageNotificationSettingApiSpec {
     @Operation(summary = "마이페이지 알림 목록 조회 API", description = "내 알림 설정 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/notification-settings")

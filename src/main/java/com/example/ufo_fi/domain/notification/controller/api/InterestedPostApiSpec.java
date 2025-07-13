@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.notification.controller;
+package com.example.ufo_fi.domain.notification.controller.api;
 
 import com.example.ufo_fi.domain.notification.dto.request.InterestedPostUpdateReq;
 import com.example.ufo_fi.global.response.ResponseBody;

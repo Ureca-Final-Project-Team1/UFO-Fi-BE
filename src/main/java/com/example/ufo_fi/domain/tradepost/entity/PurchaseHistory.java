@@ -1,6 +1,5 @@
-package com.example.ufo_fi.domain.purchasehistory.entity;
+package com.example.ufo_fi.domain.tradepost.entity;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

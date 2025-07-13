@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.useraccount.exception;
+package com.example.ufo_fi.domain.user.exception;
 
 import com.example.ufo_fi.global.exception.ErrorCode;
 import lombok.Getter;

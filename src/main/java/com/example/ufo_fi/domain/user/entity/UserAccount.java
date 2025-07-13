@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.refresh.entity;
+package com.example.ufo_fi.domain.user.entity;
 
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,27 +16,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "refresh")
+@Table(name = "user_accounts")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Refresh {
+public class UserAccount {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "token")
-    private String token;
+    @Column(name = "bank", length = 255)
+    private String bank;
+
+    @Column(name = "bank_account", length = 255)
+    private String bankAccount;
+
+    @Column(name = "password", length = 255)
+    private String password;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Refresh of(User user, String token){
-        return Refresh.builder()
-                .token(token)
+    public static UserAccount of(final User user, final AccountCreateReq accountCreateReq) {
+        return UserAccount.builder()
+                .bank(accountCreateReq.getBank())
+                .bankAccount(accountCreateReq.getBankAccount())
+                .password(accountCreateReq.getPassword())
                 .user(user)
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.notification.common;
+package com.example.ufo_fi.domain.notification.service;
 
 import java.util.List;
 

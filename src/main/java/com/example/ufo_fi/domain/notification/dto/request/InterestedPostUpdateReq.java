@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.notification.dto.request;
 
-import com.example.ufo_fi.domain.notification.common.InterestedCarriers;
+import com.example.ufo_fi.domain.notification.service.InterestedCarriers;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

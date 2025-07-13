@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.useraccount.dto.response;
+package com.example.ufo_fi.domain.user.dto.response;
 
-import com.example.ufo_fi.domain.useraccount.entity.UserAccount;
+import com.example.ufo_fi.domain.user.entity.UserAccount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

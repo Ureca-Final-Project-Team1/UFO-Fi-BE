@@ -10,7 +10,7 @@ import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
-import com.example.ufo_fi.domain.userplan.entity.UserPlan;
+import com.example.ufo_fi.domain.user.entity.UserPlan;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

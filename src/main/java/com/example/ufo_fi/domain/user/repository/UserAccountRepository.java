@@ -1,7 +1,7 @@
-package com.example.ufo_fi.domain.useraccount.repository;
+package com.example.ufo_fi.domain.user.repository;
 
 import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.useraccount.entity.UserAccount;
+import com.example.ufo_fi.domain.user.entity.UserAccount;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

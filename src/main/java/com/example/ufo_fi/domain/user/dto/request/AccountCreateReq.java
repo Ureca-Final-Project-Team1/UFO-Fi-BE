@@ -1,8 +1,7 @@
-package com.example.ufo_fi.domain.useraccount.dto.request;
+package com.example.ufo_fi.domain.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

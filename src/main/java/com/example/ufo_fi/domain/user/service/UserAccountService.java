@@ -1,13 +1,13 @@
-package com.example.ufo_fi.domain.useraccount.service;
+package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
-import com.example.ufo_fi.domain.useraccount.dto.request.AccountCreateReq;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountCreateRes;
-import com.example.ufo_fi.domain.useraccount.dto.response.AccountReadRes;
-import com.example.ufo_fi.domain.useraccount.entity.UserAccount;
-import com.example.ufo_fi.domain.useraccount.exception.UserAccountErrorCode;
-import com.example.ufo_fi.domain.useraccount.repository.UserAccountRepository;
+import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
+import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
+import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
+import com.example.ufo_fi.domain.user.entity.UserAccount;
+import com.example.ufo_fi.domain.user.exception.UserAccountErrorCode;
+import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
