@@ -17,7 +17,9 @@ public enum NotificationErrorCode implements ErrorCode {
     // message
     MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Firebase 메시지 전송에 실패했습니다."),
 
-    ;
+    // InterestedPost
+    NO_INTERESTED_POST(HttpStatus.NOT_FOUND, "관심 상품 조건을 찾을 수 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;
