@@ -13,7 +13,7 @@ import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.useraccount.UserAccountRepository;
+import com.example.ufo_fi.domain.useraccount.repository.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.time.LocalDateTime;
 import java.util.List;
