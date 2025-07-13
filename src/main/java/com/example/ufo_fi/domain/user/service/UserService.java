@@ -44,7 +44,9 @@ public class UserService {
     public UserInfoReadRes readUser(Long userId) {
         User user = userRepository.findUserWithUserPlan(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+
         UserPlan userPlan = user.getUserPlan();
+        if(userPlan == null) throw new GlobalException(UserErrorCode.NO_USER_PLAN);
 
         return UserInfoReadRes.of(user, userPlan);
     }
