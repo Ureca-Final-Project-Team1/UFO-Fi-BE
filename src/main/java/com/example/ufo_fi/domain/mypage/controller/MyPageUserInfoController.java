@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MyPageUserInfoController implements MyPageUserInfoApiSpec {
-    private final UserService UserService;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<ResponseBody<UserInfoReadRes>> readMyPageUserInfo(@RequestParam Long userId) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        UserService.readUser(userId)));
+                        userService.readUser(userId)));
     }
 }

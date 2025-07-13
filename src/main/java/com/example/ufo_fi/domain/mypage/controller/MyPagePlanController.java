@@ -20,7 +20,6 @@ public class MyPagePlanController implements MyPagePlanApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
-            Long userId,
             String carrier
     ) {
         return ResponseEntity.ok(

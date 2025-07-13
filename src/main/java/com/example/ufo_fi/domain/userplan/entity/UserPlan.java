@@ -56,7 +56,9 @@ public class UserPlan {
     private Integer sellableDataAmount;
 
     public void subtractSellableDataAmount(int requestSellData) {
+
         if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
+            
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
 
@@ -64,7 +66,9 @@ public class UserPlan {
     }
 
     public void increaseSellableDataAmount(int restore) {
+
         if (restore < 0 || restore + this.sellableDataAmount > sellMobileDataCapacityGb) {
+
             throw new GlobalException(TradePostErrorCode.EXCEED_RESTORE_CAPACITY);
         }
 

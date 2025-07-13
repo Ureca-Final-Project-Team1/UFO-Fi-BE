@@ -14,7 +14,7 @@ public class AccountReadRes {
     private String bank;
     private String bankAccount;
 
-    public static AccountReadRes from(UserAccount userAccount) {
+    public static AccountReadRes from(final UserAccount userAccount) {
         return AccountReadRes.builder()
                 .bank(userAccount.getBank())
                 .bankAccount(userAccount.getBankAccount())
