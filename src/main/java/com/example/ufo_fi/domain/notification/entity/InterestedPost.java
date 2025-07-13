@@ -1,38 +1,27 @@
 package com.example.ufo_fi.domain.notification.entity;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.domain.notification.dto.request.InterestedPostUpdateReq;
 import com.example.ufo_fi.domain.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product_preferences")
+@Table(name = "interested_posts")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductPreference {
+public class InterestedPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "carrier")
-    private Carrier carrier;
+    private int carrier;
 
     @Column(name = "interested_max_capacity")
     private Integer interestedMaxCapacity;
@@ -53,4 +42,23 @@ public class ProductPreference {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static InterestedPost from(User user) {
+        return InterestedPost.builder()
+                .user(user)
+                .carrier(0)
+                .interestedMaxCapacity(0)
+                .interestedMinCapacity(0)
+                .interestedMaxPrice(0)
+                .interestedMinPrice(0)
+                .build();
+    }
+
+    public void update(InterestedPostUpdateReq request, int carrierBitmask) {
+        this.carrier = carrierBitmask;
+        this.interestedMaxCapacity = request.getInterestedMaxCapacity();
+        this.interestedMinCapacity = request.getInterestedMinCapacity();
+        this.interestedMaxPrice = request.getInterestedMaxPrice();
+        this.interestedMinPrice = request.getInterestedMinPrice();
+    }
 }
