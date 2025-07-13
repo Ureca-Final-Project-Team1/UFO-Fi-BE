@@ -6,6 +6,7 @@ import com.example.ufo_fi.global.response.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,6 @@ public interface MyPageZetApiSpec {
     @GetMapping("/v1/mypage/zet")
     ResponseEntity<ResponseBody<ZetPurchaseRes>> purchaseZet(
             @RequestParam Long userId,
-            @RequestBody ZetPurchaseReq zetPurchaseReq
+            @RequestBody @Valid ZetPurchaseReq zetPurchaseReq
     );
 }

@@ -12,6 +12,8 @@ import com.example.ufo_fi.domain.user.dto.response.ZetPurchaseRes;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.domain.useraccount.entity.UserAccount;
+import com.example.ufo_fi.domain.useraccount.repository.UserAccountRepository;
 import com.example.ufo_fi.domain.userplan.entity.UserPlan;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -25,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final TradePostRepository tradePostRepository;
+    private final UserAccountRepository userAccountRepository;
     private final SlackExceptionNotification slackExceptionNotification;
 
     public UserPlanReadRes readUserPlan(Long userId) {
@@ -67,25 +70,30 @@ public class UserService {
 
     /**
      * Zet을 구매하는 로직
-     * 1. 사용자를 확인한다.
+     * 1. 사용자를 확인한다.(비관적 락)
+     * 2. 계좌 정보를 확인한다.
      * 2. 가상 PG 결제 승인을 받는다.(2차 MVP 서버 분리 고려)
      * 3. 결제 이력을 저장한다.
      * 4. 유저 Zet을 적립한다.
      * 5. 응답을 반환한다.
+     * => 비관적 락 성능 이슈 시 Saga 패턴 고려
+     * => 슬랙 연동으로 예외 모니터링
      */
     @Transactional
     public ZetPurchaseRes updateZet(Long userId, ZetPurchaseReq zetPurchaseReq) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdWithPessimisticLock(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        boolean paymentApproved = true;
+        if(!userAccountRepository.existsByUser(user)) throw new GlobalException(UserErrorCode.NO_ACCOUNT);
 
+        //PG 가상 연결
+        boolean paymentApproved = true;
         if(!paymentApproved){
             slackExceptionNotification.request(zetPurchaseReq);
             throw new GlobalException(UserErrorCode.PG_PAYMENT_ERROR);
         }
 
-        //user.increaseZet(zetPurchaseReq.getPurchaseZet());
-        return null;
+        user.increaseZet(zetPurchaseReq.getPurchaseZet());
+        return ZetPurchaseRes.from(user);
     }
 }

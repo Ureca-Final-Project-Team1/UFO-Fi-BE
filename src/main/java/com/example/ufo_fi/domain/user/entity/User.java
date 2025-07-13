@@ -81,4 +81,8 @@ public class User {
     public void registerUserPlan(UserPlan userPlan){
         this.userPlan = userPlan;
     }
+
+    public void increaseZet(Integer purchaseZet) {
+        this.zetAsset += purchaseZet;
+    }
 }
