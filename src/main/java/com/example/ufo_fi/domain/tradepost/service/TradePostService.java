@@ -11,7 +11,7 @@ import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
-import com.example.ufo_fi.domain.user.UserRepository;
+import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.useraccount.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;

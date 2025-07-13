@@ -3,7 +3,7 @@ package com.example.ufo_fi.domain.notification.service;
 import com.example.ufo_fi.domain.notification.dto.response.FcmTokenCommonRes;
 import com.example.ufo_fi.domain.notification.entity.FcmToken;
 import com.example.ufo_fi.domain.notification.repository.FcmTokenRepository;
-import com.example.ufo_fi.domain.user.UserRepository;
+import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
