@@ -2,6 +2,8 @@ package com.example.ufo_fi.domain.userplan.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
+import com.example.ufo_fi.domain.signup.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.global.exception.GlobalException;
@@ -13,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +54,6 @@ public class UserPlan {
     @Column(name = "sellable_data_amount")
     private Integer sellableDataAmount;
 
-    @OneToMany(mappedBy = "userPlan")
-    @Builder.Default
-    private List<User> users = new ArrayList<>();
-
-
     public void subtractSellableDataAmount(int requestSellData) {
 
         if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
@@ -74,5 +72,15 @@ public class UserPlan {
         }
 
         this.sellableDataAmount += restore;
+    }
+
+    public static UserPlan from(UserPlanReq userPlanReq){
+        return UserPlan.builder()
+                .carrier(userPlanReq.getCarrier())
+                .planName(userPlanReq.getPlanName())
+                .mobileDataType(userPlanReq.getMobileDataType())
+                .sellMobileDataCapacityGb(userPlanReq.getSellMobileDataCapacityGB())
+                .sellableDataAmount(userPlanReq.getSellMobileDataCapacityGB())
+                .build();
     }
 }
