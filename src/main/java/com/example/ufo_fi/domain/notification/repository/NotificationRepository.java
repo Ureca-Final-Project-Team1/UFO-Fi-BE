@@ -1,7 +1,10 @@
 package com.example.ufo_fi.domain.notification.repository;
 
-import com.example.ufo_fi.domain.notification.entity.Notification;
+import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+import java.util.Optional;
+
+public interface NotificationRepository extends JpaRepository<NotificationSetting, Long> {
+    Optional<NotificationSetting> findByUserId(Long userId);
 }

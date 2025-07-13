@@ -2,11 +2,11 @@ package com.example.ufo_fi.domain.tradepost.dto.response;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Slice;
 
 @Getter
 @Builder
@@ -14,15 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TradePostSearchRes {
 
-    private List<TradePostSearchDetailRes> posts;
+    private Slice<TradePostSearchDetailRes> posts;
     private LocalDateTime nextCursor;
+    private Long nextLastId;
 
-    public static TradePostSearchRes of(List<TradePost> tradePosts, LocalDateTime nextCursor) {
+    public static TradePostSearchRes of(Slice<TradePost> tradePosts, LocalDateTime nextCursor,
+        Long nextLastId) {
+
         return TradePostSearchRes.builder()
-            .posts(tradePosts.stream()
-                .map(TradePostSearchDetailRes::from)
-                .toList())
+            .posts(tradePosts.map(TradePostSearchDetailRes::from))
             .nextCursor(nextCursor)
+            .nextLastId(nextLastId)
             .build();
     }
 }
