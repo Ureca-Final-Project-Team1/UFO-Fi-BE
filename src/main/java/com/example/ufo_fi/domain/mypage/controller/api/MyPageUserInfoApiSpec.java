@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "Mypage/UserInfo API", description = "마이페이지 유저 정보 API")
+@Tag(name = "Mypage API", description = "마이페이지 유저 정보 API")
 public interface MyPageUserInfoApiSpec {
 
     @Operation(summary = "나의 프로필 조회 API", description = "유저 기본 정보를 받아온다.")

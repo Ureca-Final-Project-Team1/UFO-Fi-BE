@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.userplan.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.signup.dto.request.SignupReq;
 import com.example.ufo_fi.domain.signup.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
@@ -72,6 +73,14 @@ public class UserPlan {
         }
 
         this.sellableDataAmount += restore;
+    }
+
+    public void update(Plan plan) {
+        this.carrier = plan.getCarrier();
+        this.planName = plan.getName();
+        this.mobileDataType = plan.getMobileDataType();
+        this.sellMobileDataCapacityGb = plan.getSellMobileDataCapacityGb();
+        this.sellableDataAmount = plan.getSellMobileDataCapacityGb();
     }
 
     public static UserPlan from(UserPlanReq userPlanReq){

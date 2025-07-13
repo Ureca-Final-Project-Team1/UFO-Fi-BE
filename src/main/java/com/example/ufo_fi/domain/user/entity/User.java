@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Min(0)
     @Column(name = "zet_asset")
     private Integer zetAsset;
 

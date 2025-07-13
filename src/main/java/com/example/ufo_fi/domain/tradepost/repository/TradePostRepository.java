@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.LockModeType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select tp from TradePost tp where tp.id = :postId")
     Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
+
+    boolean existsByUser(User user);
 }
