@@ -58,7 +58,7 @@ public class TradePostService {
         TradePost tradePost = TradePost.of(request, false, false, TradePostStatus.SELLING, 0, user);
 
         user.getUserPlan().subtractSellableDataAmount(requestSellData);
-        tradePost.saveTotalPrice();// total 가격 저장
+        tradePost.saveTotalPrice();
 
         TradePost savedTradePost = tradePostRepository.save(tradePost);
 
@@ -112,13 +112,20 @@ public class TradePostService {
         tradePost.verifyOwner(tradePost, user);
 
         if (request.getSellMobileDataCapacityGb() != null) {
-            user.getUserPlan().increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
-            user.getUserPlan().subtractSellableDataAmount(request.getSellMobileDataCapacityGb());
+
+            int originalDataAmount = tradePost.getSellMobileDataCapacityGb();
+            user.getUserPlan().increaseSellableDataAmount(originalDataAmount);
+
+            int newDataAmount = request.getSellMobileDataCapacityGb();
+
+            if (newDataAmount > user.getUserPlan().getSellableDataAmount()) {
+                throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+            }
+
+            user.getUserPlan().subtractSellableDataAmount(newDataAmount);
         }
 
-        //비교 로직 추가 -> 구매하기
-
-        tradePost.saveTotalPrice();// total 가격 저장
+        tradePost.saveTotalPrice();
         tradePost.update(request);
 
         return new TradePostCommonRes(tradePost.getId());
