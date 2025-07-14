@@ -1,21 +1,22 @@
 package com.example.ufo_fi.domain.tradepost.dto.request;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
-import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@NoArgsConstructor
-public class TradePostFilterReq {
+@Setter
+public class TradePostQueryReq {
 
     private Carrier carrier;
-    private Integer maxTotalPrice;
-    private Integer minTotalPrice;
+    private Integer maxTotalZet;
+    private Integer minTotalZet;
     private Integer maxCapacity;
     private Integer minCapacity;
+    private String reputation;
 
-    private Integer size = 10;
-    private LocalDateTime cursorCreatedAt;
     private Long cursorId;
+
+    private Integer size;
+
 }
