@@ -83,4 +83,16 @@ public class User {
     public void registerUserPlan(UserPlan userPlan){
         this.userPlan = userPlan;
     }
+
+    public void decreaseZetAsset(Integer totalPrice) {
+        this.zetAsset -= totalPrice;
+    }
+
+    public void increaseZetAsset(Integer totalPrice) {
+        this.zetAsset += totalPrice;
+    }
+
+    public void increaseSellableDataAmount(Integer sellable) {
+        this.userPlan.increaseSellableDataAmount(sellable);
+    }
 }

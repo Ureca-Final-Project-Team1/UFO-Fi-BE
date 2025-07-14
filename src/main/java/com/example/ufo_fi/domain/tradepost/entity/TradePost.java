@@ -154,4 +154,8 @@ public class TradePost {
             throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
         }
     }
+
+    public void updateStatusSoldOut(){
+        this.tradePostStatus = TradePostStatus.SOLD_OUT;
+    }
 }

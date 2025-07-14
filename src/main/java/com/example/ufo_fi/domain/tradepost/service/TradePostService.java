@@ -1,5 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
+import com.example.ufo_fi.domain.payment.dto.PurchaseReq;
+import com.example.ufo_fi.domain.payment.dto.PurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
@@ -19,6 +21,8 @@ import com.example.ufo_fi.domain.useraccount.repository.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -209,4 +213,42 @@ public class TradePostService {
         }
     }
 
+    /**
+     * TradePostPurchaseController
+     * 1. 거래 게시글을 조회하고 유효성을 검사
+     * 2. 구매자와 판매자 동일 여부를 체크
+     * 3. 구매자의 자산이 충분한가?
+     * 4. 자산 차감/판매자에게 지급 예
+     */
+    @Transactional
+    public PurchaseRes purchase(Long userId, PurchaseReq purchaseReq) {
+        TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+
+        if(!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)){
+            throw new GlobalException(TradePostErrorCode.ALREADY_DELETE);
+        }
+
+        User buyer = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF));
+
+        User seller = tradePost.getUser();
+
+        if(Objects.equals(buyer.getId(), seller.getId())){
+            throw new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF);
+        }
+
+        if(buyer.getZetAsset() < tradePost.getTotalPrice()){
+            throw new GlobalException(TradePostErrorCode.ZET_LACK);
+        }
+
+        buyer.decreaseZetAsset(tradePost.getTotalPrice());
+        seller.increaseZetAsset(tradePost.getTotalPrice());
+        buyer.increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
+        tradePost.updateStatusSoldOut();
+
+        //sellable Data 증가
+        //saveHistories(); 내역 저장 로직 후에 추가
+        return PurchaseRes.from(buyer);
+    }
 }

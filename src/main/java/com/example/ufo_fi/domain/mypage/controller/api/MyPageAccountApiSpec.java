@@ -19,7 +19,9 @@ public interface MyPageAccountApiSpec {
     @Operation(summary = "마이페이지 계좌 조회 API", description = "내 계좌 정보를 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/account")
-    ResponseEntity<ResponseBody<AccountReadRes>> readAccount(@RequestParam Long userId);
+    ResponseEntity<ResponseBody<AccountReadRes>> readAccount(
+            @RequestParam Long userId
+    );
 
     @Operation(summary = "마이페이지 계좌 및 간편 비밀번호 등록 API", description = "내 계좌를 등록한다.")
     @ApiResponse(useReturnTypeSchema = true)

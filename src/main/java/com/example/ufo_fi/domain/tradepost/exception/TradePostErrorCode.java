@@ -20,7 +20,10 @@ public enum TradePostErrorCode implements ErrorCode {
     CANNOT_DELETE_NOT_SELLING_POST(HttpStatus.FORBIDDEN, "판매중 게시물만 삭제 가능합니다."),
     NO_RECOMMENDATION_FOUND(HttpStatus.NOT_FOUND, "조건에 맞는 추천 상품을 찾을 수 없습니다."),
     NO_TRADE_POST_FOUND(HttpStatus.NOT_FOUND, "게시물이 존재하지 않습니다."),
-    NO_AUTHORITY(HttpStatus.NOT_ACCEPTABLE, "게시물에 대한 수정 및 삭제 권한이 없습니다.");
+    NO_AUTHORITY(HttpStatus.NOT_ACCEPTABLE, "게시물에 대한 수정 및 삭제 권한이 없습니다."),
+    CANT_PURCHASE_MYSELF(HttpStatus.NOT_ACCEPTABLE, "자신의 게시물은 살 수 없습니다."),
+    ZET_LACK(HttpStatus.NOT_ACCEPTABLE, "Zet이 부족합니다!, 충전 페이지로 이동!"),
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
