@@ -2,6 +2,8 @@ package com.example.ufo_fi.domain.tradepost.dto.response;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,15 +16,29 @@ import org.springframework.data.domain.Slice;
 @AllArgsConstructor
 public class TradePostSearchRes {
 
-    private Slice<TradePostSearchDetailRes> posts;
+    private List<TradePostSearchDetailRes> posts;
+    private boolean hasNext;
     private LocalDateTime nextCursor;
     private Long nextLastId;
 
-    public static TradePostSearchRes of(Slice<TradePost> tradePosts, LocalDateTime nextCursor,
-        Long nextLastId) {
+    public static TradePostSearchRes of(Slice<TradePost> tradePosts) {
+
+        List<TradePostSearchDetailRes> postDetails = tradePosts.getContent().stream()
+            .map(TradePostSearchDetailRes::from)
+            .collect(Collectors.toList());
+
+        LocalDateTime nextCursor = null;
+        Long nextLastId = null;
+
+        if (!tradePosts.getContent().isEmpty()) {
+            TradePost lastPost = tradePosts.getContent().get(tradePosts.getContent().size() - 1);
+            nextCursor = lastPost.getCreatedAt();
+            nextLastId = lastPost.getId();
+        }
 
         return TradePostSearchRes.builder()
-            .posts(tradePosts.map(TradePostSearchDetailRes::from))
+            .posts(postDetails)
+            .hasNext(tradePosts.hasNext())
             .nextCursor(nextCursor)
             .nextLastId(nextLastId)
             .build();
