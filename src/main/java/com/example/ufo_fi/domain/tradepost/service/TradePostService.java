@@ -73,9 +73,16 @@ public class TradePostService {
 
         Pageable pageable = PageRequest.of(0, request.getSize());
 
-        Slice<TradePost> posts = tradePostRepository.findByCursorPaging(
-            request.getCursor(), request.getLastId(), pageable
+        List<TradePostStatus> statuses = List.of(TradePostStatus.SELLING, TradePostStatus.SOLD_OUT);
+
+        Slice<TradePost> posts = tradePostRepository.findRecentPostByCursor(
+            request.getCursor(), request.getLastId(), statuses, pageable
         );
+
+        if (posts.isEmpty()) {
+
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
 
         return TradePostSearchRes.of(posts);
     }
@@ -86,9 +93,14 @@ public class TradePostService {
     @Transactional
     public TradePostFilterRes readFilterList(TradePostFilterReq request, Long userId) {
 
-        Slice<TradePost> postSlice = tradePostRepository.searchWithPagination(request);
+        Slice<TradePost> posts = tradePostRepository.findRecentPostsByCursor(request);
 
-        return TradePostFilterRes.from(postSlice);
+        if (posts.isEmpty()) {
+
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+
+        return TradePostFilterRes.from(posts);
     }
 
     /**
@@ -154,7 +166,7 @@ public class TradePostService {
         User user = getUser(userId);
 
         List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
-            user.getUserPlan().getCarrier(), user.getUserPlan().getMobileDataType());
+            user.getUserPlan().getCarrier(), user.getUserPlan().getMobileDataType(), userId);
 
         List<TradePost> recommendationList = new ArrayList<>();
 
