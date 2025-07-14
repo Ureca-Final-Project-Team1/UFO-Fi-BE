@@ -3,8 +3,11 @@ package com.example.ufo_fi.domain.tradepost.repository;
 import static com.example.ufo_fi.domain.tradepost.entity.QTradePost.tradePost;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -72,7 +75,29 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
     }
 
+    @Override
+    public List<TradePost> findCheapestCandidates(TradePostBulkPurchaseReq condition,
+        Carrier carrier, MobileDataType mobileDataType) {
+
+        return queryFactory
+            .selectFrom(tradePost)
+            .where(
+                tradePost.isDelete.isFalse(),
+                tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
+                tradePost.carrier.eq(carrier),
+                tradePost.mobileDataType.eq(mobileDataType),
+                tradePost.pricePerUnit.loe(condition.getMaxPrice())
+            )
+            .orderBy(
+                tradePost.pricePerUnit.asc(),
+                tradePost.createdAt.desc()
+            )
+            .limit(100)
+            .fetch();
+    }
+
     private BooleanExpression cursorPaging(LocalDateTime cursor, Long lastId) {
+
         if (cursor == null || lastId == null) {
             return null;
         }
@@ -82,6 +107,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     private BooleanExpression cursorCondition(LocalDateTime createdAt, Long id) {
+
         if (createdAt == null || id == null) {
             return null;
         }
@@ -91,6 +117,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     private BooleanExpression carrierEq(Carrier carrier) {
+
         if (carrier == null) {
             return null;
         }
