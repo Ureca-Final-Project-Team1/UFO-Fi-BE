@@ -79,10 +79,7 @@ public class TradePostService {
             request.getCursor(), request.getLastId(), statuses, pageable
         );
 
-        if (posts.isEmpty()) {
-
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
+        validatePostsExistence(posts);
 
         return TradePostSearchRes.of(posts);
     }
@@ -95,10 +92,7 @@ public class TradePostService {
 
         Slice<TradePost> posts = tradePostRepository.findRecentPostsByCursor(request);
 
-        if (posts.isEmpty()) {
-
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
+        validatePostsExistence(posts);
 
         return TradePostFilterRes.from(posts);
     }
@@ -191,13 +185,21 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.NO_RECOMMENDATION_FOUND);
         }
 
-        return TradePostBulkPurchaseRes.of(recommendationList);
+        return TradePostBulkPurchaseRes.from(recommendationList);
     }
-
 
     private User getUser(Long userId) {
 
         return userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
     }
+
+    private void validatePostsExistence(Slice<TradePost> posts) {
+
+        if (posts.isEmpty()) {
+
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+    }
+
 }

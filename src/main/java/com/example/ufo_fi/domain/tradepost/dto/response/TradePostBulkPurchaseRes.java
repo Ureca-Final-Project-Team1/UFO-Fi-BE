@@ -16,7 +16,7 @@ public class TradePostBulkPurchaseRes {
     private final int totalPrice;
     private final List<TradePostSearchDetailRes> posts;
 
-    public static TradePostBulkPurchaseRes of(List<TradePost> finalPosts) {
+    public static TradePostBulkPurchaseRes from(List<TradePost> finalPosts) {
 
         List<TradePostSearchDetailRes> postDetails = finalPosts.stream()
             .map(TradePostSearchDetailRes::from)
