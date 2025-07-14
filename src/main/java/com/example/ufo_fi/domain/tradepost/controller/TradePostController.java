@@ -1,10 +1,12 @@
 package com.example.ufo_fi.domain.tradepost.controller;
 
 
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
@@ -79,5 +81,14 @@ public class TradePostController {
 
         return ResponseEntity.ok()
             .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
+    }
+
+    @PostMapping("/posts/bulk-purchase")
+    public ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> getFinalRecommendation(
+        @RequestBody @Valid TradePostBulkPurchaseReq request,
+        @RequestParam Long userId) {
+
+        return ResponseEntity
+            .ok(ResponseBody.success(tradePostService.readRecommendation(request, userId)));
     }
 }
