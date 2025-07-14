@@ -18,4 +18,12 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
 
     boolean existsByUser(User user);
+
+    @Query("""
+    SELECT tp
+    FROM TradePost tp
+    JOIN FETCH tp.reports r
+    WHERE tp.id = :postId
+    """)
+    TradePost findTradePostWithReports(@Param("postId") Long postId);
 }

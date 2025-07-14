@@ -23,7 +23,8 @@ public enum TradePostErrorCode implements ErrorCode {
     NO_AUTHORITY(HttpStatus.NOT_ACCEPTABLE, "게시물에 대한 수정 및 삭제 권한이 없습니다."),
     USER_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 요금제가 없습니다."),
     PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 요금제가 없습니다."),
-    ;
+    CANT_PURCHASE_MYSELF(HttpStatus.INTERNAL_SERVER_ERROR, "본인의 게시물은 구매를 할 수 없습니다."),
+    ZET_LACK(HttpStatus.INTERNAL_SERVER_ERROR, "zet가 부족합니다. 충전 페이지로 이동합니까?");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -1,13 +1,10 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostQueryReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.report.entity.Report;
+import com.example.ufo_fi.domain.report.repository.ReportRepository;
+import com.example.ufo_fi.domain.tradepost.dto.request.*;
+import com.example.ufo_fi.domain.tradepost.dto.response.*;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
@@ -20,6 +17,8 @@ import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,8 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TradePostService {
 
     private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
     private final TradePostRepository tradePostRepository;
-    private final UserAccountRepository userAccountRepository;
 
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
@@ -169,8 +168,7 @@ public class TradePostService {
      * 1. 일괄 구매 조회 로직
      */
     @Transactional(readOnly = true)
-    public TradePostBulkPurchaseRes readLumSumPurchase(TradePostBulkPurchaseReq request,
-        Long userId) {
+    public TradePostBulkPurchaseRes readLumSumPurchase(TradePostBulkPurchaseReq request, Long userId) {
 
         User user = getUser(userId);
 
@@ -217,4 +215,68 @@ public class TradePostService {
         }
     }
 
+    /**
+     * TradePostPurchaseController
+     * 1. 거래 게시글을 조회하고 유효성을 검사
+     * 2. 구매자와 판매자 동일 여부를 체크
+     * 3. 구매자의 자산이 충분한가?
+     * 4. 자산 차감/판매자에게 지급 예
+     */
+    @Transactional
+    public TradePostPurchaseRes purchase(Long userId, TradePostPurchaseReq purchaseReq) {
+        TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+
+        if(!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)){
+            throw new GlobalException(TradePostErrorCode.ALREADY_DELETE);
+        }
+
+        User buyer = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF));
+
+        User seller = tradePost.getUser();
+
+        if(Objects.equals(buyer.getId(), seller.getId())){
+            throw new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF);
+        }
+
+        if(buyer.getZetAsset() < tradePost.getTotalZet()){
+            throw new GlobalException(TradePostErrorCode.ZET_LACK);
+        }
+
+        buyer.decreaseZetAsset(tradePost.getTotalZet());
+        seller.increaseZetAsset(tradePost.getTotalZet());
+        buyer.increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
+        tradePost.updateStatusSoldOut();
+
+        //sellable Data 증가
+        //saveHistories(); 내역 저장 로직 후에 추가
+        return TradePostPurchaseRes.from(buyer);
+    }
+
+    @Transactional
+    public TradePostReportRes createReport(Long userId, Long postId, TradePostReportReq tradePostReportReq) {
+        TradePost tradePost = tradePostRepository.findTradePostWithReports(postId);
+
+        User reportingUser = userRepository.getReferenceById(userId);
+        User reportedUser = userRepository.getReferenceById(tradePostReportReq.getPostOwnerUserId());
+
+        Report report = Report.of(
+                reportingUser,
+                reportedUser,
+                tradePost,
+                tradePostReportReq
+        );
+
+        reportRepository.save(report);
+
+        tradePost.addReport(report);
+
+        int reportCount = tradePost.getReports().size();
+        if(reportCount >= 3){
+            tradePost.updateStatusReported();
+        }
+
+        return TradePostReportRes.of(report, tradePost, reportCount);
+    }
 }

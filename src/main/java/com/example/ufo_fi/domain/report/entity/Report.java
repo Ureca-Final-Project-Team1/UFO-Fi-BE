@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.report.entity;
 
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostReportReq;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.Column;
@@ -58,4 +59,13 @@ public class Report {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trade_post_id", nullable = false)
     private TradePost tradePost;
+
+    public static Report of(User reportingUser, User reportedUser, TradePost tradePost, TradePostReportReq tradePostReportReq) {
+        return Report.builder()
+                .content(tradePostReportReq.getContent())
+                .reportedUser(reportedUser)
+                .reportingUser(reportingUser)
+                .tradePost(tradePost)
+                .build();
+    }
 }

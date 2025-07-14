@@ -1,10 +1,12 @@
 package com.example.ufo_fi.domain.tradepost.controller.api;
 
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,5 +58,11 @@ public interface TradePostApiSpec {
         @PathVariable Long postId
     );
 
-
+    @Operation(summary = "구매(Zet <-> Data) API", description = "구매한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @DeleteMapping("/v1/posts/purchase")
+    ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
+            @RequestParam Long userId,
+            @RequestBody TradePostPurchaseReq purchaseReq
+    );
 }

@@ -89,6 +89,14 @@ public class User {
         this.userAccount = userAccount;
     }
 
+    public void decreaseZetAsset(Integer totalZet){
+        this.zetAsset -= totalZet;
+    }
+
+    public void increaseZetAsset(Integer totalZet){
+        this.zetAsset += totalZet;
+    }
+
     public void signup(UserInfoReq userInfoReq,
         String randomNickname,
         ProfilePhoto randomProfilePhoto,
@@ -100,5 +108,9 @@ public class User {
         this.profilePhoto = randomProfilePhoto;
         this.isActive = activeStatus;
         this.role = roleUser;
+    }
+
+    public void increaseSellableDataAmount(Integer sellMobileDataCapacityGb) {
+        this.userPlan.increaseSellableDataAmount(sellMobileDataCapacityGb);
     }
 }
