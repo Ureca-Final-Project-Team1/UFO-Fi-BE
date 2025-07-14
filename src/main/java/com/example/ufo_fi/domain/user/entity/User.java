@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -53,6 +54,9 @@ public class User {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "reputation")
+    private String reputation;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
@@ -73,23 +77,23 @@ public class User {
     @JoinColumn(name = "profile_photo_id")
     private ProfilePhoto profilePhoto;
 
-    public void registerUserPlan(UserPlan userPlan){
+    public void registerUserPlan(UserPlan userPlan) {
         this.userPlan = userPlan;
     }
 
-    public void registerRefresh(final Refresh refresh){
+    public void registerRefresh(final Refresh refresh) {
         this.refresh = refresh;
     }
 
-    public void registerUserAccount(final UserAccount userAccount){
+    public void registerUserAccount(final UserAccount userAccount) {
         this.userAccount = userAccount;
     }
 
     public void signup(UserInfoReq userInfoReq,
-                       String randomNickname,
-                       ProfilePhoto randomProfilePhoto,
-                       boolean activeStatus,
-                       Role roleUser) {
+        String randomNickname,
+        ProfilePhoto randomProfilePhoto,
+        boolean activeStatus,
+        Role roleUser) {
         this.name = userInfoReq.getName();
         this.phoneNumber = userInfoReq.getPhoneNumber();
         this.nickname = randomNickname;
