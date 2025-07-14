@@ -19,7 +19,7 @@ public class MyPageNotificationSettingController implements MyPageNotificationSe
     // GetMapping, 알림 설정 목록 Read
     @Override
     public ResponseEntity<ResponseBody<NotificationSettingReadRes>> readNotificationSettings(
-            @RequestParam Long userId) {
+            Long userId) {
         return ResponseEntity.ok(ResponseBody.success(notificationService.getNotificationSettings(userId)));
     }
 

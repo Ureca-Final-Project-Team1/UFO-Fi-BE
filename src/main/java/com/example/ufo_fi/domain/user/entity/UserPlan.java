@@ -1,15 +1,11 @@
 package com.example.ufo_fi.domain.user.entity;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
-import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.user.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,6 +37,13 @@ public class UserPlan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id")
     private Plan plan;
+
+    public static UserPlan from(final Plan plan) {
+        return UserPlan.builder()
+                .sellableDataAmount(plan.getSellMobileDataCapacityGb())
+                .plan(plan)
+                .build();
+    }
 
     public void subtractSellableDataAmount(int requestSellData) {
 

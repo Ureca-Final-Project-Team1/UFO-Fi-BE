@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "TradePost API", description = "거래 게시물 API")
 public interface TradePostApiSpec {
 
-    @Operation(summary = "거래 게시물 등록 API", description = "거래 게시물을 등록한다.")
+    @Operation(summary = "판매 게시물 생성 API", description = "거래 게시물을 등록한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/posts")
     ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
@@ -33,7 +33,7 @@ public interface TradePostApiSpec {
             @RequestBody @Valid TradePostCreateReq request
     );
 
-    @Operation(summary = "거래 게시물 목록 조회 API", description = "거래 게시물을 조회한다.")
+    @Operation(summary = "게시글 전체 조회 API", description = "거래 게시물을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/posts")
     ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
@@ -41,7 +41,7 @@ public interface TradePostApiSpec {
             @RequestParam Long userId
     );
 
-    @Operation(summary = "거래 게시물 목록 필터 조회 API", description = "거래 게시물을 필터링하여 조회한다.")
+    @Operation(summary = "판매 게시물 목록 필터 조회 API", description = "거래 게시물을 필터링하여 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/posts/filter")
     ResponseEntity<ResponseBody<TradePostFilterRes>> readFilterPost(
@@ -49,7 +49,7 @@ public interface TradePostApiSpec {
             @RequestBody TradePostFilterReq request
     );
 
-    @Operation(summary = "거래 게시물 수정 API", description = "거래 게시물을 수정한다.")
+    @Operation(summary = "판매 게시물 수정 API", description = "거래 게시물을 수정한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PutMapping("/v1/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
@@ -58,7 +58,7 @@ public interface TradePostApiSpec {
             @RequestBody @Valid TradePostUpdateReq request
     );
 
-    @Operation(summary = "거래 게시물 삭제 API", description = "거래 게시물을 삭제한다.")
+    @Operation(summary = "판매 게시물 삭제 API", description = "거래 게시물을 삭제한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @DeleteMapping("/v1/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(

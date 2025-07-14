@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Mypage API", description = "알림 설정 API")
 public interface MyPageNotificationSettingApiSpec {
-    @Operation(summary = "마이페이지 알림 목록 조회 API", description = "내 알림 설정 목록을 조회한다.")
+    @Operation(summary = "알림 목록 조회 API", description = "내 알림 설정 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/notification-settings")
     ResponseEntity<ResponseBody<NotificationSettingReadRes>> readNotificationSettings(
             @RequestParam Long userId);
 
-    @Operation(summary = "마이페이지 알림 ON/OFF API", description = "내 알림을 활성/비활성화 한다.")
+    @Operation(summary = "알림 ON/OFF API", description = "내 알림을 활성/비활성화 한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PatchMapping("/v1/mypage/notification-settings")
     ResponseEntity<ResponseBody<Void>> updateNotificationSettings(

@@ -17,7 +17,9 @@ public enum UserErrorCode implements ErrorCode {
     NO_UPDATE_PLAN(HttpStatus.INTERNAL_SERVER_ERROR, "업데이트 가능한 요금제가 없습니다."),
     NO_USER_ACCOUNT(HttpStatus.INTERNAL_SERVER_ERROR, "유저의 계정이 등록되어있지 않습니다."),
     ALREADY_ACCOUNT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "이미 유저의 계정이 존재합니다."),
-    NO_PLAN(HttpStatus.INTERNAL_SERVER_ERROR, "모바일 요금제 정보가 없습니다.");
+    NO_PLAN(HttpStatus.INTERNAL_SERVER_ERROR, "모바일 요금제 정보가 없습니다."),
+    ALREADY_USER_SIGNUP(HttpStatus.INTERNAL_SERVER_ERROR, "이미 유저가 회원가입 하셨습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;

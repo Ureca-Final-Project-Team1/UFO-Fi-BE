@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserPlanReq {
+    private Long planId;
     private String planName;
-    private Carrier carrier;
-    private Integer mobileDataAmount;
-    private Boolean isUltimatedAmount;
-    private Integer sellMobileDataCapacityGB;
-    private MobileDataType mobileDataType;
 }

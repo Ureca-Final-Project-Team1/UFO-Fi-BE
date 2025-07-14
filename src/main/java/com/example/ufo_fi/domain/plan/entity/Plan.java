@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Check;
 
 @Entity
 @Table(name = "plans")
@@ -19,6 +20,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Check(constraints = """
+                (mobile_data_amount IS NULL AND is_ultimated_amount IS NOT NULL)
+                OR
+                (mobile_data_amount IS NOT NULL AND is_ultimated_amount IS NULL)
+                """)
 public class Plan {
 
     @Id

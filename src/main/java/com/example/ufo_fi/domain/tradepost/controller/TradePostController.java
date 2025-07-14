@@ -41,7 +41,6 @@ public class TradePostController implements TradePostApiSpec {
                     tradePostService.createTradePost(request, userId)));
     }
 
-    //@RequestParam으로 바꾸면 좋을 듯 합니다!
     @Override
     public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
             TradePostSearchReq request,

@@ -24,14 +24,14 @@ public interface MyPagePlanApiSpec {
             @RequestParam String carrier
     );
 
-    @Operation(summary = "나의 요금제 조회 API", description = "유저의 요금제 정보를 받아온다.")
+    @Operation(summary = "나의 요금제 정보 조회 API", description = "유저의 요금제 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/user-plan")
     ResponseEntity<ResponseBody<UserPlanReadRes>> readUserPlan(
             @RequestParam Long userId
     );
 
-    @Operation(summary = "나의 요금제 정보 변경 API", description = "유저의 요금제 정보를 변경한다.")
+    @Operation(summary = "요금제 정보 변경 API", description = "유저의 요금제 정보를 변경한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PutMapping("/v1/mypage/plan")
     ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(

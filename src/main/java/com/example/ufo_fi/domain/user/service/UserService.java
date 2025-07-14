@@ -5,6 +5,8 @@ import com.example.ufo_fi.domain.notification.repository.NotificationRepository;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.plan.repository.PlanRepository;
 import com.example.ufo_fi.domain.user.dto.request.SignupReq;
+import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
+import com.example.ufo_fi.domain.user.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.user.dto.response.SignupRes;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
@@ -36,6 +38,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
+    private final UserPlanRepository userPlanRepository;
     private final TradePostRepository tradePostRepository;
     private final RandomImageSelector randomImageSelector;
     private final UserAccountRepository userAccountRepository;
@@ -124,12 +127,12 @@ public class UserService {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        if(!Objects.equals(userPlan.getSellableDataAmount(), userPlan.getPlan().getSellMobileDataCapacityGb())){
-            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
-        }
-
         Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_UPDATE_PLAN));
+
+        if(!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())){
+            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
+        }
 
         userPlan.update(plan);
 
@@ -166,29 +169,36 @@ public class UserService {
      */
     @Transactional
     public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
-        User user = signupUser(userId, signupReq);
-        registerUserPlan(signupReq, user);
+        User user = signupUser(userId, signupReq.getUserInfoReq());
+        registerUserPlan(user, signupReq.getUserPlanReq());
         setNotifications(user);
 
         return SignupRes.from(user);
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
-    private User signupUser(Long userId, SignupReq signupReq) {
+    private User signupUser(Long userId, UserInfoReq userInfoReq) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        if(user.getRole() == Role.ROLE_USER || user.getRole() == Role.ROLE_ADMIN){
+            throw new GlobalException(UserErrorCode.ALREADY_USER_SIGNUP);
+        }
 
         String randomNickname = randomNicknameGenerator.generate();
         ProfilePhoto randomProfilePhoto = randomImageSelector.select();
 
-        user.signup(signupReq.getUserInfoReq(), randomNickname, randomProfilePhoto, ACTIVE_STATUS, Role.ROLE_USER);
+        user.signup(userInfoReq, randomNickname, randomProfilePhoto, ACTIVE_STATUS, Role.ROLE_USER);
         return user;
     }
 
     //유저 요금제를 등록/연관관계 등록
-    private void registerUserPlan(SignupReq signupReq, User user) {
-//        UserPlan userPlan = UserPlan.from(signupReq.getUserPlanReq());
-//        user.registerUserPlan(userPlan);
-//        userPlanRepository.save(userPlan);
+    private void registerUserPlan(User user, UserPlanReq userPlanReq) {
+        Plan plan = planRepository.findById(userPlanReq.getPlanId())
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_PLAN));
+
+        UserPlan userPlan = UserPlan.from(plan);
+        userPlanRepository.save(userPlan);
+
+        user.registerUserPlan(userPlan);
     }
 
     //알림 설정을 초기화
