@@ -25,14 +25,15 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TradePost> findByCursorPaging(LocalDateTime cursor, Long lastId,
-        Pageable pageable) {
+    public Slice<TradePost> findRecentPostByCursor(LocalDateTime cursor, Long lastId,
+        List<TradePostStatus> statuses, Pageable pageable) {
 
         List<TradePost> content = queryFactory
             .selectFrom(tradePost)
             .where(
                 tradePost.isDelete.isFalse(),
                 tradePost.reportCount.lt(3),
+                tradePost.tradePostStatus.in(statuses),
                 cursorPaging(cursor, lastId)
             )
             .orderBy(tradePost.createdAt.desc(), tradePost.id.desc())
@@ -49,7 +50,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     @Override
-    public Slice<TradePost> searchWithPagination(TradePostFilterReq condition) {
+    public Slice<TradePost> findRecentPostsByCursor(TradePostFilterReq condition) {
 
         int pageSize = condition.getSize();
 
@@ -77,7 +78,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
     @Override
     public List<TradePost> findCheapestCandidates(TradePostBulkPurchaseReq condition,
-        Carrier carrier, MobileDataType mobileDataType) {
+        Carrier carrier, MobileDataType mobileDataType, Long userId) {
 
         return queryFactory
             .selectFrom(tradePost)
@@ -86,7 +87,9 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
                 tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
                 tradePost.carrier.eq(carrier),
                 tradePost.mobileDataType.eq(mobileDataType),
-                tradePost.pricePerUnit.loe(condition.getMaxPrice())
+                tradePost.pricePerUnit.loe(condition.getMaxPrice()),
+                tradePost.user.id.ne(userId)
+
             )
             .orderBy(
                 tradePost.pricePerUnit.asc(),
