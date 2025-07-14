@@ -1,8 +1,8 @@
-package com.example.ufo_fi.domain.signup.service;
+package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.user.entity.Nickname;
+import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.NicknameRepository;
-import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,9 @@ public class RandomNicknameGenerator {
      */
     public String generate() {
         long nicknameCount = nicknameRepository.count();
-        if(nicknameCount == 0) throw new GlobalException(SignupErrorCode.NO_NICKNAME);
+        if(nicknameCount == 0) {
+            throw new GlobalException(UserErrorCode.NO_NICKNAME);
+        }
 
         long randomId = autoIncrementRandomIdSelector.select(nicknameCount);
 
@@ -36,7 +38,7 @@ public class RandomNicknameGenerator {
     //FullNickname 형식으로 받는다.
     private String getFullNickname(long randomId) {
         Nickname nickname = nicknameRepository.findById(randomId)
-                .orElseThrow(() -> new GlobalException(SignupErrorCode.NO_NICKNAME));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_NICKNAME));
 
         String rawNickname = nickname.getNicknameAdjective();
         String formattedId = String.format(ID_FORMAT, randomId);

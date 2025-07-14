@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class FollowersReadRes {
     private List<FollowerReadRes> followersReadRes;
 
-    public static FollowersReadRes from(List<Follow> follows) {
+    public static FollowersReadRes from(final List<Follow> follows) {
         return FollowersReadRes.builder()
                 .followersReadRes(follows.stream()
                         .map(follow -> FollowerReadRes.from(follow.getFollowerUser())).toList())

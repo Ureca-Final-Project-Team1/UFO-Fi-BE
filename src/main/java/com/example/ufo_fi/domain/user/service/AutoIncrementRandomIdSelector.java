@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.signup.service;
+package com.example.ufo_fi.domain.user.service;
 
-import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
+import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AutoIncrementRandomIdSelector {
 
     public long select(long pkCount){
-        if(pkCount < 0) throw new GlobalException(SignupErrorCode.RANDOM_NUMBER_ERROR);
+        if(pkCount < 0) {
+            throw new GlobalException(UserErrorCode.RANDOM_NUMBER_ERROR);
+        }
+
         return ThreadLocalRandom.current().nextLong(1, pkCount + 1);
     }
 }

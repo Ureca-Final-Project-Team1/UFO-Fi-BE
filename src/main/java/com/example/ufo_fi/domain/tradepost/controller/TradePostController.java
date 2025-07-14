@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.controller;
 
 
+import com.example.ufo_fi.domain.tradepost.controller.api.TradePostApiSpec;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
@@ -26,58 +27,62 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class TradePostController {
+public class TradePostController implements TradePostApiSpec {
 
     private final TradePostService tradePostService;
 
-    @PostMapping("/posts")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-        @RequestBody @Valid TradePostCreateReq request,
-        @RequestParam Long userId
+            Long userId,
+            TradePostCreateReq request
     ) {
-
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.createTradePost(request, userId)));
+                ResponseBody.success(
+                    tradePostService.createTradePost(request, userId)));
     }
 
-    @GetMapping("/posts")
+    //@RequestParam으로 바꾸면 좋을 듯 합니다!
+    @Override
     public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
-        @ModelAttribute TradePostSearchReq request,
-        @RequestParam Long userId
+            TradePostSearchReq request,
+            Long userId
     ) {
-
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.readTradePostList(request, userId)));
+                ResponseBody.success(
+                        tradePostService.readTradePostList(request, userId)));
     }
 
-    @PostMapping("/posts/filter")
+    @Override
     public ResponseEntity<ResponseBody<TradePostFilterRes>> readFilterPost(
-        @RequestBody TradePostFilterReq request,
-        @RequestParam Long userId
+            Long userId,
+            TradePostFilterReq request
     ) {
 
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.readFilterList(request, userId)));
+                ResponseBody.success(
+                        tradePostService.readFilterList(request, userId)));
     }
 
-    @PutMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-        @PathVariable Long postId,
-        @RequestBody @Valid TradePostUpdateReq request,
-        @RequestParam Long userId
+            Long userId,
+            Long postId,
+            TradePostUpdateReq request
     ) {
 
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.updateTradePost(postId, request, userId)));
+                ResponseBody.success(
+                        tradePostService.updateTradePost(postId, request, userId)));
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
-        @PathVariable Long postId,
-        @RequestParam Long userId
+            Long postId,
+            Long userId
     ) {
 
-        return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.deleteTradePost(postId, userId)));
     }
 }

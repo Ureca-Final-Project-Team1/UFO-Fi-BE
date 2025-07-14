@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "refresh")
+@Table(name = "refreshs")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -28,15 +28,4 @@ public class Refresh {
 
     @Column(name = "token")
     private String token;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public static Refresh of(User user, String token){
-        return Refresh.builder()
-                .token(token)
-                .user(user)
-                .build();
-    }
 }

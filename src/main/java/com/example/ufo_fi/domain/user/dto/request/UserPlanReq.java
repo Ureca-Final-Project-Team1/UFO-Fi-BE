@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.signup.dto.request;
+package com.example.ufo_fi.domain.user.dto.request;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;

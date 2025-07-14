@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,19 +23,23 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "reports")
+@Table(
+        name = "reports",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"trade_post_id", "reporting_user_id"})
+)
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Report {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content", nullable = false, length = 255)
+    @Column(name = "content", nullable = false)
     private String content;
 
     @CreatedDate
@@ -42,8 +47,12 @@ public class Report {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "reported_user_id", nullable = false)
+    private User reportedUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reporting_user_id", nullable = false)
+    private User reportingUser;
 
     @Setter //편의 메서드를 위한 setter
     @ManyToOne(fetch = FetchType.LAZY)

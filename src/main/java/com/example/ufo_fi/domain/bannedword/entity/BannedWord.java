@@ -18,11 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BannedWord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "word", nullable = false, length = 255)
+    @Column(name = "word", nullable = false)
     private String word;
 }

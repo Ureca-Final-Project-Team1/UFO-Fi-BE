@@ -18,6 +18,6 @@ public class MyPageUserInfoController implements MyPageUserInfoApiSpec {
     public ResponseEntity<ResponseBody<UserInfoReadRes>> readMyPageUserInfo(@RequestParam Long userId) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.readUser(userId)));
+                        userService.readUserAndUserPlan(userId)));
     }
 }

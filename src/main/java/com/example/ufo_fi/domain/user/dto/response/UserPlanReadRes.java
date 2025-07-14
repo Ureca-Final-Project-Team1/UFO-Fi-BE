@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.user.dto.response;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,13 +20,13 @@ public class UserPlanReadRes {
     private MobileDataType mobileDataType;
     private Integer sellMobileDataCapacity;
 
-    public static UserPlanReadRes from(UserPlan userPlan) {
+    public static UserPlanReadRes of(UserPlan userPlan, Plan plan) {
         return UserPlanReadRes.builder()
-                .planId(userPlan.getId())
-                .planName(userPlan.getPlanName())
-                .carrier(userPlan.getCarrier())
-                .mobileDataType(userPlan.getMobileDataType())
-                .sellMobileDataCapacity(userPlan.getSellMobileDataCapacityGb())
+                .planId(plan.getId())
+                .planName(plan.getName())
+                .carrier(plan.getCarrier())
+                .mobileDataType(plan.getMobileDataType())
+                .sellMobileDataCapacity(plan.getSellMobileDataCapacityGb())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.tradepost.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
@@ -98,16 +99,15 @@ public class TradePost {
     }
 
     public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
-        TradePostStatus tradePostStatus,
-        Integer reportCount, User user) {
-
+                               TradePostStatus tradePostStatus,
+                               Integer reportCount, User user, final Plan plan) {
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
             .pricePerUnit(request.getPricePerUnit())
             .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
-            .carrier(user.getUserPlan().getCarrier())
-            .mobileDataType(user.getUserPlan().getMobileDataType())
+            .carrier(plan.getCarrier())
+            .mobileDataType(plan.getMobileDataType())
             .tradePostStatus(tradePostStatus)
             .reportCount(reportCount)
             .isUpdate(isUpdate)

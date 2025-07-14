@@ -1,8 +1,8 @@
-package com.example.ufo_fi.domain.signup.service;
+package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.user.entity.ProfilePhoto;
+import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.ProfilePhotoRepository;
-import com.example.ufo_fi.domain.signup.exception.SignupErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,13 @@ public class RandomImageSelector {
      */
     public ProfilePhoto select() {
         long photoCount = profilePhotoRepository.count();
-        if(photoCount == 0) throw new GlobalException(SignupErrorCode.NO_PHOTO);
+        if(photoCount == 0) {
+            throw new GlobalException(UserErrorCode.NO_PHOTO);
+        }
 
         long randomId = autoIncrementRandomIdSelector.select(photoCount);
 
         return profilePhotoRepository.findById(randomId)
-                .orElseThrow(() -> new GlobalException(SignupErrorCode.NO_PHOTO));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_PHOTO));
     }
 }

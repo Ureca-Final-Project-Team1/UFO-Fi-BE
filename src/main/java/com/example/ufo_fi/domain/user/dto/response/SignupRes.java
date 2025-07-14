@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.signup.dto.response;
+package com.example.ufo_fi.domain.user.dto.response;
 
 import com.example.ufo_fi.domain.user.entity.User;
 import lombok.AllArgsConstructor;
