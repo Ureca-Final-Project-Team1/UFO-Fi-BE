@@ -1,9 +1,11 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
@@ -11,11 +13,11 @@ import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.useraccount.repository.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +48,7 @@ public class TradePostService {
         }
 
         int userAvailableData = user.getUserPlan().getSellMobileDataCapacityGb();
-        int requestSellData = request.getSellMobileDataCapacityGb();
+        int requestSellData = request.getSellableDataAmount();
 
         if (requestSellData > userAvailableData) {
 
@@ -56,7 +58,7 @@ public class TradePostService {
         TradePost tradePost = TradePost.of(request, false, false, TradePostStatus.SELLING, 0, user);
 
         user.getUserPlan().subtractSellableDataAmount(requestSellData);
-        tradePost.calculateTotalPrice();// total 가격 저장
+        tradePost.saveTotalPrice();// total 가격 저장
 
         TradePost savedTradePost = tradePostRepository.save(tradePost);
 
@@ -75,17 +77,7 @@ public class TradePostService {
             request.getCursor(), request.getLastId(), pageable
         );
 
-        LocalDateTime nextCursor = null;
-        Long nextLastId = null;
-        List<TradePost> postContent = posts.getContent();
-
-        if (!postContent.isEmpty()) {
-            TradePost lastPost = postContent.get(postContent.size() - 1);
-            nextCursor = lastPost.getCreatedAt();
-            nextLastId = lastPost.getId();
-        }
-
-        return TradePostSearchRes.of(posts, nextCursor, nextLastId);
+        return TradePostSearchRes.of(posts);
     }
 
     /**
@@ -120,7 +112,7 @@ public class TradePostService {
 
         //비교 로직 추가 -> 구매하기
 
-        tradePost.calculateTotalPrice();// total 가격 저장
+        tradePost.saveTotalPrice();// total 가격 저장
         tradePost.update(request);
 
         return new TradePostCommonRes(tradePost.getId());
@@ -151,6 +143,45 @@ public class TradePostService {
 
         return new TradePostCommonRes(tradePost.getId());
     }
+
+    /**
+     * 1. 일괄 구매 조회 로직
+     */
+    @Transactional(readOnly = true)
+    public TradePostBulkPurchaseRes readRecommendation(TradePostBulkPurchaseReq request,
+        Long userId) {
+
+        User user = getUser(userId);
+
+        List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
+            user.getUserPlan().getCarrier(), user.getUserPlan().getMobileDataType());
+
+        List<TradePost> recommendationList = new ArrayList<>();
+
+        int cumulativeGb = 0;
+        int cumulativePrice = 0;
+        final int desiredGb = request.getDesiredGb();
+        final int maxPrice = request.getMaxPrice();
+
+        for (TradePost post : candidates) {
+
+            if ((cumulativePrice + post.getTotalPrice() <= maxPrice) &&
+                (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb)) {
+
+                recommendationList.add(post);
+                cumulativePrice += post.getTotalPrice();
+                cumulativeGb += post.getSellMobileDataCapacityGb();
+            }
+        }
+
+        if (recommendationList.isEmpty()) {
+
+            throw new GlobalException(TradePostErrorCode.NO_RECOMMENDATION_FOUND);
+        }
+
+        return TradePostBulkPurchaseRes.of(recommendationList);
+    }
+
 
     private User getUser(Long userId) {
 
