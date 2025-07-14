@@ -14,12 +14,12 @@ public class TradePostBulkPurchaseRes {
 
     private final int totalGb;
     private final int totalPrice;
-    private final List<TradePostSearchDetailRes> posts;
+    private final List<TradePostDetailRes> posts;
 
     public static TradePostBulkPurchaseRes from(List<TradePost> finalPosts) {
 
-        List<TradePostSearchDetailRes> postDetails = finalPosts.stream()
-            .map(TradePostSearchDetailRes::from)
+        List<TradePostDetailRes> postDetails = finalPosts.stream()
+            .map(TradePostDetailRes::from)
             .collect(Collectors.toList());
 
         int totalGb = finalPosts.stream().mapToInt(TradePost::getSellMobileDataCapacityGb).sum();
