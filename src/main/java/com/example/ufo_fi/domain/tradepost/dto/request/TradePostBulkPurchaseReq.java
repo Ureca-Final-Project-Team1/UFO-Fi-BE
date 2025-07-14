@@ -1,0 +1,22 @@
+package com.example.ufo_fi.domain.tradepost.dto.request;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class TradePostBulkPurchaseReq {
+    
+    @NotNull(message = "원하는 데이터 용량을 입력해주세요.")
+    @Min(value = 0, message = "데이터 용량은 0GB 이상이어야 합니다.")
+    @Max(value = 100, message = "데이터 용량은 100GB를 초과할 수 없습니다.")
+    private int desiredGb;
+
+    @NotNull(message = "최대 예산을 입력해주세요.")
+    @Min(value = 0, message = "예산은 0원 이상이어야 합니다.")
+    @Max(value = 10000, message = "예산은 10,000원을 초과할 수 없습니다.")
+    private int maxPrice;
+}

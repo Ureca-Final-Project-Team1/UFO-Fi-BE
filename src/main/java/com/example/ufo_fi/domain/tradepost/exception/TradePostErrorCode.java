@@ -18,7 +18,9 @@ public enum TradePostErrorCode implements ErrorCode {
     EXCEED_RESTORE_CAPACITY(HttpStatus.GONE, "회수량과 잔여 데이터량이 판매 가능 용량보다 많습니다."),
     ACCOUNT_NOT_REGISTERED(HttpStatus.FORBIDDEN, "계좌를 입력해야 됩니다."),
     CANNOT_DELETE_NOT_SELLING_POST(HttpStatus.FORBIDDEN, "판매중 게시물만 삭제 가능합니다."),
-    NO_AUTHORITY(HttpStatus.FORBIDDEN, "게시물에 대한 수정 및 삭제 권한이 없습니다.");
+    NO_RECOMMENDATION_FOUND(HttpStatus.NOT_FOUND, "조건에 맞는 추천 상품을 찾을 수 없습니다."),
+    NO_TRADE_POST_FOUND(HttpStatus.NOT_FOUND, "게시물이 존재하지 않습니다."),
+    NO_AUTHORITY(HttpStatus.NOT_ACCEPTABLE, "게시물에 대한 수정 및 삭제 권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

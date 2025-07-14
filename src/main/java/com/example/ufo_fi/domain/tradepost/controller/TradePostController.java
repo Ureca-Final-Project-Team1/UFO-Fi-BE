@@ -1,10 +1,12 @@
 package com.example.ufo_fi.domain.tradepost.controller;
 
 
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
@@ -20,12 +22,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/v1")
 public class TradePostController {
 
     private final TradePostService tradePostService;
@@ -79,5 +83,14 @@ public class TradePostController {
 
         return ResponseEntity.ok()
             .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
+    }
+
+    @PostMapping("/posts/bulk-purchase")
+    public ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> getFinalRecommendation(
+        @RequestBody @Valid TradePostBulkPurchaseReq request,
+        @RequestParam Long userId) {
+
+        return ResponseEntity
+            .ok(ResponseBody.success(tradePostService.readRecommendation(request, userId)));
     }
 }

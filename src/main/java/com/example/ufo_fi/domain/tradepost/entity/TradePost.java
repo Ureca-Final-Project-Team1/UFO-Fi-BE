@@ -105,7 +105,7 @@ public class TradePost {
             .user(user)
             .title(request.getTitle())
             .pricePerUnit(request.getPricePerUnit())
-            .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
+            .sellMobileDataCapacityGb(request.getSellDataAmount())
             .carrier(user.getUserPlan().getCarrier())
             .mobileDataType(user.getUserPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
@@ -117,7 +117,7 @@ public class TradePost {
 
     @PrePersist
     @PreUpdate
-    public void calculateTotalPrice() {
+    public void saveTotalPrice() {
 
         if (this.pricePerUnit != null && this.sellMobileDataCapacityGb > 0) {
             this.totalPrice = this.pricePerUnit * this.sellMobileDataCapacityGb;

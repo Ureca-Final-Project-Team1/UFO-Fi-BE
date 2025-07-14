@@ -3,8 +3,11 @@ package com.example.ufo_fi.domain.tradepost.repository;
 import static com.example.ufo_fi.domain.tradepost.entity.QTradePost.tradePost;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -22,14 +25,15 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TradePost> findByCursorPaging(LocalDateTime cursor, Long lastId,
-        Pageable pageable) {
+    public Slice<TradePost> findRecentPostByCursor(LocalDateTime cursor, Long lastId,
+        List<TradePostStatus> statuses, Pageable pageable) {
 
         List<TradePost> content = queryFactory
             .selectFrom(tradePost)
             .where(
                 tradePost.isDelete.isFalse(),
                 tradePost.reportCount.lt(3),
+                tradePost.tradePostStatus.in(statuses),
                 cursorPaging(cursor, lastId)
             )
             .orderBy(tradePost.createdAt.desc(), tradePost.id.desc())
@@ -46,7 +50,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     @Override
-    public Slice<TradePost> searchWithPagination(TradePostFilterReq condition) {
+    public Slice<TradePost> findRecentPostsByCursor(TradePostFilterReq condition) {
 
         int pageSize = condition.getSize();
 
@@ -72,7 +76,31 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
     }
 
+    @Override
+    public List<TradePost> findCheapestCandidates(TradePostBulkPurchaseReq condition,
+        Carrier carrier, MobileDataType mobileDataType, Long userId) {
+
+        return queryFactory
+            .selectFrom(tradePost)
+            .where(
+                tradePost.isDelete.isFalse(),
+                tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
+                tradePost.carrier.eq(carrier),
+                tradePost.mobileDataType.eq(mobileDataType),
+                tradePost.pricePerUnit.loe(condition.getMaxPrice()),
+                tradePost.user.id.ne(userId)
+
+            )
+            .orderBy(
+                tradePost.pricePerUnit.asc(),
+                tradePost.createdAt.desc()
+            )
+            .limit(100)
+            .fetch();
+    }
+
     private BooleanExpression cursorPaging(LocalDateTime cursor, Long lastId) {
+
         if (cursor == null || lastId == null) {
             return null;
         }
@@ -82,6 +110,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     private BooleanExpression cursorCondition(LocalDateTime createdAt, Long id) {
+
         if (createdAt == null || id == null) {
             return null;
         }
@@ -91,6 +120,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     private BooleanExpression carrierEq(Carrier carrier) {
+
         if (carrier == null) {
             return null;
         }
