@@ -21,5 +21,5 @@ public class TradePostCreateReq {
     private Integer pricePerUnit;
 
     @Min(value = 1, message = "용량은 1GB 이상이어야 됩니다.")
-    private Integer sellMobileDataCapacityGb;
+    private Integer sellableDataAmount;
 }
