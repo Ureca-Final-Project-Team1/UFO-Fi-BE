@@ -24,7 +24,7 @@ public class TradePostFilterDetailRes {
         return TradePostFilterDetailRes.builder()
             .postId(tradePost.getId())
             .title(tradePost.getTitle())
-            .totalPrice(tradePost.getTotalPrice())
+            .totalPrice(tradePost.getTotalZet())
             .sellMobileDataCapacityGb(tradePost.getSellMobileDataCapacityGb())
             .carrier(tradePost.getCarrier())
             .status(tradePost.getTradePostStatus())

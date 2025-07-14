@@ -31,8 +31,6 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         List<TradePost> content = queryFactory
             .selectFrom(tradePost)
             .where(
-                tradePost.isDelete.isFalse(),
-                tradePost.reportCount.lt(3),
                 tradePost.tradePostStatus.in(statuses),
                 cursorPaging(cursor, lastId)
             )
@@ -83,16 +81,15 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         return queryFactory
             .selectFrom(tradePost)
             .where(
-                tradePost.isDelete.isFalse(),
                 tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
                 tradePost.carrier.eq(carrier),
                 tradePost.mobileDataType.eq(mobileDataType),
-                tradePost.pricePerUnit.loe(condition.getMaxPrice()),
+                tradePost.zetPerUnit.loe(condition.getMaxPrice()),
                 tradePost.user.id.ne(userId)
 
             )
             .orderBy(
-                tradePost.pricePerUnit.asc(),
+                tradePost.zetPerUnit.asc(),
                 tradePost.createdAt.desc()
             )
             .limit(100)
@@ -137,16 +134,16 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
         if (minTotalPrice != null && maxTotalPrice != null) {
 
-            return tradePost.totalPrice.goe(minTotalPrice)
-                .and(tradePost.totalPrice.loe(maxTotalPrice));
+            return tradePost.totalZet.goe(minTotalPrice)
+                .and(tradePost.totalZet.loe(maxTotalPrice));
         }
 
         if (minTotalPrice != null) {
 
-            return tradePost.totalPrice.goe(minTotalPrice);
+            return tradePost.totalZet.goe(minTotalPrice);
         }
 
-        return tradePost.totalPrice.loe(maxTotalPrice);
+        return tradePost.totalZet.loe(maxTotalPrice);
     }
 
     private BooleanExpression rangeGb(Integer minCapacity, Integer maxCapacity) {

@@ -25,7 +25,7 @@ public class TradePostSearchDetailRes {
         return TradePostSearchDetailRes.builder()
             .title(tradePost.getTitle())
             .carrier(tradePost.getCarrier())
-            .pricePerUnit(tradePost.getPricePerUnit())
+            .pricePerUnit(tradePost.getZetPerUnit())
             .mobileDataType(tradePost.getMobileDataType())
             .sellMobileDataCapacityGb(tradePost.getSellMobileDataCapacityGb())
             .build();

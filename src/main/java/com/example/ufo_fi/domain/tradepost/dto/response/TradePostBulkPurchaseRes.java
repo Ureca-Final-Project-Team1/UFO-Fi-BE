@@ -23,7 +23,7 @@ public class TradePostBulkPurchaseRes {
             .collect(Collectors.toList());
 
         int totalGb = finalPosts.stream().mapToInt(TradePost::getSellMobileDataCapacityGb).sum();
-        int totalPrice = finalPosts.stream().mapToInt(TradePost::getTotalPrice).sum();
+        int totalPrice = finalPosts.stream().mapToInt(TradePost::getTotalZet).sum();
 
         return TradePostBulkPurchaseRes.builder()
             .totalGb(totalGb)
