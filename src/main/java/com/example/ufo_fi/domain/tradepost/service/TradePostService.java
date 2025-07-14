@@ -48,7 +48,7 @@ public class TradePostService {
         }
 
         int userAvailableData = user.getUserPlan().getSellMobileDataCapacityGb();
-        int requestSellData = request.getSellableDataAmount();
+        int requestSellData = request.getSellDataAmount();
 
         if (requestSellData > userAvailableData) {
 

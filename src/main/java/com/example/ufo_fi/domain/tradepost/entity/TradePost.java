@@ -105,7 +105,7 @@ public class TradePost {
             .user(user)
             .title(request.getTitle())
             .pricePerUnit(request.getPricePerUnit())
-            .sellMobileDataCapacityGb(request.getSellableDataAmount())
+            .sellMobileDataCapacityGb(request.getSellDataAmount())
             .carrier(user.getUserPlan().getCarrier())
             .mobileDataType(user.getUserPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
