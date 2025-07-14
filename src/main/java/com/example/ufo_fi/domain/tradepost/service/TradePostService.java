@@ -1,10 +1,8 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.*;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
@@ -18,7 +16,7 @@ import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -105,12 +103,12 @@ public class TradePostService {
         }
 
         int userAvailableData = userPlan.getSellableDataAmount();
-        int requestSellData = request.getSellMobileDataCapacityGb();
+        int requestSellData = request.getSellDataAmount();
         if (requestSellData > userAvailableData) {
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
 
-        TradePost tradePost = TradePost.of(request, false, false, TradePostStatus.SELLING, 0, user, plan);
+        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user);
         userPlan.subtractSellableDataAmount(requestSellData);
         tradePost.calculateTotalPrice();// total 가격 저장
         TradePost savedTradePost = tradePostRepository.save(tradePost);
@@ -125,21 +123,15 @@ public class TradePostService {
 
         Pageable pageable = PageRequest.of(0, request.getSize());
 
-        Slice<TradePost> posts = tradePostRepository.findByCursorPaging(
-            request.getCursor(), request.getLastId(), pageable
+        List<TradePostStatus> statuses = List.of(TradePostStatus.SELLING, TradePostStatus.SOLD_OUT);
+
+        Slice<TradePost> posts = tradePostRepository.findRecentPostByCursor(
+            request.getCursor(), request.getLastId(), statuses, pageable
         );
 
-        LocalDateTime nextCursor = null;
-        Long nextLastId = null;
-        List<TradePost> postContent = posts.getContent();
+        validatePostsExistence(posts);
 
-        if (!postContent.isEmpty()) {
-            TradePost lastPost = postContent.get(postContent.size() - 1);
-            nextCursor = lastPost.getCreatedAt();
-            nextLastId = lastPost.getId();
-        }
-
-        return TradePostSearchRes.of(posts, nextCursor, nextLastId);
+        return TradePostSearchRes.of(posts);
     }
 
     /**
@@ -148,9 +140,11 @@ public class TradePostService {
     @Transactional
     public TradePostFilterRes readFilterList(TradePostFilterReq request, Long userId) {
 
-        Slice<TradePost> postSlice = tradePostRepository.searchWithPagination(request);
+        Slice<TradePost> posts = tradePostRepository.findRecentPostsByCursor(request);
 
-        return TradePostFilterRes.from(postSlice);
+        validatePostsExistence(posts);
+
+        return TradePostFilterRes.from(posts);
     }
 
     /**
@@ -168,13 +162,20 @@ public class TradePostService {
         tradePost.verifyOwner(tradePost, user);
 
         if (request.getSellMobileDataCapacityGb() != null) {
-            user.getUserPlan().increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
-            user.getUserPlan().subtractSellableDataAmount(request.getSellMobileDataCapacityGb());
+
+            int originalDataAmount = tradePost.getSellMobileDataCapacityGb();
+            user.getUserPlan().increaseSellableDataAmount(originalDataAmount);
+
+            int newDataAmount = request.getSellMobileDataCapacityGb();
+
+            if (newDataAmount > user.getUserPlan().getSellableDataAmount()) {
+                throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+            }
+
+            user.getUserPlan().subtractSellableDataAmount(newDataAmount);
         }
 
-        //비교 로직 추가 -> 구매하기
-
-        tradePost.calculateTotalPrice();// total 가격 저장
+        tradePost.calculateTotalPrice();
         tradePost.update(request);
 
         return new TradePostCommonRes(tradePost.getId());
@@ -206,9 +207,55 @@ public class TradePostService {
         return new TradePostCommonRes(tradePost.getId());
     }
 
+    /**
+     * 1. 일괄 구매 조회 로직
+     */
+    @Transactional(readOnly = true)
+    public TradePostBulkPurchaseRes readRecommendation(TradePostBulkPurchaseReq request,
+                                                       Long userId) {
+
+        User user = getUser(userId);
+
+        List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
+            user.getUserPlan().getPlan().getCarrier(), user.getUserPlan().getPlan().getMobileDataType(), userId);
+
+        List<TradePost> recommendationList = new ArrayList<>();
+
+        int cumulativeGb = 0;
+        int cumulativePrice = 0;
+        final int desiredGb = request.getDesiredGb();
+        final int maxPrice = request.getMaxPrice();
+
+        for (TradePost post : candidates) {
+
+            if ((cumulativePrice + post.getTotalZet() <= maxPrice) &&
+                (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb)) {
+
+                recommendationList.add(post);
+                cumulativePrice += post.getTotalZet();
+                cumulativeGb += post.getSellMobileDataCapacityGb();
+            }
+        }
+
+        if (recommendationList.isEmpty()) {
+            throw new GlobalException(TradePostErrorCode.NO_RECOMMENDATION_FOUND);
+        }
+
+        return TradePostBulkPurchaseRes.from(recommendationList);
+    }
+
     private User getUser(Long userId) {
 
         return userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
     }
+
+    private void validatePostsExistence(Slice<TradePost> posts) {
+
+        if (posts.isEmpty()) {
+
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+    }
+
 }

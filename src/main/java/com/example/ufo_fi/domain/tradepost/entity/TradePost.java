@@ -2,7 +2,6 @@ package com.example.ufo_fi.domain.tradepost.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
-import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
@@ -62,24 +61,15 @@ public class TradePost {
     @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price_per_unit")
-    private Integer pricePerUnit;
+    @Column(name = "zet_per_unit")
+    private Integer zetPerUnit;
 
-    @Column(name = "total_price")
-    private Integer totalPrice;
-
-    @Column(name = "report_count")
-    private Integer reportCount;
+    @Column(name = "total_zet")
+    private Integer totalZet;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private TradePostStatus tradePostStatus;
-
-    @Column(name = "is_update")
-    private Boolean isUpdate;
-
-    @Column(name = "is_delete")
-    private Boolean isDelete;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -98,20 +88,16 @@ public class TradePost {
         report.setTradePost(this);
     }
 
-    public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
-                               TradePostStatus tradePostStatus,
-                               Integer reportCount, User user, final Plan plan) {
+    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus, User user) {
+
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
-            .pricePerUnit(request.getPricePerUnit())
-            .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
-            .carrier(plan.getCarrier())
-            .mobileDataType(plan.getMobileDataType())
+            .zetPerUnit(request.getZetPerUnit())
+            .sellMobileDataCapacityGb(request.getSellDataAmount())
+            .carrier(user.getUserPlan().getPlan().getCarrier())
+            .mobileDataType(user.getUserPlan().getPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
-            .reportCount(reportCount)
-            .isUpdate(isUpdate)
-            .isDelete(isDelete)
             .build();
     }
 
@@ -119,16 +105,14 @@ public class TradePost {
     @PreUpdate
     public void calculateTotalPrice() {
 
-        if (this.pricePerUnit != null && this.sellMobileDataCapacityGb > 0) {
-            this.totalPrice = this.pricePerUnit * this.sellMobileDataCapacityGb;
+        if (this.zetPerUnit != null && this.sellMobileDataCapacityGb > 0) {
+            this.totalZet = this.zetPerUnit * this.sellMobileDataCapacityGb;
         } else {
-            this.totalPrice = 0;
+            this.totalZet = 0;
         }
     }
 
     public void softDeleteAndStatusDelete() {
-
-        this.isDelete = true;
         this.tradePostStatus = TradePostStatus.DELETED;
     }
 
@@ -139,7 +123,7 @@ public class TradePost {
         }
 
         if (request.getPricePerUnit() != null) {
-            this.pricePerUnit = request.getPricePerUnit();
+            this.zetPerUnit = request.getPricePerUnit();
         }
 
         if (request.getSellMobileDataCapacityGb() != null) {
