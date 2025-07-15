@@ -26,15 +26,21 @@ public class MyPageHistoryController implements MyPageHistoryApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<PurchaseHistoriesRes>> readPurchaseHistories(Long userId) {
+    public ResponseEntity<ResponseBody<PurchaseHistoriesRes>> readPurchaseHistories(
+            Long userId
+    ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         tradePostService.readPurchaseHistories(userId)));
     }
 
     @Override
-    public ResponseEntity<ResponseBody<PurchaseHistoryRes>> readPurchaseHistory(Long userId, Long purchaseHistoryId) {
+    public ResponseEntity<ResponseBody<PurchaseHistoryRes>> readPurchaseHistory(
+            Long userId,
+            Long purchaseHistoryId
+    ) {
         return ResponseEntity.ok(
-                ResponseBody.success(tradePostService.readPurchaseHistories()));
+                ResponseBody.success(
+                        tradePostService.readPurchaseHistory(purchaseHistoryId)));
     }
 }

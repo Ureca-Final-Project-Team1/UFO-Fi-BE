@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PurchaseHistoryRes {
     private Long postId;
+    private Long purchaseHistoryId;
     private LocalDateTime createdAt;
     private Carrier carrier;
     private String title;
@@ -27,6 +28,7 @@ public class PurchaseHistoryRes {
     public static PurchaseHistoryRes from(final TradeHistory tradeHistory) {
         return PurchaseHistoryRes.builder()
                 .postId(tradeHistory.getTradePost().getId())
+                .purchaseHistoryId(tradeHistory.getId())
                 .createdAt(tradeHistory.getCreatedAt())
                 .carrier(tradeHistory.getTradePost().getCarrier())
                 .title(tradeHistory.getTradePost().getTitle())

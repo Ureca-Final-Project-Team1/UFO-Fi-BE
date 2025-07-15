@@ -288,4 +288,14 @@ public class TradePostService {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(TradeType.PURCHASE, userId);
         return PurchaseHistoriesRes.from(tradeHistories);
     }
+
+    /**
+     * MyPageTradeHistoryController
+     * 1. 상태가 PURCHASE인 거래 내역을 purchaseHistoryId로 찾아옵니다.
+     * 2. DTO 매핑하고 리턴합니다.
+     */
+    public PurchaseHistoryRes readPurchaseHistory(Long purchaseHistoryId) {
+        TradeHistory tradeHistory = tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(TradeType.PURCHASE, purchaseHistoryId);
+        return PurchaseHistoryRes.from(tradeHistory);
+    }
 }
