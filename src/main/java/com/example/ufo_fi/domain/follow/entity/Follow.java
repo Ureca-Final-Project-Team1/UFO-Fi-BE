@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(                     //중복된 팔로우를 해결할 수 있다.
-        name = "follows",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"follower_user_id", "following_user_id"})
+    name = "follows",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"follower_user_id", "following_user_id"})
 )
 @Getter
 @Builder
@@ -39,4 +39,11 @@ public class Follow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_user_id", nullable = false)
     private User followingUser;
+
+    public static Follow createFollow(User follower, User following) {
+        return Follow.builder()
+            .followerUser(follower)
+            .followingUser(following)
+            .build();
+    }
 }
