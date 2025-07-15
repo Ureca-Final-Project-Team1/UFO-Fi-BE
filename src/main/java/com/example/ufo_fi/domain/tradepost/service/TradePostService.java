@@ -5,14 +5,16 @@ import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
 import com.example.ufo_fi.domain.tradepost.dto.request.*;
 import com.example.ufo_fi.domain.tradepost.dto.response.*;
+import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
+import com.example.ufo_fi.domain.tradepost.entity.TradeType;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
+import com.example.ufo_fi.domain.tradepost.repository.TradeHistoryRepository;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class TradePostService {
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final TradePostRepository tradePostRepository;
+    private final TradeHistoryRepository tradeHistoryRepository;
 
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
@@ -264,5 +267,35 @@ public class TradePostService {
         }
 
         return TradePostReportRes.of(report, tradePost, reportCount);
+    }
+
+    /**
+     * MyPageTradeHistoryController
+     * 1. 상태가 SALE인 거래 내역을 userId로 찾아옵니다.
+     * 2. DTO 매핑하고 리턴합니다.
+     */
+    public SaleHistoriesRes readSaleHistories(Long userId) {
+        List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(TradeType.SALE, userId);
+        return SaleHistoriesRes.from(tradeHistories);
+    }
+
+    /**
+     * MyPageTradeHistoryController
+     * 1. 상태가 SALE인 거래 내역을 userId로 찾아옵니다.
+     * 2. DTO 매핑하고 리턴합니다.
+     */
+    public PurchaseHistoriesRes readPurchaseHistories(Long userId) {
+        List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(TradeType.PURCHASE, userId);
+        return PurchaseHistoriesRes.from(tradeHistories);
+    }
+
+    /**
+     * MyPageTradeHistoryController
+     * 1. 상태가 PURCHASE인 거래 내역을 purchaseHistoryId로 찾아옵니다.
+     * 2. DTO 매핑하고 리턴합니다.
+     */
+    public PurchaseHistoryRes readPurchaseHistory(Long purchaseHistoryId) {
+        TradeHistory tradeHistory = tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(TradeType.PURCHASE, purchaseHistoryId);
+        return PurchaseHistoryRes.from(tradeHistory);
     }
 }
