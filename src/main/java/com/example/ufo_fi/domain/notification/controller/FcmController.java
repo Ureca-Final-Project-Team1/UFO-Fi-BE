@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class FcmTokenController implements FcmTokenApiSpec {
+public class FcmController implements FcmTokenApiSpec {
 
     private final FcmService fcmTokenService;
 
