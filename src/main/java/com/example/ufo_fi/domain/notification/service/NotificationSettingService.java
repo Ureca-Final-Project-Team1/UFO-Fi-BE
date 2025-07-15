@@ -34,7 +34,6 @@ public class NotificationSettingService {
         return NotificationSettingReadRes.from(settings, isTradeAll);
     }
 
-
     /**
      * 알림 설정 수정
      * 1. 기존 설정 조회
@@ -63,6 +62,7 @@ public class NotificationSettingService {
 
     /**
      * 알림 설정 조회 시, 각각의 알림 분기 로직
+     * TODO: 분기 처리 로직 리팩토링
      */
     private boolean resolve(NotificationType type, NotificationSetting setting) {
         return switch (type) {
@@ -71,6 +71,4 @@ public class NotificationSettingService {
             default -> false;
         };
     }
-
-
 }
