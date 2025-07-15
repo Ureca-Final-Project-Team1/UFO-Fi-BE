@@ -1,35 +1,23 @@
 package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
-import com.example.ufo_fi.domain.notification.repository.NotificationRepository;
+import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.plan.repository.PlanRepository;
-import com.example.ufo_fi.domain.user.dto.request.SignupReq;
-import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
-import com.example.ufo_fi.domain.user.dto.request.UserPlanReq;
-import com.example.ufo_fi.domain.user.dto.response.SignupRes;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
-import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
-import com.example.ufo_fi.domain.user.dto.request.UserPlanUpdateReq;
-import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
-import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
-import com.example.ufo_fi.domain.user.dto.response.UserInfoReadRes;
-import com.example.ufo_fi.domain.user.dto.response.UserPlanReadRes;
-import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;
-import com.example.ufo_fi.domain.user.entity.ProfilePhoto;
-import com.example.ufo_fi.domain.user.entity.Role;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserAccount;
+import com.example.ufo_fi.domain.user.dto.request.*;
+import com.example.ufo_fi.domain.user.dto.response.*;
+import com.example.ufo_fi.domain.user.entity.*;
 import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
 import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.transaction.Transactional;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +30,7 @@ public class UserService {
     private final TradePostRepository tradePostRepository;
     private final RandomImageSelector randomImageSelector;
     private final UserAccountRepository userAccountRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationSettingRepository notificationRepository;
     private final RandomNicknameGenerator randomNicknameGenerator;
 
     /**
@@ -56,12 +44,12 @@ public class UserService {
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
-        if(userPlan == null) {
+        if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
 
         Plan plan = userPlan.getPlan();
-        if(plan == null){
+        if (plan == null) {
             throw new GlobalException(UserErrorCode.NO_PLAN);
         }
 
@@ -79,7 +67,7 @@ public class UserService {
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserAccount userAccount = user.getUserAccount();
-        if(userAccount == null) {
+        if (userAccount == null) {
             throw new GlobalException(UserErrorCode.NO_USER_ACCOUNT);
         }
 
@@ -97,12 +85,12 @@ public class UserService {
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
-        if(userPlan == null) {
+        if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
 
         Plan plan = userPlan.getPlan();
-        if(plan == null){
+        if (plan == null) {
             throw new GlobalException(UserErrorCode.NO_PLAN);
         }
 
@@ -123,14 +111,14 @@ public class UserService {
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
         UserPlan userPlan = user.getUserPlan();
 
-        if(tradePostRepository.existsByUser(user)) {
+        if (tradePostRepository.existsByUser(user)) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
         Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_UPDATE_PLAN));
 
-        if(!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())){
+        if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
@@ -150,7 +138,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        if(user.getUserAccount() != null) {
+        if (user.getUserAccount() != null) {
             throw new GlobalException(UserErrorCode.ALREADY_ACCOUNT_EXIST);
         }
 
@@ -179,7 +167,7 @@ public class UserService {
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
     private User signupUser(Long userId, UserInfoReq userInfoReq) {
         User user = userRepository.findById(userId).orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
-        if(user.getRole() == Role.ROLE_USER || user.getRole() == Role.ROLE_ADMIN){
+        if (user.getRole() == Role.ROLE_USER || user.getRole() == Role.ROLE_ADMIN) {
             throw new GlobalException(UserErrorCode.ALREADY_USER_SIGNUP);
         }
 

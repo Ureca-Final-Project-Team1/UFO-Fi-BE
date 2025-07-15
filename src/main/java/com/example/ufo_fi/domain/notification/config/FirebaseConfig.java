@@ -37,6 +37,7 @@ public class FirebaseConfig {
         try (InputStream serviceAccount = resolveFirebaseKeyStream(firebaseConfigPath)) {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setProjectId("ufo-fi")
                     .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
