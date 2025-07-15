@@ -24,7 +24,8 @@ public enum TradePostErrorCode implements ErrorCode {
     USER_PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "유저의 요금제가 없습니다."),
     PLAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 요금제가 없습니다."),
     CANT_PURCHASE_MYSELF(HttpStatus.INTERNAL_SERVER_ERROR, "본인의 게시물은 구매를 할 수 없습니다."),
-    ZET_LACK(HttpStatus.INTERNAL_SERVER_ERROR, "zet가 부족합니다. 충전 페이지로 이동합니까?");
+    ZET_LACK(HttpStatus.INTERNAL_SERVER_ERROR, "zet가 부족합니다. 충전 페이지로 이동합니까?"),
+    DTO_PARSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, " 응답 생성중 문제");
 
     private final HttpStatus httpStatus;
     private final String message;
