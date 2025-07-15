@@ -15,7 +15,7 @@ public class FollowingReadRes {
     private String nickname;
     private String profilePhotoUrl;
 
-    public static FollowingReadRes from(User followerUser) {
+    public static FollowingReadRes from(final User followerUser) {
         return FollowingReadRes.builder()
                 .id(followerUser.getId())
                 .nickname(followerUser.getNickname())

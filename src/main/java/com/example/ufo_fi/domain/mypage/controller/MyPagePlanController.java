@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MyPagePlanController implements MyPagePlanApiSpec {
-    private final UserService userService;
     private final PlanService planService;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(

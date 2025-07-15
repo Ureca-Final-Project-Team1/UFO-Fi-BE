@@ -1,96 +1,73 @@
 package com.example.ufo_fi.domain.tradepost.controller;
 
 
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
+import com.example.ufo_fi.domain.tradepost.controller.api.TradePostApiSpec;
+import com.example.ufo_fi.domain.tradepost.dto.request.*;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFilterRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1")
-public class TradePostController {
+public class TradePostController implements TradePostApiSpec {
 
     private final TradePostService tradePostService;
 
-    @PostMapping("/posts")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-        @RequestBody @Valid TradePostCreateReq request,
-        @RequestParam Long userId
+            Long userId,
+            TradePostCreateReq request
     ) {
-
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.createTradePost(request, userId)));
+                ResponseBody.success(
+                        tradePostService.createTradePost(request, userId)));
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
-        @ModelAttribute TradePostSearchReq request,
-        @RequestParam Long userId
+    @Override
+    public ResponseEntity<ResponseBody<TradePostListRes>> readTradePosts(
+            TradePostQueryReq request,
+            Long userId
     ) {
-
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.readTradePostList(request, userId)));
+                ResponseBody.success(
+                        tradePostService.readTradePostList(request, userId)));
     }
 
-    @PostMapping("/posts/filter")
-    public ResponseEntity<ResponseBody<TradePostFilterRes>> readFilterPost(
-        @RequestBody TradePostFilterReq request,
-        @RequestParam Long userId
-    ) {
-
-        return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.readFilterList(request, userId)));
-    }
-
-    @PutMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-        @PathVariable Long postId,
-        @RequestBody @Valid TradePostUpdateReq request,
-        @RequestParam Long userId
+            Long userId,
+            Long postId,
+            TradePostUpdateReq request
     ) {
 
         return ResponseEntity.ok(
-            ResponseBody.success(tradePostService.updateTradePost(postId, request, userId)));
+                ResponseBody.success(
+                        tradePostService.updateTradePost(postId, request, userId)));
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
-        @PathVariable Long postId,
-        @RequestParam Long userId
+            Long postId,
+            Long userId
     ) {
-
-        return ResponseEntity.ok()
-            .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                tradePostService.deleteTradePost(postId, userId)));
     }
 
-    @PostMapping("/posts/bulk-purchase")
-    public ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> getFinalRecommendation(
-        @RequestBody @Valid TradePostBulkPurchaseReq request,
-        @RequestParam Long userId) {
-
-        return ResponseEntity
-            .ok(ResponseBody.success(tradePostService.readRecommendation(request, userId)));
+    @Override
+    public ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
+            Long userId,
+            TradePostPurchaseReq purchaseReq
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.purchase(userId, purchaseReq)));
     }
 }

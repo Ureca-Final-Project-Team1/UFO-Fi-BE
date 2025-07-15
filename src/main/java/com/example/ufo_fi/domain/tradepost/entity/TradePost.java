@@ -61,24 +61,15 @@ public class TradePost {
     @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price_per_unit")
-    private Integer pricePerUnit;
+    @Column(name = "zet_per_unit")
+    private Integer zetPerUnit;
 
-    @Column(name = "total_price")
-    private Integer totalPrice;
-
-    @Column(name = "report_count")
-    private Integer reportCount;
+    @Column(name = "total_zet")
+    private Integer totalZet;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private TradePostStatus tradePostStatus;
-
-    @Column(name = "is_update")
-    private Boolean isUpdate;
-
-    @Column(name = "is_delete")
-    private Boolean isDelete;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -97,38 +88,31 @@ public class TradePost {
         report.setTradePost(this);
     }
 
-    public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
-        TradePostStatus tradePostStatus,
-        Integer reportCount, User user) {
+    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus, User user) {
 
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
-            .pricePerUnit(request.getPricePerUnit())
+            .zetPerUnit(request.getZetPerUnit())
             .sellMobileDataCapacityGb(request.getSellDataAmount())
-            .carrier(user.getUserPlan().getCarrier())
-            .mobileDataType(user.getUserPlan().getMobileDataType())
+            .carrier(user.getUserPlan().getPlan().getCarrier())
+            .mobileDataType(user.getUserPlan().getPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
-            .reportCount(reportCount)
-            .isUpdate(isUpdate)
-            .isDelete(isDelete)
             .build();
     }
 
     @PrePersist
     @PreUpdate
-    public void saveTotalPrice() {
+    public void calculateTotalPrice() {
 
-        if (this.pricePerUnit != null && this.sellMobileDataCapacityGb > 0) {
-            this.totalPrice = this.pricePerUnit * this.sellMobileDataCapacityGb;
+        if (this.zetPerUnit != null && this.sellMobileDataCapacityGb > 0) {
+            this.totalZet = this.zetPerUnit * this.sellMobileDataCapacityGb;
         } else {
-            this.totalPrice = 0;
+            this.totalZet = 0;
         }
     }
 
     public void softDeleteAndStatusDelete() {
-
-        this.isDelete = true;
         this.tradePostStatus = TradePostStatus.DELETED;
     }
 
@@ -139,7 +123,7 @@ public class TradePost {
         }
 
         if (request.getPricePerUnit() != null) {
-            this.pricePerUnit = request.getPricePerUnit();
+            this.zetPerUnit = request.getPricePerUnit();
         }
 
         if (request.getSellMobileDataCapacityGb() != null) {
@@ -153,5 +137,13 @@ public class TradePost {
 
             throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
         }
+    }
+
+    public void updateStatusSoldOut() {
+        this.tradePostStatus = TradePostStatus.SOLD_OUT;
+    }
+
+    public void updateStatusReported() {
+        this. tradePostStatus = TradePostStatus.REPORTED;
     }
 }

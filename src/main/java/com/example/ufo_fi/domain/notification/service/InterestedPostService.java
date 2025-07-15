@@ -1,6 +1,5 @@
 package com.example.ufo_fi.domain.notification.service;
 
-import com.example.ufo_fi.domain.notification.common.InterestedCarriers;
 import com.example.ufo_fi.domain.notification.dto.request.InterestedPostUpdateReq;
 import com.example.ufo_fi.domain.notification.entity.InterestedPost;
 import com.example.ufo_fi.domain.notification.exception.NotificationErrorCode;

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 @Getter
 @Builder
@@ -16,11 +15,11 @@ public class FollowerReadRes {
     private String nickname;
     private String profilePhotoUrl;
 
-    public static FollowerReadRes from(final User user) {
+    public static FollowerReadRes from(final User followingUser) {
         return FollowerReadRes.builder()
-                .id(user.getId())
-                .nickname(user.getNickname())
-                .profilePhotoUrl(user.getProfilePhoto().getProfilePhotoUrl())
+                .id(followingUser.getId())
+                .nickname(followingUser.getNickname())
+                .profilePhotoUrl(followingUser.getProfilePhoto().getProfilePhotoUrl())
                 .build();
     }
 }

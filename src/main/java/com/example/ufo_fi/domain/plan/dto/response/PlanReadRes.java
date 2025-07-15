@@ -20,7 +20,7 @@ public class PlanReadRes {
     private Integer sellMobileDataCapacityGB;
     private MobileDataType mobileDataType;
 
-    public static PlanReadRes from(Plan plan) {
+    public static PlanReadRes from(final Plan plan) {
         return PlanReadRes.builder()
                 .planName(plan.getName())
                 .carrier(plan.getCarrier())

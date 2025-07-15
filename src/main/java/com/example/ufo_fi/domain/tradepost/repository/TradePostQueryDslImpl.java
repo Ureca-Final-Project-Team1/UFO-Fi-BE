@@ -5,18 +5,20 @@ import static com.example.ufo_fi.domain.tradepost.entity.QTradePost.tradePost;
 import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostFilterReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,19 +27,21 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<TradePost> findRecentPostByCursor(LocalDateTime cursor, Long lastId,
-        List<TradePostStatus> statuses, Pageable pageable) {
-
+    public Slice<TradePost> findPostsByConditions(TradePostQueryReq condition, Pageable pageable) {
         List<TradePost> content = queryFactory
             .selectFrom(tradePost)
             .where(
-                tradePost.isDelete.isFalse(),
-                tradePost.reportCount.lt(3),
-                tradePost.tradePostStatus.in(statuses),
-                cursorPaging(cursor, lastId)
+                tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
+                carrierEq(condition.getCarrier()),
+
+                rangePrice(condition.getMinTotalZet(), condition.getMaxTotalZet()),
+                rangeGb(condition.getMinCapacity(), condition.getMaxCapacity()),
+                reputationIn(condition.getReputation()),
+
+                cursorIdLt(condition.getCursorId())
             )
-            .orderBy(tradePost.createdAt.desc(), tradePost.id.desc())
-            .limit(pageable.getPageSize() + 1)
+            .orderBy(tradePost.id.desc())
+            .limit(pageable.getPageSize() + 1) // 다음 페이지 여부 확인을 위해 1개 더 조회
             .fetch();
 
         boolean hasNext = false;
@@ -49,31 +53,12 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
-    @Override
-    public Slice<TradePost> findRecentPostsByCursor(TradePostFilterReq condition) {
-
-        int pageSize = condition.getSize();
-
-        List<TradePost> tradePosts = queryFactory
-            .selectFrom(tradePost)
-            .where(
-                carrierEq(condition.getCarrier()),
-                rangePrice(condition.getMinTotalPrice(), condition.getMaxTotalPrice()),
-                rangeGb(condition.getMinCapacity(), condition.getMaxCapacity()),
-                cursorCondition(condition.getCursorCreatedAt(), condition.getCursorId())
-            )
-            .orderBy(tradePost.createdAt.desc(), tradePost.id.desc())
-            .limit(pageSize + 1)
-            .fetch();
-
-        boolean hasNext = tradePosts.size() > pageSize;
-
-        if (hasNext) {
-            tradePosts.remove(pageSize);
+    private BooleanExpression cursorIdLt(Long cursorId) {
+        
+        if (cursorId == null) {
+            return null;
         }
-
-        return new SliceImpl<>(tradePosts, Pageable.ofSize(pageSize), hasNext);
-
+        return tradePost.id.lt(cursorId);
     }
 
     @Override
@@ -83,30 +68,19 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         return queryFactory
             .selectFrom(tradePost)
             .where(
-                tradePost.isDelete.isFalse(),
                 tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
                 tradePost.carrier.eq(carrier),
                 tradePost.mobileDataType.eq(mobileDataType),
-                tradePost.pricePerUnit.loe(condition.getMaxPrice()),
+                tradePost.zetPerUnit.loe(condition.getMaxPrice()),
                 tradePost.user.id.ne(userId)
 
             )
             .orderBy(
-                tradePost.pricePerUnit.asc(),
+                tradePost.zetPerUnit.asc(),
                 tradePost.createdAt.desc()
             )
             .limit(100)
             .fetch();
-    }
-
-    private BooleanExpression cursorPaging(LocalDateTime cursor, Long lastId) {
-
-        if (cursor == null || lastId == null) {
-            return null;
-        }
-
-        return tradePost.createdAt.lt(cursor)
-            .or(tradePost.createdAt.eq(cursor).and(tradePost.id.lt(lastId)));
     }
 
     private BooleanExpression cursorCondition(LocalDateTime createdAt, Long id) {
@@ -137,16 +111,16 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
         if (minTotalPrice != null && maxTotalPrice != null) {
 
-            return tradePost.totalPrice.goe(minTotalPrice)
-                .and(tradePost.totalPrice.loe(maxTotalPrice));
+            return tradePost.totalZet.goe(minTotalPrice)
+                .and(tradePost.totalZet.loe(maxTotalPrice));
         }
 
         if (minTotalPrice != null) {
 
-            return tradePost.totalPrice.goe(minTotalPrice);
+            return tradePost.totalZet.goe(minTotalPrice);
         }
 
-        return tradePost.totalPrice.loe(maxTotalPrice);
+        return tradePost.totalZet.loe(maxTotalPrice);
     }
 
     private BooleanExpression rangeGb(Integer minCapacity, Integer maxCapacity) {
@@ -168,5 +142,13 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         }
 
         return tradePost.sellMobileDataCapacityGb.loe(maxCapacity);
+    }
+
+    private BooleanExpression reputationIn(String reputation) {
+        if (!StringUtils.hasText(reputation)) {
+            return null;
+        }
+        List<String> reputations = Arrays.asList(reputation.split(","));
+        return tradePost.user.reputation.in(reputations);
     }
 }

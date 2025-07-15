@@ -22,7 +22,7 @@ public class TradePostCreateReq {
     @NotNull(message = "단위당 가격은 필수입니다.")
     @Min(value = 1, message = "가격은 1원 이상이어야 합니다.")
     @Max(value = 10000000, message = "가격은 10,000,000원을 초과할 수 없습니다.")
-    private Integer pricePerUnit;
+    private Integer zetPerUnit;
 
     @NotNull(message = "판매 용량은 필수입니다.")
     @Min(value = 1, message = "용량은 1GB 이상이어야 합니다.")
