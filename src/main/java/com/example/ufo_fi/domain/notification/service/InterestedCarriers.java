@@ -1,5 +1,7 @@
 package com.example.ufo_fi.domain.notification.service;
 
+import com.example.ufo_fi.domain.plan.entity.Carrier;
+
 import java.util.List;
 
 /**
@@ -24,5 +26,13 @@ public enum InterestedCarriers {
             bitmask |= carrier.getBit();
         }
         return bitmask;
+    }
+
+    public static InterestedCarriers fromCarrier(Carrier carrier) {
+        return switch (carrier) {
+            case LGU -> LGU;
+            case KT -> KT;
+            case SKT -> SKT;
+        };
     }
 }
