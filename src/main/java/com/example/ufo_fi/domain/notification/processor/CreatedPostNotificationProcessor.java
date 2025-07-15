@@ -30,7 +30,7 @@ public class CreatedPostNotificationProcessor {
         // List<Long> followerIds = followingRepository.findFollowerIdsBySellerId(sellerId);
 
         // 2. 관심 상품 사용자 및 알림 활성 사용자 조회
-        List<Long> enabledUserIds = interestedPostRepository.findMatchedUserIdsWithNotificationEnabled(carrier, zet, capacity);
+        List<Long> enabledUserIds = interestedPostRepository.findMatchedUserIdsWithNotificationEnabled(zet, capacity, carrier);
 
         // 3. 메시지 조립 (템플릿 기반)
         NotificationTemplate template = NotificationTemplate.INTERESTED_PRODUCT;
