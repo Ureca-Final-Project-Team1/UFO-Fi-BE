@@ -4,7 +4,10 @@ import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
+import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,6 +20,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,26 +56,20 @@ public class TradePost {
     private Carrier carrier;
 
     @Column(name = "sell_mobile_data_capacity_gb")
-    private int sellMobileDataCapacityGb;
+    private Integer sellMobileDataCapacityGb;
 
     @Column(name = "title", length = 15)
     private String title;
 
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "zet_per_unit")
+    private Integer zetPerUnit;
 
-    @Column(name = "report_count")
-    private Integer reportCount;
+    @Column(name = "total_zet")
+    private Integer totalZet;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private TradePostStatus tradePostStatus;
-
-    @Column(name = "is_update")
-    private Boolean isUpdate;
-
-    @Column(name = "is_delete")
-    private Boolean isDelete;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -89,28 +88,62 @@ public class TradePost {
         report.setTradePost(this);
     }
 
-    public static TradePost of(TradePostCreateReq request, Boolean isUpdate, Boolean isDelete,
-        TradePostStatus tradePostStatus,
-        Integer reportCount, User user) {
+    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus, User user) {
+
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
-            .price(request.getPrice())
-            .sellMobileDataCapacityGb(request.getSellMobileDataCapacityGb())
-            .carrier(user.getUserPlan().getCarrier())
-            .mobileDataType(user.getUserPlan().getMobileDataType())
+            .zetPerUnit(request.getZetPerUnit())
+            .sellMobileDataCapacityGb(request.getSellDataAmount())
+            .carrier(user.getUserPlan().getPlan().getCarrier())
+            .mobileDataType(user.getUserPlan().getPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
-            .reportCount(reportCount)
-            .isUpdate(isUpdate)
-            .isDelete(isDelete)
             .build();
     }
 
-    public void softDelete() {
-        this.isDelete = true;
+    @PrePersist
+    @PreUpdate
+    public void calculateTotalPrice() {
+
+        if (this.zetPerUnit != null && this.sellMobileDataCapacityGb > 0) {
+            this.totalZet = this.zetPerUnit * this.sellMobileDataCapacityGb;
+        } else {
+            this.totalZet = 0;
+        }
     }
 
-    public void statusDelete() {
+    public void softDeleteAndStatusDelete() {
         this.tradePostStatus = TradePostStatus.DELETED;
+    }
+
+    public void update(TradePostUpdateReq request) {
+
+        if (request.getTitle() != null) {
+            this.title = request.getTitle();
+        }
+
+        if (request.getPricePerUnit() != null) {
+            this.zetPerUnit = request.getPricePerUnit();
+        }
+
+        if (request.getSellMobileDataCapacityGb() != null) {
+            this.sellMobileDataCapacityGb = request.getSellMobileDataCapacityGb();
+        }
+    }
+
+    public void verifyOwner(TradePost tradePost, User user) {
+
+        if (!tradePost.getUser().getId().equals(user.getId())) {
+
+            throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
+        }
+    }
+
+    public void updateStatusSoldOut() {
+        this.tradePostStatus = TradePostStatus.SOLD_OUT;
+    }
+
+    public void updateStatusReported() {
+        this. tradePostStatus = TradePostStatus.REPORTED;
     }
 }

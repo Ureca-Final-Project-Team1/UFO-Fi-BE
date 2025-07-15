@@ -1,64 +1,73 @@
 package com.example.ufo_fi.domain.tradepost.controller;
 
 
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostSearchReq;
+import com.example.ufo_fi.domain.tradepost.controller.api.TradePostApiSpec;
+import com.example.ufo_fi.domain.tradepost.dto.request.*;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostSearchRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Post", description = "판매 게시글 관련 API")
+
 @RestController
 @RequiredArgsConstructor
-public class TradePostController {
+public class TradePostController implements TradePostApiSpec {
 
     private final TradePostService tradePostService;
 
-    @PostMapping("/posts")
-    @Operation(summary = "판매 게시글 생성", description = "판매 게시글을 생성합니다.")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-            @RequestBody TradePostCreateReq request,
-            @Parameter(description = "판매자 ID", example = "1") @RequestParam Long userId
+            Long userId,
+            TradePostCreateReq request
     ) {
-        return ResponseEntity.ok()
-                .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.createTradePost(request, userId)));
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<ResponseBody<TradePostSearchRes>> readTradePosts(
-            @ModelAttribute TradePostSearchReq request, // Request param을 안쓴 이유는 이미 바인딩을 시켜놓음
-            @RequestParam Long userId
+    @Override
+    public ResponseEntity<ResponseBody<TradePostListRes>> readTradePosts(
+            TradePostQueryReq request,
+            Long userId
     ) {
-        return ResponseEntity.ok()
-                .body(ResponseBody.success(tradePostService.readTradePostList(userId, request)));
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.readTradePostList(request, userId)));
     }
 
-    @PutMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-            @RequestBody TradePostCreateReq request,
-            @RequestParam Long userId
+            Long userId,
+            Long postId,
+            TradePostUpdateReq request
     ) {
-        return ResponseEntity.ok()
-                .body(ResponseBody.success(tradePostService.createTradePost(request, userId)));
 
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.updateTradePost(postId, request, userId)));
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
-            @PathVariable Long postId,
-            @RequestParam Long userId
+            Long postId,
+            Long userId
     ) {
-
-        return ResponseEntity.ok()
-                .body(ResponseBody.success(tradePostService.deleteTradePost(postId, userId)));
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                tradePostService.deleteTradePost(postId, userId)));
     }
 
-
+    @Override
+    public ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
+            Long userId,
+            TradePostPurchaseReq purchaseReq
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.purchase(userId, purchaseReq)));
+    }
 }

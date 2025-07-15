@@ -26,11 +26,11 @@ public class Plan {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "carrier")
+    @Column(name = "carrier", nullable = false)
     private Carrier carrier;
 
     @Column(name = "mobile_data_amount")    //무제한 데이터일 시 null
@@ -39,10 +39,10 @@ public class Plan {
     @Column(name = "is_ultimated_amount")   //무제한 데이터가 아닐 시 null
     private Boolean isUltimatedAmount;
 
-    @Column(name = "sell_mobile_data_capacity_gb")
+    @Column(name = "sell_mobile_data_capacity_gb", nullable = false)
     private Integer sellMobileDataCapacityGb;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mobile_data_type")
+    @Column(name = "mobile_data_type", nullable = false)
     private MobileDataType mobileDataType;
 }
