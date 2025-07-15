@@ -74,30 +74,16 @@ public class TradePostService {
      */
     public TradePostListRes readTradePostList(TradePostQueryReq request, Long userId) {
 
-        int pageSize =
-            (request.getSize() != null && request.getSize() > 0) ? request.getSize() : 20;
+        int pageSize = 0;
+        if(request.getSize() != null && request.getSize() > 0){
+            pageSize = request.getSize();
+        }
+        pageSize = 20;
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
         Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
             request, pageable);
-
-        validatePostsExistence(posts);
-
-        return TradePostListRes.of(posts);
-    }
-
-    /**
-     * 게시물 필터링(cursor 기반 유저가 원하는대로 조회)
-     */
-    @Transactional
-    public TradePostListRes readFilterList(TradePostQueryReq request, Long userId) {
-        int pageSize =
-            (request.getSize() != null && request.getSize() > 0) ? request.getSize() : 20;
-
-        Pageable pageable = PageRequest.of(0, pageSize);
-
-        Slice<TradePost> posts = tradePostRepository.findPostsByConditions(request, pageable);
 
         validatePostsExistence(posts);
 
