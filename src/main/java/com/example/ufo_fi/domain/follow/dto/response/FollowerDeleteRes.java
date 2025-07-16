@@ -1,11 +1,18 @@
 package com.example.ufo_fi.domain.follow.dto.response;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.example.ufo_fi.domain.follow.entity.Follow;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FollowerDeleteRes {
+    private Long id;
 
-    private final Long id;
+    public static FollowerDeleteRes from(final Follow follow){
+        return FollowerDeleteRes.builder()
+                .id(follow.getId())
+                .build();
+    }
 }

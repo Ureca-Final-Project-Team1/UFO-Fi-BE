@@ -13,22 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class FollowController implements FollowApiSpec {
-
     private final FollowService followService;
 
     @Override
-    public ResponseEntity<ResponseBody<FollowingCreateRes>> createFollower(Long toId,
-        Long fromId) {
+    public ResponseEntity<ResponseBody<FollowingCreateRes>> createFollow(
+        Long followingId,
+        Long followerId
+    ) {
         return ResponseEntity.ok(
-            ResponseBody
-                .success(followService.createFollowing(toId, fromId)));
+                ResponseBody.success(
+                        followService.createFollow(followingId, followerId)));
     }
 
     @Override
-    public ResponseEntity<ResponseBody<FollowerDeleteRes>> deleteFollower(Long followerId,
-        Long userId) {
-        return ResponseEntity.ok(ResponseBody.success(
-            followService.deleteFollower(followerId, userId)
-        ));
+    public ResponseEntity<ResponseBody<FollowerDeleteRes>> deleteFollow(
+        Long followingId,
+        Long userId
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        followService.deleteFollower(followingId, userId)));
     }
 }

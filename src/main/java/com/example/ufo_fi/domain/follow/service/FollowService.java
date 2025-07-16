@@ -23,55 +23,50 @@ public class FollowService {
     private final UserRepository userRepository;
 
     /**
-     * @param toId   toId 팔로우할 대상의 ID
-     * @param fromId fromId 팔로우를 신청하는 주체(나)의 ID
-     * @return
+     * FollowController
+     * @param followingId   toId 팔로우할 대상의 ID
+     * @param followerId 팔로우를 신청하는 주체(나)의 ID
+     * 1. 나를 조회한다.
+     * 2. 상대(내가 팔로우할 사람)을 조회한다.
+     * 3. 내가 나를 조회한다면, 예외를 발생시킨다.
      */
     @Transactional
-    public FollowingCreateRes createFollowing(Long toId, Long fromId) {
+    public FollowingCreateRes createFollow(Long followingId, Long followerId) {
 
-        User follower = getUser(fromId); // 신청한 사람
-        User following = getUser(toId); // 신청 받은 사람
+        User follower = readUser(followerId); // 신청한 사람(내가 팔로워가 된다.)
+        User following = readUser(followingId); // 신청 받은 사람
 
-        if (follower.getId().equals(following.getId())) {
-
+        if (isFollowerEqualsFollowing(follower, following)) {
             throw new GlobalException(FollowErrorCode.INVALID_REQUEST);
         }
 
-        if (followRepository.existsByFollowerUserAndFollowingUser(follower, following)) {
-
-            throw new GlobalException(FollowErrorCode.FOLLOW_ALREADY_EXISTS);
-        }
-
         Follow newFollow = Follow.createFollow(follower, following);
-
         Follow savedFollow = followRepository.save(newFollow);
 
-        return new FollowingCreateRes(savedFollow.getId());
+        return FollowingCreateRes.from(savedFollow);
     }
 
     /**
-     * @param fromId : 삭제할 팔로워 (나를 팔로우했던 사람)
-     * @param toId   : 나 (팔로우를 당한 사람)
-     * @return
+     * FollowController
+     * @param followingId : 삭제할 팔로워 (나를 팔로우했던 사람)
+     * @param userId   : 나 (팔로우를 당한 사람)
+     * 1. 팔로우를 조회한다.
+     * 2. 팔로우를 삭제한다.
+     * 3. dto 반환
      */
     @Transactional
-    public FollowerDeleteRes deleteFollower(Long fromId, Long toId) {
-
-        User me = getUser(toId); //로그인 한 사용자
-
-        User follower2Remove = getUser(fromId);
-
-        Follow follow = followRepository.findByFollowingUserAndFollowerUser(me, follower2Remove)
+    public FollowerDeleteRes deleteFollower(Long followingId, Long userId) {
+        Follow follow = followRepository.findByFollowingUserIdAndFollowerUserId(followingId, userId)
             .orElseThrow(() -> new GlobalException(FollowErrorCode.FOLLOW_NOT_FOUND));
 
         followRepository.delete(follow);
 
-        return new FollowerDeleteRes(follower2Remove.getId());
+        return FollowerDeleteRes.from(follow);
     }
 
     /**
-     * MyPageFollowController 내가 팔로워 일 시 상대방은 팔로잉(당하는 사람)이다.
+     * MyPageFollowController
+     * 내가 팔로워 일 시 상대방은 팔로잉(당하는 사람)이다.
      */
     public FollowingsReadRes readFollowings(Long userId) {
         List<Follow> follows = followRepository.findAllByFollowerUserId(userId);
@@ -79,15 +74,20 @@ public class FollowService {
     }
 
     /**
-     * MyPageFollowController 내가 팔로잉(당하는 사람) 일 시 상대방은 팔로워(가해자)이다.
+     * MyPageFollowController
+     * 내가 팔로잉(당하는 사람) 일 시 상대방은 팔로워(가해자)이다.
      */
     public FollowersReadRes readFollowers(Long userId) {
         List<Follow> follows = followRepository.findAllByFollowingUserId(userId);
         return FollowersReadRes.from(follows);
     }
 
-    private User getUser(Long userId) {
+    private boolean isFollowerEqualsFollowing(User follower, User following) {
+        return follower.getId().equals(following.getId());
+    }
+
+    private User readUser(Long userId) {
         return userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(FollowErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(FollowErrorCode.USER_NOT_FOUND));
     }
 }
