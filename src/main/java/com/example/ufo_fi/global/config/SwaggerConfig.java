@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         servers = {
-                @Server(url = "http://localhost:8080", description = "로컬 개발")
+                @Server(url = "http://localhost:8080", description = "local server url"),
+                @Server(url = "https://api.ufo-fi.store", description = "deploy server url")
         }
 )
 @Configuration
