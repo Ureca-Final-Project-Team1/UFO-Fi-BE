@@ -37,7 +37,7 @@
 
 ## 2. 서비스 소개
 
-### 2-1. 무선 데이터 거래 플랫폼
+## 무선 데이터 거래 플랫폼
 
 ### `서비스 개요`
 
@@ -71,6 +71,8 @@
 
 **<`30일`지나면 유효하지 않고(달마다 충전되는 데이터), `동일한 데이터는 싼 가격을 찾는`다는 요금제의 특수성 고려>**
 
+**!!본 목표는 언제까지나 `가정`에 의거합니다.**
+
 ---
 
 ## 3. 시스템 아키텍처
@@ -96,34 +98,37 @@
 
 
 
----
-
-## 6. 기능 세부 구조도
-
-
-
 --- 
 
-## 7. 기술 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+## 6. 기술 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 | **Backend**                        | ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat&logo=springsecurity&logoColor=white) ![OAuth2](https://img.shields.io/badge/OAuth2-4285F4?style=flat&logo=oauth&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20web%20tokens&logoColor=white) ![JPA](https://img.shields.io/badge/JPA-59666C?style=flat&logo=hibernate&logoColor=white) ![QueryDSL](https://img.shields.io/badge/QueryDSL-0078D4?style=flat&logo=java&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) ![FCM](https://img.shields.io/badge/FCM-FFCA28?style=flat&logo=firebase&logoColor=black)                                                                                                                                              
 | **Backend Testing & Code Quality** | ![JUnit5](https://img.shields.io/badge/JUnit5-25A162?style=flat&logo=junit5&logoColor=white) ![Mockito](https://img.shields.io/badge/Mockito-25A162?style=flat&logo=mockito&logoColor=white) ![H2](https://img.shields.io/badge/H2-0078D4?style=flat&logo=h2&logoColor=white) ![Jacoco](https://img.shields.io/badge/Jacoco-DC382D?style=flat&logo=jacoco&logoColor=white)                                                                                                       
 
 ---
 
-## 8. ETC
+## 7. ETC
 
-### 8-1. 커밋 컨벤션
-
-
-
-### 8-2. 코드 스타일 가이드
+### 7-1. 코드 스타일 가이드
 
 [CODE-STYLE.md](./CODE-STYLE.md)
 
+### 7-2. 지라-깃허브 연동 가이드
+
+[지라 깃허브 사용법.pdf](https://github.com/user-attachments/files/21259209/default.pdf)
+
 ---
 
-## 9. To Do(추후 계획)
+## 8. To Do(추후 계획)
 
-현재까지 완성된 `그저 돌아가는 프로그램`의 설계의 단점을 분석하며, 리팩토링해본다.
+### 8-1. 
+
+현재까지 완성된 `주먹 구구식의 그저 돌아가는 프로그램`의 설계의 단점을 분석하며, 리팩토링해본다.
 
 
+### 8-2. 결제 프로세스
+
+<img width="987" height="798" alt="image" src="https://github.com/user-attachments/assets/7e5f9aec-11b2-4845-92bf-d64dd636f36b" />
+
+```
+1. 클라이언트 PG 서버로 요청
+2. 
