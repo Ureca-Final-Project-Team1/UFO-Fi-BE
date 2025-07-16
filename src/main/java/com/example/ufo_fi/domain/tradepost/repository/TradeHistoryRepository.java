@@ -16,7 +16,7 @@ public interface TradeHistoryRepository extends JpaRepository<TradeHistory, Long
     JOIN FETCH th.tradePost tp
     JOIN FETCH th.user u
     LEFT JOIN FETCH tp.reports r
-    WHERE th.tradeType = :tradeType 
+    WHERE th.tradeType = :tradeType
     AND th.user.id = :userId
     """)
     List<TradeHistory> findByUserIdAndStatus(

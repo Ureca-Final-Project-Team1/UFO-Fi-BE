@@ -60,7 +60,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "구매(Zet <-> Data) API", description = "구매한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("/v1/posts/purchase")
+    @PostMapping("/v1/posts/purchase")
     ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
             @RequestParam Long userId,
             @RequestBody TradePostPurchaseReq purchaseReq
