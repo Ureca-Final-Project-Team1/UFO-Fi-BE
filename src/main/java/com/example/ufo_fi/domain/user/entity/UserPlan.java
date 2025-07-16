@@ -1,18 +1,9 @@
 package com.example.ufo_fi.domain.user.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.user.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,13 +39,14 @@ public class UserPlan {
     public void subtractSellableDataAmount(int requestSellData) {
 
         if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
-            
+
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
 
         this.sellableDataAmount -= requestSellData;
     }
 
+    // TODO: 판매가능량과 구매량 분리 필요
     public void increaseSellableDataAmount(int restore) {
 
         if (restore < 0 || restore + this.sellableDataAmount > plan.getSellMobileDataCapacityGb()) {
