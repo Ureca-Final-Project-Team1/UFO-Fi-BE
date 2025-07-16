@@ -127,7 +127,8 @@
 
 ### 8-2. 결제 프로세스
 
-<img width="987" height="798" alt="image" src="https://github.com/user-attachments/assets/7e5f9aec-11b2-4845-92bf-d64dd636f36b" />
+<img width="700" height="600" alt="image" src="https://github.com/user-attachments/assets/c992fe62-8a60-4f6c-82b9-64e48a3bd47d" />
+
 
 ```
 1. 클라이언트 PG 서버로 요청
