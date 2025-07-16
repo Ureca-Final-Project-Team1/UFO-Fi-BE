@@ -63,11 +63,13 @@
 ### `백엔드 개발 핵심 목표`
 
 - **충전 시스템의 안전성** : 충전 시스템의 `안전성`
-- **확장 가능한 코드 구조** : 프론트 팀의 기획을 위한 `확장에 용이한 구조` 설계 고민. 
+- **확장 가능한 코드 구조** : 프론트 팀의 기획을 위한 `확장에 용이한 구조` 설계 고민
 - **거래 게시물-ZET(재화 단위) 간 정합성 보장** : `트랜잭션과 ERD 구조/도메인 분리`로 정합성을 위한 더 나은 구조 고민
 - **동시 클릭과 같은 경쟁 상태 고려** : `DB락`과 `MySQL 격리수준`을 통한 동시성/이상 현상 해결
 
-<`많지 않은` 초기 사용자, 결제라는 `실거래` 시스템을 위함>
+**<`많지 않은` 초기 사용자, 결제라는 `실거래` 시스템을 위함>**
+
+**<`30일`지나면 유효하지 않고(달마다 충전되는 데이터), `동일한 데이터는 싼 가격을 찾는`다는 요금제의 특수성 고려>**
 
 ---
 
@@ -81,7 +83,7 @@
 
 ## 4. ERD
 
-<img width="1658" height="706" alt="image" src="https://github.com/user-attachments/assets/fb0352e7-2135-408f-b6db-06d96d2845a1" />
+<img width="2942" height="1200" alt="image" src="https://github.com/user-attachments/assets/3607d425-ace1-411e-838f-e4e44e294f53" />
 
 - 초기 빠른 기능 구현(1차 MVP)를 위한 테이블 구조
 - 추후 기능 추가에 따른 ERD 수정 예정
@@ -102,9 +104,9 @@
 
 --- 
 
-## 7. 기술 스택
-
-
+## 7. 기술 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+| **Backend**                        | ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat&logo=springsecurity&logoColor=white) ![OAuth2](https://img.shields.io/badge/OAuth2-4285F4?style=flat&logo=oauth&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20web%20tokens&logoColor=white) ![JPA](https://img.shields.io/badge/JPA-59666C?style=flat&logo=hibernate&logoColor=white) ![QueryDSL](https://img.shields.io/badge/QueryDSL-0078D4?style=flat&logo=java&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) ![FCM](https://img.shields.io/badge/FCM-FFCA28?style=flat&logo=firebase&logoColor=black)                                                                                                                                              
+| **Backend Testing & Code Quality** | ![JUnit5](https://img.shields.io/badge/JUnit5-25A162?style=flat&logo=junit5&logoColor=white) ![Mockito](https://img.shields.io/badge/Mockito-25A162?style=flat&logo=mockito&logoColor=white) ![H2](https://img.shields.io/badge/H2-0078D4?style=flat&logo=h2&logoColor=white) ![Jacoco](https://img.shields.io/badge/Jacoco-DC382D?style=flat&logo=jacoco&logoColor=white)                                                                                                       
 
 ---
 
@@ -112,8 +114,15 @@
 
 ### 8-1. 커밋 컨벤션
 
+
+
 ### 8-2. 코딩 컨벤션
+
 
 ---
 
 ## 9. To Do(추후 계획)
+
+그저 `돌아가는 프로그램`을 만들고 이에 대한 설계의 단점을 분석하며, 리팩토링해본다.
+
+
