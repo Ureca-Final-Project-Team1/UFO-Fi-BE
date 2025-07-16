@@ -1,5 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
+import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
+import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
@@ -17,16 +19,17 @@ import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +39,13 @@ public class TradePostService {
     private final ReportRepository reportRepository;
     private final TradePostRepository tradePostRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
 
         User user = userRepository.findUserWithUserPlanAndUserAccountWithPessimisticLock(userId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
 
         UserPlan userPlan = user.getUserPlan();
         if (userPlan == null) {
@@ -68,6 +72,10 @@ public class TradePostService {
         userPlan.subtractSellableDataAmount(requestSellData);
         tradePost.calculateTotalPrice();// total 가격 저장
         TradePost savedTradePost = tradePostRepository.save(tradePost);
+
+        // 판매 게시물 생성 이벤트 발생
+        publisher.publishEvent(new CreatedPostEvent(user.getId(), savedTradePost.getId(), savedTradePost.getCarrier(), savedTradePost.getTotalZet(), savedTradePost.getSellMobileDataCapacityGb()));
+
         return new TradePostCommonRes(savedTradePost.getId());
     }
 
@@ -78,7 +86,7 @@ public class TradePostService {
     public TradePostListRes readTradePostList(TradePostQueryReq request, Long userId) {
 
         int pageSize = 0;
-        if(request.getSize() != null && request.getSize() > 0){
+        if (request.getSize() != null && request.getSize() > 0) {
             pageSize = request.getSize();
         }
         pageSize = 20;
@@ -86,7 +94,7 @@ public class TradePostService {
         Pageable pageable = PageRequest.of(0, pageSize);
 
         Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
-            request, pageable);
+                request, pageable);
 
         validatePostsExistence(posts);
 
@@ -98,12 +106,12 @@ public class TradePostService {
      */
     @Transactional
     public TradePostCommonRes updateTradePost(Long postId, TradePostUpdateReq request,
-        Long userId) {
+                                              Long userId) {
 
         User user = getUser(userId);
 
         TradePost tradePost = tradePostRepository.findByIdWithLock(postId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
 
         tradePost.verifyOwner(tradePost, user);
 
@@ -136,7 +144,7 @@ public class TradePostService {
         User user = getUser(userId);
 
         TradePost tradePost = tradePostRepository.findById(postId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
 
         tradePost.verifyOwner(tradePost, user);
 
@@ -162,8 +170,8 @@ public class TradePostService {
         User user = getUser(userId);
 
         List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
-            user.getUserPlan().getPlan().getCarrier(),
-            user.getUserPlan().getPlan().getMobileDataType(), userId);
+                user.getUserPlan().getPlan().getCarrier(),
+                user.getUserPlan().getPlan().getMobileDataType(), userId);
 
         List<TradePost> recommendationList = new ArrayList<>();
 
@@ -175,7 +183,7 @@ public class TradePostService {
         for (TradePost post : candidates) {
 
             if ((cumulativePrice + post.getTotalZet() <= maxPrice) &&
-                (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb)) {
+                    (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb)) {
 
                 recommendationList.add(post);
                 cumulativePrice += post.getTotalZet();
@@ -193,7 +201,7 @@ public class TradePostService {
     private User getUser(Long userId) {
 
         return userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
     }
 
     private void validatePostsExistence(Slice<TradePost> posts) {
@@ -216,7 +224,7 @@ public class TradePostService {
         TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
                 .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
-        if(!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)){
+        if (!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_DELETE);
         }
 
@@ -225,11 +233,11 @@ public class TradePostService {
 
         User seller = tradePost.getUser();
 
-        if(Objects.equals(buyer.getId(), seller.getId())){
+        if (Objects.equals(buyer.getId(), seller.getId())) {
             throw new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF);
         }
 
-        if(buyer.getZetAsset() < tradePost.getTotalZet()){
+        if (buyer.getZetAsset() < tradePost.getTotalZet()) {
             throw new GlobalException(TradePostErrorCode.ZET_LACK);
         }
 
@@ -240,9 +248,16 @@ public class TradePostService {
 
         //sellable Data 증가
         //saveHistories(); 내역 저장 로직 후에 추가
+
+        // 거래 완료 이벤트 발행
+        publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
+
         return TradePostPurchaseRes.from(buyer);
     }
 
+    /**
+     * 게시물 신고 로직
+     */
     @Transactional
     public TradePostReportRes createReport(Long userId, Long postId, TradePostReportReq tradePostReportReq) {
         TradePost tradePost = tradePostRepository.findTradePostWithReports(postId);
@@ -262,7 +277,7 @@ public class TradePostService {
         tradePost.addReport(report);
 
         int reportCount = tradePost.getReports().size();
-        if(reportCount >= 3){
+        if (reportCount >= 3) {
             tradePost.updateStatusReported();
         }
 
