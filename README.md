@@ -119,7 +119,7 @@
 
 ## 8. To Do(추후 계획)
 
-### 8-1. 리팩토링링
+### 8-1. 리팩토링
 
 현재까지 완성된 `주먹 구구식의 그저 돌아가는 프로그램`의 설계의 단점을 분석하며, 리팩토링해본다.
 
@@ -132,6 +132,53 @@
 4. 각 도메인 별 기능 정리 후 락을 통한 이상 현상 해결
 
 5. Controller <-> Service <-> Manager <-> Repository의 4개의 계층으로 중복 코드 제거
+
+<details>
+
+```java
+
+   /**
+     * MyPageUserPlanController 유저의 요금제 정보를 업데이트하는 메서드
+     * 1. fetch join을 통해 userPlan까지 다 받아온다.
+     * 2. 유저가 게시물을 올린 상태(sellableMobileDate)와 조금이라도 사용한 상태일 시 예외를 던진다.
+     * 3. 요금제 테이블에서 요금제 정보를 받아온다.
+     * 4. 영속화된 userPlan을 업데이트하고 return
+*/
+    @Transactional
+    public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
+        User user = userRepository.findUserWithUserPlan(userId)
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        UserPlan userPlan = user.getUserPlan();
+
+        if (tradePostRepository.existsByUser(user)) {
+            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
+        }
+
+        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_UPDATE_PLAN));
+
+        if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
+            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
+        }
+
+        userPlan.update(plan);
+
+        return UserPlanUpdateRes.from(userPlan);
+    }
+```
+
+여러 곳에서 사용될 수 있는 아래의 코드
+
+```java
+        User user = userRepository.findUserWithUserPlan(userId)
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        UserPlan userPlan = user.getUserPlan();
+```
+
+이러한 로직들을 묶어, UserManager의 findUserPlan()이라는 메서드로 묶기
+
+
+</details>
 
 6. HttpStatus의 상태 코드를 확인 후 적절한 상태 코드 사용
 
@@ -148,4 +195,3 @@
 4. 결제 성공, 결제 서버에서 우리 서비스로 요청(웹 훅)
 5. 결제 성공 로직(ZET 충전) 실행
 
-```
