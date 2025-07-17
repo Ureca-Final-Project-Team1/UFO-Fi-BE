@@ -1,5 +1,9 @@
 package com.example.ufo_fi.global.security.oauth;
 
+import com.example.ufo_fi.domain.notification.entity.InterestedPost;
+import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
+import com.example.ufo_fi.domain.notification.repository.InterestedPostRepository;
+import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
@@ -20,6 +24,8 @@ import org.springframework.stereotype.Service;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
     private final RefreshRepository refreshRepository;
+    private final InterestedPostRepository interestedPostRepository;
+    private final NotificationSettingRepository notificationSettingRepository;
 
     /**
      * 1. DefaultOAuth2User를 받아옴(DefaultOAuth2UserService에서 Access 토큰을 받아오고, 그것으로 카카오 유저 서비스에 접근해 정보 또한 받아온다.)
@@ -57,6 +63,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User createUser(OAuth2Response oAuth2Response) {
         User newUser = User.of(oAuth2Response, Role.ROLE_NO_INFO);
         User signupUser = userRepository.save(newUser);
+
+        NotificationSetting notificationSetting = NotificationSetting.from(
+                newUser,
+                false,
+                false,
+                false,
+                false,
+                false
+        );
+        notificationSettingRepository.save(notificationSetting);
+
+        InterestedPost interestedPost = InterestedPost.from(newUser);
+        interestedPostRepository.save(interestedPost);
+
         return CustomOAuth2User.from(signupUser);
     }
 }

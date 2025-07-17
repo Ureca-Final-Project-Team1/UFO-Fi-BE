@@ -126,8 +126,7 @@ public class UserService {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_UPDATE_PLAN));
+        Plan plan = userPlan.getPlan();
 
         if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
@@ -168,14 +167,13 @@ public class UserService {
     public SignupRes updateUserAndUserPlan(Long userId, SignupReq signupReq) {
         User user = signupUser(userId, signupReq.getUserInfoReq());
         registerUserPlan(user, signupReq.getUserPlanReq());
-        setNotifications(user);
-
         return SignupRes.from(user);
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
     private User signupUser(Long userId, UserInfoReq userInfoReq) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         if (user.getRole() == Role.ROLE_USER || user.getRole() == Role.ROLE_ADMIN) {
             throw new GlobalException(UserErrorCode.ALREADY_USER_SIGNUP);
@@ -197,11 +195,5 @@ public class UserService {
         userPlanRepository.save(userPlan);
 
         user.registerUserPlan(userPlan);
-    }
-
-    //알림 설정을 초기화
-    private void setNotifications(User user) {
-        NotificationSetting notification = NotificationSetting.from(user);
-        notificationRepository.save(notification);
     }
 }

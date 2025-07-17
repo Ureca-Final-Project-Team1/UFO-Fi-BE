@@ -37,7 +37,6 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Min(0)
     @Column(name = "zet_asset")
     private Integer zetAsset;
 
@@ -95,11 +94,13 @@ public class User {
         this.zetAsset += totalZet;
     }
 
-    public void signup(UserInfoReq userInfoReq,
-        String randomNickname,
-        ProfilePhoto randomProfilePhoto,
-        boolean activeStatus,
-        Role roleUser) {
+    public void signup(
+            UserInfoReq userInfoReq,
+            String randomNickname,
+            ProfilePhoto randomProfilePhoto,
+            boolean activeStatus,
+            Role roleUser
+    ) {
         this.name = userInfoReq.getName();
         this.phoneNumber = userInfoReq.getPhoneNumber();
         this.nickname = randomNickname;

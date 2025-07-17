@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlanReadRes {
+    private Long planId;
     private String planName;
     private Carrier carrier;
     private Integer mobileDataAmount;
@@ -22,6 +23,7 @@ public class PlanReadRes {
 
     public static PlanReadRes from(final Plan plan) {
         return PlanReadRes.builder()
+                .planId(plan.getId())
                 .planName(plan.getName())
                 .carrier(plan.getCarrier())
                 .mobileDataAmount(plan.getMobileDataAmount())
