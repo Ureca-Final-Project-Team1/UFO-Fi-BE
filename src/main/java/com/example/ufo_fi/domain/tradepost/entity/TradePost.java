@@ -122,8 +122,8 @@ public class TradePost {
             this.title = request.getTitle();
         }
 
-        if (request.getPricePerUnit() != null) {
-            this.zetPerUnit = request.getPricePerUnit();
+        if (request.getZetPerUnit() != null) {
+            this.zetPerUnit = request.getZetPerUnit();
         }
 
         if (request.getSellMobileDataCapacityGb() != null) {
