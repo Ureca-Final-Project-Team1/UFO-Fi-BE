@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.notification.controller.api.InterestedPostApiSp
 import com.example.ufo_fi.domain.notification.dto.request.InterestedPostUpdateReq;
 import com.example.ufo_fi.domain.notification.service.InterestedPostService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +19,10 @@ public class InterestedPostController implements InterestedPostApiSpec {
     @Override
     public ResponseEntity<ResponseBody<Void>> updateInterestedPost(
             InterestedPostUpdateReq request,
-            Long userId) {
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
 
-        interestedPostService.updateInterestedPost(userId, request);
+        interestedPostService.updateInterestedPost(defaultUserPrincipal.getId(), request);
         return ResponseEntity.ok(ResponseBody.noContent());
     }
 }

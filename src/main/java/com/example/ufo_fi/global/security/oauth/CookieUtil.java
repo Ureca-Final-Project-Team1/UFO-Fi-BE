@@ -1,0 +1,32 @@
+package com.example.ufo_fi.global.security.oauth;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
+
+@Component
+public class CookieUtil {
+
+    //추후 보안 공부 해볼것.
+    public void setResponseBasicCookie(String key, String value, int expiredMs, HttpServletResponse response){
+        String cookieValue = String.format(
+        "%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None; Secure",
+        key, value, expiredMs);
+
+        response.addHeader("Set-Cookie", cookieValue);
+    }
+
+    public void deleteCookie(String key, String value, HttpServletResponse response){
+        Cookie cookie = new Cookie(key, value);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
+    public Cookie getCookie(String key, HttpServletRequest request){
+        return WebUtils.getCookie(request, key);
+    }
+}

@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.follow.dto.response.FollowerDeleteRes;
 import com.example.ufo_fi.domain.follow.dto.response.FollowingCreateRes;
 import com.example.ufo_fi.domain.follow.service.FollowService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,20 +19,20 @@ public class FollowController implements FollowApiSpec {
     @Override
     public ResponseEntity<ResponseBody<FollowingCreateRes>> createFollow(
         Long followingId,
-        Long followerId
+        DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        followService.createFollow(followingId, followerId)));
+                        followService.createFollow(followingId, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<FollowerDeleteRes>> deleteFollow(
         Long followingId,
-        Long userId
+        DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        followService.deleteFollower(followingId, userId)));
+                        followService.deleteFollower(followingId, defaultUserPrincipal.getId())));
     }
 }

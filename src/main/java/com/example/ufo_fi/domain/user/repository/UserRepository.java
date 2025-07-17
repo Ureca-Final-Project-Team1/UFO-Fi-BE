@@ -46,4 +46,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     WHERE u.id = :userId
     """)
     Optional<User> findUserWithUserAccount(Long userId);
+
+    User findByKakaoId(String string);
 }

@@ -8,12 +8,14 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +31,7 @@ public interface TradePostApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/posts")
     ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-        @RequestParam Long userId,
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody @Valid TradePostCreateReq request
     );
 
@@ -38,14 +40,14 @@ public interface TradePostApiSpec {
     @GetMapping("/v1/posts")
     ResponseEntity<ResponseBody<TradePostListRes>> readTradePosts(
         @ParameterObject TradePostQueryReq request,
-        @RequestParam Long userId
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 
     @Operation(summary = "판매 게시물 수정 API", description = "거래 게시물을 수정한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PutMapping("/v1/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-        @RequestParam Long userId,
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId,
         @RequestBody @Valid TradePostUpdateReq request
     );
@@ -54,7 +56,7 @@ public interface TradePostApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @DeleteMapping("/v1/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
-        @RequestParam Long userId,
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId
     );
 
@@ -62,7 +64,7 @@ public interface TradePostApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/posts/purchase")
     ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
             @RequestBody TradePostPurchaseReq purchaseReq
     );
 }

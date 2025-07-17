@@ -8,6 +8,7 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,53 +22,53 @@ public class TradePostController implements TradePostApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             TradePostCreateReq request
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.createTradePost(request, userId)));
+                        tradePostService.createTradePost(request, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<TradePostListRes>> readTradePosts(
             TradePostQueryReq request,
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.readTradePostList(request, userId)));
+                        tradePostService.readTradePostList(request, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             Long postId,
             TradePostUpdateReq request
     ) {
 
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.updateTradePost(postId, request, userId)));
+                        tradePostService.updateTradePost(postId, request, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
-            Long postId,
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal,
+            Long postId
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                tradePostService.deleteTradePost(postId, userId)));
+                tradePostService.deleteTradePost(postId, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             TradePostPurchaseReq purchaseReq
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.purchase(userId, purchaseReq)));
+                        tradePostService.purchase(defaultUserPrincipal.getId(), purchaseReq)));
     }
 }

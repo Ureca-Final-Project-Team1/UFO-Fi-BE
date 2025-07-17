@@ -4,11 +4,13 @@ import com.example.ufo_fi.domain.plan.dto.response.PlansReadRes;
 import com.example.ufo_fi.domain.user.dto.request.SignupReq;
 import com.example.ufo_fi.domain.user.dto.response.SignupRes;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +30,7 @@ public interface SignupControllerApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/signup")
     ResponseEntity<ResponseBody<SignupRes>> signup(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
             @RequestBody @Valid SignupReq signupReq
     );
 }

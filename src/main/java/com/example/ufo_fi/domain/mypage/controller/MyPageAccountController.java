@@ -6,6 +6,7 @@ import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
 import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,20 +18,20 @@ public class MyPageAccountController implements MyPageAccountApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<AccountReadRes>> readAccount(
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.readUserAccount(userId)));
+                        userService.readUserAccount(defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<AccountCreateRes>> createAccount(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             AccountCreateReq accountCreateReq
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.createUserAccount(userId, accountCreateReq)));
+                        userService.createUserAccount(defaultUserPrincipal.getId(), accountCreateReq)));
     }
 }

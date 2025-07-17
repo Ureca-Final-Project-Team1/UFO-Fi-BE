@@ -8,6 +8,7 @@ import com.example.ufo_fi.domain.user.dto.response.UserPlanReadRes;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,20 +30,20 @@ public class MyPagePlanController implements MyPagePlanApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<UserPlanReadRes>> readUserPlan(
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.readUserPlan(userId)));
+                        userService.readUserPlan(defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             UserPlanUpdateReq userPlanUpdateReq
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.updateUserPlan(userId, userPlanUpdateReq)));
+                        userService.updateUserPlan(defaultUserPrincipal.getId(), userPlanUpdateReq)));
     }
 }

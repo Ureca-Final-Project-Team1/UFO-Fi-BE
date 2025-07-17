@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.user.entity;
 
 import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
+import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -66,6 +67,14 @@ public class User {
     @JoinColumn(name = "profile_photo_id")
     private ProfilePhoto profilePhoto;
 
+    public static User of(OAuth2Response oAuth2Response, Role role) {
+        return User.builder()
+                .kakaoId(oAuth2Response.getProviderId().toString())
+                .role(role)
+                .email(oAuth2Response.getEmail())
+                .build();
+    }
+
     public void registerUserPlan(UserPlan userPlan) {
         this.userPlan = userPlan;
     }
@@ -101,5 +110,9 @@ public class User {
 
     public void increaseSellableDataAmount(Integer sellMobileDataCapacityGb) {
         this.userPlan.increaseSellableDataAmount(sellMobileDataCapacityGb);
+    }
+
+    public void deleteRefresh(){
+        this.refresh = null;
     }
 }

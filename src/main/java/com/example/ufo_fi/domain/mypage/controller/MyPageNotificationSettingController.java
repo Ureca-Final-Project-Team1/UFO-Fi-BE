@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.notification.dto.response.NotificationSettingRe
 import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.service.NotificationSettingService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,18 +20,22 @@ public class MyPageNotificationSettingController implements MyPageNotificationSe
     // GetMapping, 알림 설정 목록 Read
     @Override
     public ResponseEntity<ResponseBody<NotificationSettingReadRes>> readNotificationSettings(
-            Long userId) {
-        return ResponseEntity.ok(ResponseBody.success(notificationService.getNotificationSettings(userId)));
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        notificationService.getNotificationSettings(defaultUserPrincipal.getId())));
     }
 
     // PatchMapping, 알림 설정 Update
     // TODO 유효하지 않은 알림 들어왔을 경우 예외 처리
     @Override
     public ResponseEntity<ResponseBody<Void>> updateNotificationSettings(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             NotificationType type,
-            boolean enable) {
-        notificationService.updateNotificationSettings(userId, type, enable);
+            boolean enable
+    ) {
+        notificationService.updateNotificationSettings(defaultUserPrincipal.getId(), type, enable);
         return ResponseEntity.ok(ResponseBody.noContent());
     }
 }

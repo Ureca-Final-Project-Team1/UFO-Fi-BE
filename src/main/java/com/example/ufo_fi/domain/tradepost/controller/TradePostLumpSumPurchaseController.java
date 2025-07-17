@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,10 +18,10 @@ public class TradePostLumpSumPurchaseController implements TradePostLumpSumPurch
     @Override
     public ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readLumSumPurchase(
             TradePostBulkPurchaseReq request,
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.readLumSumPurchase(request, userId)));
+                        tradePostService.readLumSumPurchase(request, defaultUserPrincipal.getId())));
     }
 }
