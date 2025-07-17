@@ -127,9 +127,12 @@
 
 ### 8-2. 결제 프로세스
 
-<img width="700" height="600" alt="image" src="https://github.com/user-attachments/assets/c992fe62-8a60-4f6c-82b9-64e48a3bd47d" />
+<img width="747" height="649" alt="image" src="https://github.com/user-attachments/assets/65b5cd76-9350-46f8-bef4-1461ba538682" />
+
+1. 클라이언트 UFO_FI 서버로 요청 -> 클라이언트
+2. UFO_FI 서버는 PG 서버로 리다이렉트
+3. PG 서버에서 클라이언트 결제 실행
+4. 
 
 
 ```
-1. 클라이언트 PG 서버로 요청
-2. 
