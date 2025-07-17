@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.user.dto.response;
 
 import com.example.ufo_fi.domain.user.entity.UserAccount;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountCreateRes {
+
+    @Schema(description = "내 고유 식별 번호")
     private Long id;
 
     public static AccountCreateRes from(final UserAccount userAccount){

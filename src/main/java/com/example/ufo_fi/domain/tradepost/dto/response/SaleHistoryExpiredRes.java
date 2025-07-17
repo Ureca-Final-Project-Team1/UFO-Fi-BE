@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.dto.response;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 public class SaleHistoryExpiredRes extends SaleHistoryRes{
     private final static String content = "해당 게시글은 유효 기간이 지나, 삭제 처리되었습니다.";
 
+    @Schema(description = "그냥 문자열")
     private String expiredContent;
 
     public static SaleHistoryExpiredRes from(TradeHistory history) {

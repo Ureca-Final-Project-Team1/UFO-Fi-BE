@@ -3,6 +3,7 @@ package com.example.ufo_fi.domain.user.dto.response;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +14,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserInfoReadRes {
+
+    @Schema(description = "닉네임")
     private String nickname;
+
+    @Schema(description = "이메일")
     private String email;
+
+    @Schema(description = "판매 가능한 모바일 데이터(실제 파는 것이 아님 그저 기준)")
     private Integer sellMobileDataCapacityGb;
+
+    @Schema(description = "실제 판매 가능한 모바일 데이터")
     private Integer sellableDataAmount;
+
+    @Schema(description = "zet 총량")
     private Integer zetAsset;
 
     public static UserInfoReadRes of(final User user, final UserPlan userPlan, final Plan plan){
