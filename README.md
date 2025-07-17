@@ -131,9 +131,14 @@
 
 4. 각 도메인 별 기능 정리 후 락을 통한 이상 현상 해결
 
-5. Controller <-> Service <-> Manager <-> Repository의 4개의 계층으로 중복 코드 제거
+5. Controller <-> Service <-> Manager <-> Repository의 4개의 레이어를 통한 관심사의 분리
 
 <details>
+
+Controller: 뷰(API Spec/end Point)
+Service: 트랜잭션과 로직 흐름(UseCase)
+Manager: 순수 자바코드, 엔티티를 다루는 코드(Domain)
+Repository: DB 영속 관리
 
 ```java
 
