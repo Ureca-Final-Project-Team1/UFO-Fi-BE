@@ -6,6 +6,7 @@ import com.example.ufo_fi.domain.tradepost.dto.response.PurchaseHistoryRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.SaleHistoriesRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -18,25 +19,24 @@ public class MyPageHistoryController implements MyPageHistoryApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<SaleHistoriesRes>> readSaleHistories(
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.readSaleHistories(userId)));
+                        tradePostService.readSaleHistories(defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<PurchaseHistoriesRes>> readPurchaseHistories(
-            Long userId
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.readPurchaseHistories(userId)));
+                        tradePostService.readPurchaseHistories(defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<PurchaseHistoryRes>> readPurchaseHistory(
-            Long userId,
             Long purchaseHistoryId
     ) {
         return ResponseEntity.ok(

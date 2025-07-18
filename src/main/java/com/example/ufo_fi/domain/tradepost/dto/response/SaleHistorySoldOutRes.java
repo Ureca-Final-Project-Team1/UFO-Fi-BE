@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.dto.response;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaleHistorySoldOutRes extends SaleHistoryRes{
+
+    @Schema(description = "판매 날짜")
     private LocalDateTime saleDateTime;
+
+    @Schema(description = "현제 나에게 남은 ZET")
     private Integer remainZet;
 
     public static SaleHistorySoldOutRes from(final TradeHistory history) {

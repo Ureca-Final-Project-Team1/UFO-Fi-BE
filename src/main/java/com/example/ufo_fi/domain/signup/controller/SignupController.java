@@ -7,6 +7,7 @@ import com.example.ufo_fi.domain.user.dto.request.SignupReq;
 import com.example.ufo_fi.domain.user.dto.response.SignupRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,11 +29,11 @@ public class SignupController implements SignupControllerApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<SignupRes>> signup(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             SignupReq signupReq
     ){
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.updateUserAndUserPlan(userId, signupReq)));
+                        userService.updateUserAndUserPlan(defaultUserPrincipal.getId(), signupReq)));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.dto.response;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -12,8 +13,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TradePostBulkPurchaseRes {
 
+    @Schema(description = "일괄 구매 총 GB")
     private final int totalGb;
+
+    @Schema(description = "일괄 구매 총 ZET")
     private final int totalPrice;
+
+    @Schema(description = "일괄 구매 게시글들")
     private final List<TradePostDetailRes> posts;
 
     public static TradePostBulkPurchaseRes from(List<TradePost> finalPosts) {

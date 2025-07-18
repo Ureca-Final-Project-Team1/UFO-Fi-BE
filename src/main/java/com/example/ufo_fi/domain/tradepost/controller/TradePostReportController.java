@@ -6,6 +6,7 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReportRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +18,12 @@ public class TradePostReportController implements TradePostReportApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<TradePostReportRes>> createReport(
-            Long userId,
+            DefaultUserPrincipal defaultUserPrincipal,
             Long postId,
             TradePostReportReq tradePostReportReq
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        tradePostService.createReport(userId, postId, tradePostReportReq)));
+                        tradePostService.createReport(defaultUserPrincipal.getId(), postId, tradePostReportReq)));
     }
 }

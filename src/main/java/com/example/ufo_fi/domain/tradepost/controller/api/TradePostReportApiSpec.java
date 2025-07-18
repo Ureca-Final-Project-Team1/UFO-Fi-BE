@@ -4,10 +4,12 @@ import com.example.ufo_fi.domain.tradepost.dto.request.TradePostReportReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReportRes;
 import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +21,7 @@ public interface TradePostReportApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/reports/{postId}")
     ResponseEntity<ResponseBody<TradePostReportRes>> createReport(
-            @RequestParam(value = "userId") Long userId,
+            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
             @RequestParam(value = "postId") Long postId,
             @RequestBody TradePostReportReq tradePostReportReq
     );

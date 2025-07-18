@@ -20,23 +20,18 @@ public class NotificationSetting {
     @Column(name = "id")
     private Long id;
 
-    @ColumnDefault("false")
     @Column(name = "is_event_agreed")
     private Boolean isEventAgreed;
 
-    @ColumnDefault("false")
     @Column(name = "is_sell_agreed")
     private Boolean isSellAgreed;
 
-    @ColumnDefault("false")
     @Column(name = "is_interested_post_agreed")
     private Boolean isInterestedPostAgreed;
 
-    @ColumnDefault("false")
     @Column(name = "is_reported_agreed")
     private Boolean isReportedAgreed;
 
-    @ColumnDefault("false")
     @Column(name = "is_follower_post_agreed")
     private Boolean isFollowerPostAgreed;
 
@@ -44,8 +39,20 @@ public class NotificationSetting {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static NotificationSetting from(User user) {
+    public static NotificationSetting from(
+            User user,
+            Boolean isEventAgreed,
+            Boolean isSellAgreed,
+            Boolean isInterestedPostAgreed,
+            Boolean isReportedAgreed,
+            Boolean isFollowerPostAgreed
+    ) {
         return NotificationSetting.builder()
+                .isEventAgreed(isEventAgreed)
+                .isSellAgreed(isSellAgreed)
+                .isInterestedPostAgreed(isInterestedPostAgreed)
+                .isReportedAgreed(isReportedAgreed)
+                .isFollowerPostAgreed(isFollowerPostAgreed)
                 .user(user)
                 .build();
     }

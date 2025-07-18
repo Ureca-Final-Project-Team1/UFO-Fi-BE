@@ -58,7 +58,7 @@ public class TradePost {
     @Column(name = "sell_mobile_data_capacity_gb")
     private Integer sellMobileDataCapacityGb;
 
-    @Column(name = "title", length = 15)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "zet_per_unit")
@@ -122,8 +122,8 @@ public class TradePost {
             this.title = request.getTitle();
         }
 
-        if (request.getPricePerUnit() != null) {
-            this.zetPerUnit = request.getPricePerUnit();
+        if (request.getZetPerUnit() != null) {
+            this.zetPerUnit = request.getZetPerUnit();
         }
 
         if (request.getSellMobileDataCapacityGb() != null) {

@@ -28,4 +28,10 @@ public class Refresh {
 
     @Column(name = "token")
     private String token;
+
+    public static Refresh of(String token) {
+        return Refresh.builder()
+                .token(token)
+                .build();
+    }
 }

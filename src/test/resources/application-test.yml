@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+jwt:
+  secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+  access-token-validity-ms: 50000000
+  refresh-token-validity-ms: 604800000

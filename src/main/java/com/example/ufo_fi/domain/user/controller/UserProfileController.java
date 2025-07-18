@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.user.controller.api.UserProfileApiSpec;
 import com.example.ufo_fi.domain.user.dto.response.AnotherUserInfoReadRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,12 +18,12 @@ public class UserProfileController implements UserProfileApiSpec {
 
 
     @Override
-    public ResponseEntity<ResponseBody<AnotherUserInfoReadRes>> readUser(Long anotherUserId,
-        Long userId) {
+    public ResponseEntity<ResponseBody<AnotherUserInfoReadRes>> readUser(
+            Long anotherUserId,
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
         return ResponseEntity.ok(
-            ResponseBody.success(
-                userService.readAnotherUser(anotherUserId, userId)
-            )
-        );
+                ResponseBody.success(
+                        userService.readAnotherUser(anotherUserId, defaultUserPrincipal.getId())));
     }
 }

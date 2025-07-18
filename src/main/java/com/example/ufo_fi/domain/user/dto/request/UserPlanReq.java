@@ -1,13 +1,16 @@
 package com.example.ufo_fi.domain.user.dto.request;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
-import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class UserPlanReq {
+
+    @Schema(description = "요금제 식별자")
     private Long planId;
+
+    @Schema(description = "요금제 이름")
     private String planName;
 }

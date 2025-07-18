@@ -17,6 +17,7 @@ import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
+import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
@@ -224,8 +225,16 @@ public class TradePostService {
         TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
                 .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
-        if (!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
+        if (tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
+            throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
+        }
+
+        if (tradePost.getTradePostStatus().equals(TradePostStatus.DELETED)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_DELETE);
+        }
+
+        if (tradePost.getTradePostStatus().equals(TradePostStatus.REPORTED)) {
+            throw new GlobalException(TradePostErrorCode.ALREADY_REPORTED);
         }
 
         User buyer = userRepository.findById(userId)
@@ -291,16 +300,24 @@ public class TradePostService {
      */
     public SaleHistoriesRes readSaleHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(TradeType.SALE, userId);
+        if(tradeHistories.isEmpty()){
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+
         return SaleHistoriesRes.from(tradeHistories);
     }
 
     /**
      * MyPageTradeHistoryController
-     * 1. 상태가 SALE인 거래 내역을 userId로 찾아옵니다.
+     * 1. 상태가 PURCHASE인 거래 내역을 userId로 찾아옵니다.
      * 2. DTO 매핑하고 리턴합니다.
      */
     public PurchaseHistoriesRes readPurchaseHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(TradeType.PURCHASE, userId);
+        if(tradeHistories.isEmpty()){
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+
         return PurchaseHistoriesRes.from(tradeHistories);
     }
 
@@ -311,6 +328,10 @@ public class TradePostService {
      */
     public PurchaseHistoryRes readPurchaseHistory(Long purchaseHistoryId) {
         TradeHistory tradeHistory = tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(TradeType.PURCHASE, purchaseHistoryId);
+        if(tradeHistory == null){
+            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+        }
+
         return PurchaseHistoryRes.from(tradeHistory);
     }
 }
