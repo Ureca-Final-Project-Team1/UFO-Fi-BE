@@ -39,6 +39,7 @@ public class SecurityConfig {
     private final RefreshRepository refreshRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http    //rest api 기본 설정 추가
