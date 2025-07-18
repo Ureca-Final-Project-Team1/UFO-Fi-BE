@@ -12,7 +12,7 @@ public class CookieUtil {
     //추후 보안 공부 해볼것.
     public void setResponseBasicCookie(String key, String value, int expiredMs, HttpServletResponse response){
         String cookieValue = String.format(
-        "%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None; Secure",
+        "%s=%s; Path=/; Max-Age=%d; HttpOnly; ",
         key, value, expiredMs);
 
         response.addHeader("Set-Cookie", cookieValue);
