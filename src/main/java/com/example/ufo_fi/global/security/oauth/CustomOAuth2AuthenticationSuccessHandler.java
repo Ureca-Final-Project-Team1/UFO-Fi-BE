@@ -51,7 +51,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         log.info("JWT {}", jwt);
         log.info("Refresh-Token {}", refresh);
 
-        response.sendRedirect("localhost:3000/login/success");
+        response.sendRedirect("http://localhost:3000/login/success");
     }
 
     //jwt 토큰 생성
