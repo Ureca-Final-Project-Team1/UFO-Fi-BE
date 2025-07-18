@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/refresh").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import java.io.IOException;
+
 /**
  * Authentication에서 여러가지 정보를 가져와 JWT토큰을 생성해준다.
  * 또한 RefreshToken도 생성해준다.
@@ -38,7 +40,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
      * refresh 토큰은 생성 시 DB에 저장해준다.
      */
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) authentication.getPrincipal();
         String jwt = generateJwt(customOAuth2User);             //jwt 생성
         String refresh = generateRefresh(customOAuth2User);     //refresh token 생성
@@ -48,6 +50,8 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
         log.info("JWT {}", jwt);
         log.info("Refresh-Token {}", refresh);
+
+        response.sendRedirect("localhost:3000/login/success");
     }
 
     //jwt 토큰 생성
