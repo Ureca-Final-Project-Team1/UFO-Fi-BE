@@ -17,7 +17,6 @@ import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
@@ -166,7 +165,7 @@ public class TradePostService {
      * 1. 일괄 구매 조회 로직
      */
     @Transactional(readOnly = true)
-    public TradePostBulkPurchaseRes readLumSumPurchase(TradePostBulkPurchaseReq request, Long userId) {
+    public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request, Long userId) {
 
         User user = getUser(userId);
 
