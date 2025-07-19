@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "TradePost API", description = "거래 게시물 일괄 구매 API")
-public interface TradePostLumpSumPurchaseApiSpec {
+public interface TradePostBulkPurchaseApiSpec {
 
     @Operation(summary = "일괄 구매 조회 API", description = "일괄 구매를 위한 조회를 한다.(미완)")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/posts/lump-sum-purchase")
-    ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readLumSumPurchase(
+    @GetMapping("/v1/posts/bulk-purchase")
+    ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readBulkPurchase(
             @ParameterObject TradePostBulkPurchaseReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
