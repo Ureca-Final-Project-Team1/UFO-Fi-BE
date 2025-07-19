@@ -171,6 +171,20 @@ public class UserService {
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
+    public UserRoleReadRes getUserRole(Role role) {
+        return UserRoleReadRes.from(role);
+    }
+
+    @Transactional
+    public UserNicknameUpdateRes updateUserNicknames(Long userId, UserNicknameUpdateReq userNicknameUpdateReq) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+
+        user.updateNickname(userNicknameUpdateReq);
+
+        return UserNicknameUpdateRes.from(user);
+    }
+
     private User signupUser(Long userId, UserInfoReq userInfoReq) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
@@ -195,9 +209,5 @@ public class UserService {
         userPlanRepository.save(userPlan);
 
         user.registerUserPlan(userPlan);
-    }
-
-    public UserRoleReadRes getUserRole(Role role) {
-        return UserRoleReadRes.from(role);
     }
 }
