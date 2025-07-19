@@ -3,6 +3,7 @@ package com.example.ufo_fi.domain.signup.controller.api;
 import com.example.ufo_fi.domain.plan.dto.response.PlansReadRes;
 import com.example.ufo_fi.domain.user.dto.request.SignupReq;
 import com.example.ufo_fi.domain.user.dto.response.SignupRes;
+import com.example.ufo_fi.domain.user.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,12 +27,18 @@ public interface SignupControllerApiSpec {
             @RequestParam(value = "carrier") String rawCarrier
     );
 
-    // TODO: 추후 인증 연동 시 @AuthenticationPrincipal 사용하여 userId 추출
     @Operation(summary = "회원가입 API", description = "유저 정보와 요금제 정보를 포함하여 저장한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/signup")
     ResponseEntity<ResponseBody<SignupRes>> signup(
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
             @RequestBody @Valid SignupReq signupReq
+    );
+
+    @Operation(summary = "회원가입 API", description = "유저의 ROLE을 가져온다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/v1/signup/user-role")
+    ResponseEntity<ResponseBody<UserRoleReadRes>> readUserRole(
+            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 }

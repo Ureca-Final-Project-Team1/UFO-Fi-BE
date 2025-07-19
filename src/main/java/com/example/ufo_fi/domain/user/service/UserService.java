@@ -196,4 +196,8 @@ public class UserService {
 
         user.registerUserPlan(userPlan);
     }
+
+    public UserRoleReadRes getUserRole(Role role) {
+        return UserRoleReadRes.from(role);
+    }
 }

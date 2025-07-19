@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.plan.service.PlanService;
 import com.example.ufo_fi.domain.signup.controller.api.SignupControllerApiSpec;
 import com.example.ufo_fi.domain.user.dto.request.SignupReq;
 import com.example.ufo_fi.domain.user.dto.response.SignupRes;
+import com.example.ufo_fi.domain.user.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -35,5 +36,14 @@ public class SignupController implements SignupControllerApiSpec {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         userService.updateUserAndUserPlan(defaultUserPrincipal.getId(), signupReq)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserRoleReadRes>> readUserRole(
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        userService.getUserRole(defaultUserPrincipal.getRole())));
     }
 }
