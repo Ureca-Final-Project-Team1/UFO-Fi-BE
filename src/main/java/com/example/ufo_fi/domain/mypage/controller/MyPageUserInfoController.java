@@ -1,7 +1,9 @@
 package com.example.ufo_fi.domain.mypage.controller;
 
 import com.example.ufo_fi.domain.mypage.controller.api.MyPageUserInfoApiSpec;
+import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.domain.user.dto.response.UserInfoReadRes;
+import com.example.ufo_fi.domain.user.dto.response.UserNicknameUpdateRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -22,5 +24,15 @@ public class MyPageUserInfoController implements MyPageUserInfoApiSpec {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         userService.readUserAndUserPlan(defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserNicknameUpdateRes>> updateMyPageUserNicknames(
+            DefaultUserPrincipal defaultUserPrincipal,
+            UserNicknameUpdateReq userNicknameUpdateReq
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        userService.updateUserNicknames(defaultUserPrincipal.getId(), userNicknameUpdateReq)));
     }
 }
