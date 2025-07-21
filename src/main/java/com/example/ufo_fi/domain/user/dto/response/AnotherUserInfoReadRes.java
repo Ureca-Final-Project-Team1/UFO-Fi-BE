@@ -1,42 +1,57 @@
 package com.example.ufo_fi.domain.user.dto.response;
 
+import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AnotherUserInfoReadRes {
 
     @Schema(description = "다른 사용자 식별 번호")
-    private final Long userId;
+    private Long userId;
 
     @Schema(description = "다른 사용자 닉네임")
-    private final String nickname;
+    private String nickname;
 
     @Schema(description = "다른 사용자 프로필 사진")
-    private final String profileImageUrl;
+    private String profileImageUrl;
 
     @Schema(description = "다른 사용자 팔로워 수")
-    private final Long followerCount;
+    private Long followerCount;
 
     @Schema(description = "다른 사용자 팔로잉 수")
-    private final Long followingCount;
+    private Long followingCount;
+
+    @Schema(description = "이 사람이 올린 게시물들")
+    private List<TradePostRes> tradePostsRes;
 
     public static AnotherUserInfoReadRes of(User user, Long followerCount, Long followingCount) {
+        return AnotherUserInfoReadRes.builder()
+            .userId(user.getId())
+            .nickname(user.getNickname())
+            .profileImageUrl(user.getProfilePhoto().getProfilePhotoUrl())
+            .followerCount(followerCount)
+            .followingCount(followingCount)
+            .build();
+    }
 
-        String imageUrl = null;
-
-        if (user.getProfilePhoto() != null) {
-            imageUrl = String.valueOf(user.getProfilePhoto());
-        }
-        return new AnotherUserInfoReadRes(
-            user.getId(),
-            user.getNickname(),
-            imageUrl,
-            followerCount,
-            followingCount
-        );
+    public static AnotherUserInfoReadRes of(User user, Long followerCount, Long followingCount, List<TradePost> tradePosts) {
+        return AnotherUserInfoReadRes.builder()
+            .userId(user.getId())
+            .nickname(user.getNickname())
+            .profileImageUrl(user.getProfilePhoto().getProfilePhotoUrl())
+            .followerCount(followerCount)
+            .followingCount(followingCount)
+            .tradePostsRes(tradePosts.stream().map(TradePostRes::from).toList())
+            .build();
     }
 }

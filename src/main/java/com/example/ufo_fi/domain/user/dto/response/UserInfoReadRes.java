@@ -30,6 +30,9 @@ public class UserInfoReadRes {
     @Schema(description = "zet 총량")
     private Integer zetAsset;
 
+    @Schema(description = "프사입니다.")
+    private String profilePhotoUrl;
+
     public static UserInfoReadRes of(final User user, final UserPlan userPlan, final Plan plan){
         return UserInfoReadRes.builder()
                 .nickname(user.getNickname())
@@ -37,6 +40,7 @@ public class UserInfoReadRes {
                 .sellMobileDataCapacityGb(plan.getSellMobileDataCapacityGb())
                 .sellableDataAmount(userPlan.getSellableDataAmount())
                 .zetAsset(user.getZetAsset())
+                .profilePhotoUrl(user.getProfilePhoto().getProfilePhotoUrl())
                 .build();
     }
 }

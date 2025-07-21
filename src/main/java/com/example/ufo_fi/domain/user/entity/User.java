@@ -67,11 +67,12 @@ public class User {
     @JoinColumn(name = "profile_photo_id")
     private ProfilePhoto profilePhoto;
 
-    public static User of(OAuth2Response oAuth2Response, Role role) {
+    public static User of(OAuth2Response oAuth2Response, Role role, Integer zetAsset) {
         return User.builder()
                 .kakaoId(oAuth2Response.getProviderId().toString())
                 .role(role)
                 .email(oAuth2Response.getEmail())
+                .zetAsset(zetAsset)
                 .build();
     }
 
@@ -119,6 +120,7 @@ public class User {
     }
 
     public void updateNickname(UserNicknameUpdateReq userNicknameUpdateReq) {
-        this.nickname = userNicknameUpdateReq.getNickname();
+
+        this.nickname = userNicknameUpdateReq.getNickname() + String.format(" #%03d", id);
     }
 }

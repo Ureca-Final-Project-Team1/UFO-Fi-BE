@@ -5,6 +5,7 @@ import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
 import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.plan.repository.PlanRepository;
+import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.dto.request.*;
 import com.example.ufo_fi.domain.user.dto.response.*;
@@ -15,6 +16,7 @@ import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class UserService {
      * 2. return 한다.
      */
     public UserPlanReadRes readUserPlan(Long userId) {
-        User user = userRepository.findUserWithUserPlanAndPlan(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
@@ -64,7 +66,7 @@ public class UserService {
      * 2. 은행명, 계좌번호
      */
     public AccountReadRes readUserAccount(Long userId) {
-        User user = userRepository.findUserWithUserAccount(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserAccount userAccount = user.getUserAccount();
@@ -81,7 +83,7 @@ public class UserService {
      * 2. return 한다.
      */
     public UserInfoReadRes readUserAndUserPlan(Long userId) {
-        User user = userRepository.findUserWithUserPlanAndPlan(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
@@ -102,11 +104,16 @@ public class UserService {
         User readUser = userRepository.findUserWithUserPlanAndPlan(anotherUserId)
             .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
+        List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
+
         Long followerCount = followRepository.countByFollowingUser_Id(anotherUserId);
 
         Long followingCount = followRepository.countByFollowerUser_Id(anotherUserId);
 
-        return AnotherUserInfoReadRes.of(readUser, followerCount, followingCount);
+        if(tradePosts.isEmpty()){
+            return AnotherUserInfoReadRes.of(readUser, followerCount, followingCount);
+        }
+        return AnotherUserInfoReadRes.of(readUser, followerCount, followingCount, tradePosts);
     }
 
     /**
@@ -118,15 +125,22 @@ public class UserService {
      */
     @Transactional
     public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
-        User user = userRepository.findUserWithUserPlan(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+
         UserPlan userPlan = user.getUserPlan();
+        if(userPlan == null){
+            throw new GlobalException(UserErrorCode.NO_USER_PLAN);
+        }
 
         if (tradePostRepository.existsByUser(user)) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
         Plan plan = userPlan.getPlan();
+        if(plan == null){
+            throw new GlobalException(UserErrorCode.NO_PLAN);
+        }
 
         if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
