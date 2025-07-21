@@ -64,7 +64,7 @@ public class TradePostDetailRes {
             .pricePerUnit(tradePost.getZetPerUnit())
             .mobileDataType(tradePost.getMobileDataType())
             .sellerNickname(tradePost.getUser().getNickname())
-            .sellerId(tradePost.getId())
+            .sellerId(tradePost.getUser().getId())
             .build();
     }
 }
