@@ -224,7 +224,7 @@ public class TradePostService {
         TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
                 .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
-        if (tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
+        if (tradePost.getTradePostStatus().equals(TradePostStatus.SOLD_OUT)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
         }
 
