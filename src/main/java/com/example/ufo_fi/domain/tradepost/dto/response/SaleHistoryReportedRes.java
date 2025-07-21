@@ -30,6 +30,7 @@ public class SaleHistoryReportedRes extends SaleHistoryRes{
                 .title(history.getTradePost().getTitle())
                 .totalZet(history.getTradePost().getTotalZet())
                 .mobileDataType(history.getTradePost().getMobileDataType())
+                .sellMobileDataAmountGB(history.getTradePost().getSellMobileDataCapacityGb())
                 .reportContent(history.getTradePost().getReports().get(0).getContent())
                 .reportDateTime(history.getTradePost().getReports().get(0).getCreatedAt())
                 .build();

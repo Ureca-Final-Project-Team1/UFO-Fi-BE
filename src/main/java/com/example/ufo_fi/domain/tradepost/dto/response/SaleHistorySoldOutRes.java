@@ -30,6 +30,7 @@ public class SaleHistorySoldOutRes extends SaleHistoryRes{
                 .title(history.getTradePost().getTitle())
                 .totalZet(history.getTradePost().getTotalZet())
                 .mobileDataType(history.getTradePost().getMobileDataType())
+                .sellMobileDataAmountGB(history.getTradePost().getSellMobileDataCapacityGb())
                 .saleDateTime(history.getCreatedAt())
                 .remainZet(history.getUser().getZetAsset())
                 .build();

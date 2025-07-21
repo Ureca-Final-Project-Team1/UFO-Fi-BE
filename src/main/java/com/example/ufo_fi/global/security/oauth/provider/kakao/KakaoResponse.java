@@ -51,6 +51,9 @@ public class KakaoResponse extends OAuth2Response {
     public String getEmail() {
         Map<String, Object> attributes = super.oauth2User.getAttributes();
         if(attributes == null) throw new AuthenticationServiceException("email이 없음");
-        return (String) attributes.get(Scope.KAKAO_EMAIL.getScopeKey());
+        Map<String, Object> kakaoAccount =
+            (Map<String, Object>) attributes.get(Scope.KAKAO_ACCOUNT.getScopeKey());
+
+        return (String) kakaoAccount.get(Scope.KAKAO_EMAIL.getScopeKey());
     }
 }

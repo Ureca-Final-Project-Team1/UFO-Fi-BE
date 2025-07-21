@@ -43,4 +43,20 @@ public abstract class SaleHistoryRes {
 
     @Schema(example = "LTE, _5G", description = "모바일 데이터 타입")
     private MobileDataType mobileDataType;
+
+    @Schema(description = "총 구매 GB")
+    private Integer sellMobileDataAmountGB;
+
+    public static SaleHistoryRes from(final TradeHistory history) {
+        return SaleHistorySoldOutRes.builder()
+            .postId(history.getTradePost().getId())
+            .status(history.getTradePost().getTradePostStatus())
+            .createdAt(history.getTradePost().getCreatedAt())
+            .carrier(history.getTradePost().getCarrier())
+            .title(history.getTradePost().getTitle())
+            .totalZet(history.getTradePost().getTotalZet())
+            .mobileDataType(history.getTradePost().getMobileDataType())
+            .sellMobileDataAmountGB(history.getTradePost().getSellMobileDataCapacityGb())
+            .build();
+    }
 }

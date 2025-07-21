@@ -16,17 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MyPagePlanController implements MyPagePlanApiSpec {
-    private final PlanService planService;
     private final UserService userService;
-
-    @Override
-    public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
-            String carrier
-    ) {
-        return ResponseEntity.ok(
-                ResponseBody.success(
-                        planService.readPlans(carrier)));
-    }
 
     @Override
     public ResponseEntity<ResponseBody<UserPlanReadRes>> readUserPlan(

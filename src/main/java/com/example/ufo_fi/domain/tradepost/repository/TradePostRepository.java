@@ -3,6 +3,7 @@ package com.example.ufo_fi.domain.tradepost.repository;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -26,4 +27,6 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     WHERE tp.id = :postId
     """)
     TradePost findTradePostWithReports(@Param("postId") Long postId);
+
+    List<TradePost> findAllByUser(User readUser);
 }

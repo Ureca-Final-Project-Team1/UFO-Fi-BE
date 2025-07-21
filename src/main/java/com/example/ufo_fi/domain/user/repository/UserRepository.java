@@ -10,13 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("""
-    SELECT u 
-    FROM User u 
-    JOIN FETCH u.userPlan
-    WHERE u.id = :userId
-    """)
-    Optional<User> findUserWithUserPlan(@Param("userId") Long userId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
@@ -28,8 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """)
     Optional<User> findUserWithUserPlanAndUserAccountWithPessimisticLock(@Param("userId") Long userId);
 
-    List<User> findAllByIdIn(List<Long> followerIds);
-
     @Query("""
     SELECT u
     FROM User u
@@ -38,14 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     WHERE u.id = :userId
     """)
     Optional<User> findUserWithUserPlanAndPlan(Long userId);
-
-    @Query("""
-    SELECT u
-    FROM User u
-    JOIN FETCH u.userAccount
-    WHERE u.id = :userId
-    """)
-    Optional<User> findUserWithUserAccount(Long userId);
 
     User findByKakaoId(String string);
 }

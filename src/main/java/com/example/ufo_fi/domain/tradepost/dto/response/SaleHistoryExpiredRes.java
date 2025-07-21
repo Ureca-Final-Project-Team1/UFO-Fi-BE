@@ -26,6 +26,7 @@ public class SaleHistoryExpiredRes extends SaleHistoryRes{
                 .title(history.getTradePost().getTitle())
                 .totalZet(history.getTradePost().getTotalZet())
                 .mobileDataType(history.getTradePost().getMobileDataType())
+                .sellMobileDataAmountGB(history.getTradePost().getSellMobileDataCapacityGb())
                 .expiredContent(content)
                 .build();
     }
