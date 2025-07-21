@@ -19,13 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "Mypage API", description = "마이페이지 요금제 API")
 public interface MyPagePlanApiSpec {
 
-    @Operation(summary = "통신사 별 요금제 정보 조회 API", description = "통신사 별 요금제 정보를 조회한다.")
-    @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/plan")
-    ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
-            @RequestParam String carrier
-    );
-
     @Operation(summary = "나의 요금제 정보 조회 API", description = "유저의 요금제 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/user-plan")
