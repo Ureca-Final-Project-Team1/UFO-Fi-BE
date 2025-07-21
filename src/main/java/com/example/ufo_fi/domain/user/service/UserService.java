@@ -138,7 +138,7 @@ public class UserService {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        Plan plan = planRepository.findById(userPlan.getId())
+        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(PlanErrorCode.INVALID_PLAN));
 
         if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
