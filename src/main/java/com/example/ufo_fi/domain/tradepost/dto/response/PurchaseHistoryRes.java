@@ -39,6 +39,9 @@ public class PurchaseHistoryRes {
     @Schema(example = "SKT, KT, LGU", description = "모바일 데이터 타입")
     private MobileDataType mobileDataType;
 
+    @Schema(description = "판매하는 총 GB입니다.")
+    private Integer totalGB;
+
     public static PurchaseHistoryRes from(final TradeHistory tradeHistory) {
         return PurchaseHistoryRes.builder()
                 .postId(tradeHistory.getTradePost().getId())
@@ -48,6 +51,7 @@ public class PurchaseHistoryRes {
                 .title(tradeHistory.getTradePost().getTitle())
                 .totalZet(tradeHistory.getTradePost().getTotalZet())
                 .mobileDataType(tradeHistory.getTradePost().getMobileDataType())
+                .totalGB(tradeHistory.getTradePost().getSellMobileDataCapacityGb())
                 .build();
     }
 }

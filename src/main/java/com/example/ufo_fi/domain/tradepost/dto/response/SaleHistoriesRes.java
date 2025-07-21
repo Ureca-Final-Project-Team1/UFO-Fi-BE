@@ -35,6 +35,9 @@ public class SaleHistoriesRes {
                                     if(REPORTED.equals(tradePostStatus)){
                                         return SaleHistoryReportedRes.from(history);
                                     }
+                                    if(SELLING.equals(tradePostStatus)){
+                                        return SaleHistoryRes.from(history);
+                                    }
                                     throw new GlobalException(TradePostErrorCode.DTO_PARSING_ERROR);
                                 })
                                 .toList()
