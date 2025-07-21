@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.follow.repository.FollowRepository;
 import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
 import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.plan.entity.Plan;
+import com.example.ufo_fi.domain.plan.exception.PlanErrorCode;
 import com.example.ufo_fi.domain.plan.repository.PlanRepository;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
@@ -137,10 +138,8 @@ public class UserService {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        Plan plan = userPlan.getPlan();
-        if(plan == null){
-            throw new GlobalException(UserErrorCode.NO_PLAN);
-        }
+        Plan plan = planRepository.findById(userPlan.getId())
+                .orElseThrow(() -> new GlobalException(PlanErrorCode.INVALID_PLAN));
 
         if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
