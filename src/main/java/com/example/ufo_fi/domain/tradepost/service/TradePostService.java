@@ -179,8 +179,7 @@ public class TradePostService {
      * 1. 일괄 구매 조회 로직
      */
     @Transactional(readOnly = true)
-    public TradePostBulkPurchaseRes readLumSumPurchase(TradePostBulkPurchaseReq request,
-        Long userId) {
+    public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request, Long userId) {
 
         User user = getUser(userId);
 

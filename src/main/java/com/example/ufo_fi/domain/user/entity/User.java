@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.user.entity;
 
 import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
+import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -115,5 +116,9 @@ public class User {
 
     public void deleteRefresh(){
         this.refresh = null;
+    }
+
+    public void updateNickname(UserNicknameUpdateReq userNicknameUpdateReq) {
+        this.nickname = userNicknameUpdateReq.getNickname();
     }
 }
