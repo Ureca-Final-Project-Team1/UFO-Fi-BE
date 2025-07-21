@@ -21,7 +21,7 @@ public class CustomInterestedPostRepositoryImpl implements CustomInterestedPostR
      * 관심 상품에 해당 & 관심 상품 알림 ON 사용자 조회
      */
     @Override
-    public List<Long> findMatchedUserIdsWithNotificationEnabled(int price, int capacity, int carrierBit) {
+    public List<Long> findMatchedUserIdsWithNotificationEnabled(int price, int capacity, int carrierBit, long sellerId) {
         return jpaQueryFactory
                 .select(ip.user.id)
                 .from(ip)
@@ -32,7 +32,8 @@ public class CustomInterestedPostRepositoryImpl implements CustomInterestedPostR
                         ip.interestedMinCapacity.loe(capacity),
                         ip.interestedMaxCapacity.goe(capacity),
                         Expressions.numberTemplate(Integer.class, "bitand({0}, {1})", ip.carrier, carrierBit).eq(carrierBit),
-                        ns.isInterestedPostAgreed.isTrue()
+                        ns.isInterestedPostAgreed.isTrue(),
+                        ip.user.id.ne(sellerId)
                 )
                 .fetch();
     }
