@@ -10,7 +10,6 @@ import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +27,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
 
     @Override
     public Slice<TradePost> findPostsByConditions(TradePostQueryReq condition, Pageable pageable) {
+
         List<TradePost> content = queryFactory
             .selectFrom(tradePost)
             .where(
@@ -41,7 +41,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
                 cursorIdLt(condition.getCursorId())
             )
             .orderBy(tradePost.id.desc())
-            .limit(pageable.getPageSize() + 1) // 다음 페이지 여부 확인을 위해 1개 더 조회
+            .limit(pageable.getPageSize() + 1)
             .fetch();
 
         boolean hasNext = false;
@@ -51,14 +51,6 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
         }
 
         return new SliceImpl<>(content, pageable, hasNext);
-    }
-
-    private BooleanExpression cursorIdLt(Long cursorId) {
-        
-        if (cursorId == null) {
-            return null;
-        }
-        return tradePost.id.lt(cursorId);
     }
 
     @Override
@@ -83,14 +75,12 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
             .fetch();
     }
 
-    private BooleanExpression cursorCondition(LocalDateTime createdAt, Long id) {
+    private BooleanExpression cursorIdLt(Long cursorId) {
 
-        if (createdAt == null || id == null) {
+        if (cursorId == null) {
             return null;
         }
-
-        return tradePost.createdAt.lt(createdAt)
-            .or(tradePost.createdAt.eq(createdAt).and(tradePost.id.lt(id)));
+        return tradePost.id.lt(cursorId);
     }
 
     private BooleanExpression carrierEq(Carrier carrier) {
@@ -145,10 +135,13 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
     }
 
     private BooleanExpression reputationIn(String reputation) {
+
         if (!StringUtils.hasText(reputation)) {
             return null;
         }
+
         List<String> reputations = Arrays.asList(reputation.split(","));
+
         return tradePost.user.reputation.in(reputations);
     }
 }
