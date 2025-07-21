@@ -46,20 +46,25 @@ public class TradePostDetailRes {
     @Schema(example = "LTE, _5G", description = "모바일 데이터 타입")
     private MobileDataType mobileDataType;
 
-    public static TradePostDetailRes from(final TradePost tradePost) {
+    @Schema(description = "판매자 닉네임")
+    private String sellerNickname;
 
+    @Schema(description = "판매자 아이디")
+    private Long sellerId;
+
+    public static TradePostDetailRes from(final TradePost tradePost) {
         return TradePostDetailRes.builder()
             .postId(tradePost.getId())
             .title(tradePost.getTitle())
             .sellMobileDataCapacityGb(tradePost.getSellMobileDataCapacityGb())
             .carrier(tradePost.getCarrier())
             .createdAt(tradePost.getCreatedAt())
-
             .totalPrice(tradePost.getTotalZet())
             .status(tradePost.getTradePostStatus())
-
             .pricePerUnit(tradePost.getZetPerUnit())
             .mobileDataType(tradePost.getMobileDataType())
+            .sellerNickname(tradePost.getUser().getNickname())
+            .sellerId(tradePost.getId())
             .build();
     }
 }
