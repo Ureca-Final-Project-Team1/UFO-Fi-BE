@@ -61,7 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      * 2. 저장 후 OAuth2User를 생성 반환한다.
      */
     private OAuth2User createUser(OAuth2Response oAuth2Response) {
-        User newUser = User.of(oAuth2Response, Role.ROLE_NO_INFO);
+        User newUser = User.of(oAuth2Response, Role.ROLE_NO_INFO, 0);
         User signupUser = userRepository.save(newUser);
 
         NotificationSetting notificationSetting = NotificationSetting.from(

@@ -1,5 +1,6 @@
 package com.example.ufo_fi.global.security.config;
 
+import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.security.jwt.JwtFilter;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
@@ -65,6 +66,7 @@ public class SecurityConfig {
                         .requestMatchers("/refresh").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v1/signup").hasAuthority(Role.ROLE_NO_INFO.toString())
                         .anyRequest().authenticated());
 
         return http.build();
