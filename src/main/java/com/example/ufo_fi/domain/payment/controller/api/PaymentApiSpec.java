@@ -29,7 +29,7 @@ public interface PaymentApiSpec {
 
     @Operation(summary = "결제 정보 검증 및 승인 API", description = "결제 정보를 검증하고 최종 결제 승인을 요청합니다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("v1/confirm")
+    @PostMapping("/v1/payment/confirm")
     ResponseEntity<ResponseBody<ConfirmRes>> confirm(
             @RequestBody ConfirmReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
