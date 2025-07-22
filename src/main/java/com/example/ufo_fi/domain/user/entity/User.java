@@ -123,4 +123,8 @@ public class User {
 
         this.nickname = userNicknameUpdateReq.getNickname() + String.format(" #%03d", id);
     }
+
+    public void updateStatusReported() {
+        this.role = Role.ROLE_REPORTED;
+    }
 }

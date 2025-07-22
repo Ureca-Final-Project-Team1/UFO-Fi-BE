@@ -1,0 +1,41 @@
+package com.example.ufo_fi.domain.report.controller;
+
+import com.example.ufo_fi.domain.report.controller.api.ReportTradePostApiSpec;
+import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
+import com.example.ufo_fi.domain.report.dto.response.ApproveRollBackRes;
+import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
+import com.example.ufo_fi.domain.report.service.ReportService;
+import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class ReportTradePostController implements ReportTradePostApiSpec {
+    private final ReportService reportService;
+
+    @Override
+    public ResponseEntity<ResponseBody<Void>> reportTradePost(
+        DefaultUserPrincipal defaultUserPrincipal,
+        ReportCreateReq reportCreateReq
+    ) {
+        reportService.reportTradePost(defaultUserPrincipal.getId(), reportCreateReq);
+        return ResponseEntity.ok(ResponseBody.noContent());
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<RollBackReportsReadRes>> readRollBackRegistration(
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<ApproveRollBackRes>> approveRollBackRegistration(
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return null;
+    }
+}
