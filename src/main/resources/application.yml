@@ -64,6 +64,15 @@ cloud:
     stack:
       auto: false
 #<============================================================================
+
+#<payment Gateway================================================================
+payment:
+  client-key: ${TOSS_CLIENT_KEY}
+  secrete-key: ${TOSS_SECRETE_KEY}
+  confirmUrl: ${TOSS_CONFIRM_URL}
+
+#<============================================================================
+
 ---
 spring:
   config:

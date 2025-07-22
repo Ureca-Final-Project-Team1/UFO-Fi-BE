@@ -38,6 +38,7 @@ out/
 
 ### properties ###
 src/main/resources/*.properties
+src/test/resources/*.properties
 
 ### FCM key ###
 src/main/resources/*.json
