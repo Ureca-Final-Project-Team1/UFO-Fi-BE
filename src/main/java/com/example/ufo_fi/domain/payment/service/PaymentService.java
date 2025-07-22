@@ -69,6 +69,7 @@ public class PaymentService {
         HttpResponse<String> response = requestConfirm(request);
 
         // 3. 응답 파싱
+        // TODO: 응답이 오류일 경우 처리
         JsonNode jsonResponse = jsonParser(response);
 
         // 4. 결제 내용 DB 저장
@@ -103,7 +104,7 @@ public class PaymentService {
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(paymentConfig.getConfirmUrl()))
-                    .header("Authorization", "Basic " + paymentConfig.getPaymentSecreteKey())
+                    .header("Authorization", "Basic " + paymentConfig.getPaymentSecretKey())
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
@@ -139,7 +140,6 @@ public class PaymentService {
     private JsonNode jsonParser(HttpResponse<String> response) {
         try {
             JsonNode jsonNode = new ObjectMapper().readTree(response.body());
-            System.out.println(jsonNode.toPrettyString());
             return jsonNode;
         } catch (IOException e) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_CONFIRM_PARSE_FAIL);
