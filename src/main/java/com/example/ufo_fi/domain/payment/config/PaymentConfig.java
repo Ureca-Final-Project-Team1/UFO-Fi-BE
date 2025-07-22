@@ -11,8 +11,8 @@ public class PaymentConfig {
     @Value("${payment.client-key}")
     private String paymentClientKey;
 
-    @Value("${payment.secrete-key}")
-    private String paymentSecreteKey;
+    @Value("${payment.secret-key}")
+    private String paymentSecretKey;
 
     @Value("${payment.confirmUrl}")
     private String confirmUrl;

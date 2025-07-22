@@ -68,7 +68,7 @@ cloud:
 #<payment Gateway================================================================
 payment:
   client-key: ${TOSS_CLIENT_KEY}
-  secrete-key: ${TOSS_SECRETE_KEY}
+  secret-key: ${TOSS_SECRET_KEY}
   confirmUrl: ${TOSS_CONFIRM_URL}
 
 #<============================================================================
