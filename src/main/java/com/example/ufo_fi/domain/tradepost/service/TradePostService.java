@@ -19,7 +19,6 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReportRes;
-import com.example.ufo_fi.domain.tradepost.entity.BulkPurchaseType;
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
@@ -179,7 +178,8 @@ public class TradePostService {
      * 1. 일괄 구매 조회 로직
      */
     @Transactional(readOnly = true)
-    public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request, Long userId) {
+    public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request,
+        Long userId) {
 
         User user = getUser(userId);
 
@@ -190,35 +190,17 @@ public class TradePostService {
         List<TradePost> recommendationList = new ArrayList<>();
 
         int cumulativeGb = 0;
-        int cumulativePrice = 0;
         final int desiredGb = request.getDesiredGb();
-        final int maxPrice = request.getMaxPrice();
-        final BulkPurchaseType purchaseType = request.getPurchaseType();
+        final int unitPrice = request.getUnitPerZet();
 
-        if (purchaseType.equals(BulkPurchaseType.CAPACITY)) {
+        for (TradePost post : candidates) {
+            if (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb
+                && post.getZetPerUnit() <= unitPrice) {
 
-            for (TradePost post : candidates) {
-                //용량 중심
-                if (cumulativeGb >= desiredGb) {
-                    break;
-                }
                 recommendationList.add(post);
-                cumulativePrice += post.getTotalZet();
                 cumulativeGb += post.getSellMobileDataCapacityGb();
             }
-        } else if (purchaseType.equals(BulkPurchaseType.BUDGET)) {
-            //돈 중심
-            for (TradePost post : candidates) {
-
-                if (cumulativePrice + post.getTotalZet() <= maxPrice) {
-
-                    recommendationList.add(post);
-                    cumulativePrice += post.getTotalZet();
-                    cumulativeGb += post.getSellMobileDataCapacityGb();
-                }
-            }
         }
-
         if (recommendationList.isEmpty()) {
             throw new GlobalException(TradePostErrorCode.NO_RECOMMENDATION_FOUND);
         }
