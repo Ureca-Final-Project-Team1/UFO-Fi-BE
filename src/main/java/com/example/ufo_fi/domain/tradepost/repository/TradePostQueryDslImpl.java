@@ -63,7 +63,7 @@ public class TradePostQueryDslImpl implements TradePostQueryDsl {
                 tradePost.tradePostStatus.eq(TradePostStatus.SELLING),
                 tradePost.carrier.eq(carrier),
                 tradePost.mobileDataType.eq(mobileDataType),
-                tradePost.zetPerUnit.loe(condition.getMaxPrice()),
+                tradePost.zetPerUnit.loe(condition.getUnitPerZet()),
                 tradePost.user.id.ne(userId)
 
             )
