@@ -78,6 +78,9 @@ public class PaymentService {
         // 5. 응답 반환
         // TODO: 넘겨줄 데이터 확정지어 넘겨주기
         String url = jsonResponse.get("receipt").get("url").asText();
+
+        // TODO: 실제 ZET 충전되어야 함
+
         return ConfirmRes.from(url);
     }
 
