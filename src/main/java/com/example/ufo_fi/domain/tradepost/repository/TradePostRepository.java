@@ -29,4 +29,14 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     TradePost findTradePostWithReports(@Param("postId") Long postId);
 
     List<TradePost> findAllByUser(User readUser);
+
+    @Query("""
+    SELECT DISTINCT tp
+    FROM TradePost tp
+    JOIN FETCH tp.reports r
+    GROUP BY tp
+    HAVING COUNT(r) >= 3
+    ORDER BY tp.createdAt ASC
+    """)
+    List<TradePost> findReportedPostsWithAtLeastThreeReports();
 }

@@ -3,8 +3,18 @@ package com.example.ufo_fi.domain.user.entity;
 import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
 import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -88,11 +98,11 @@ public class User {
         this.userAccount = userAccount;
     }
 
-    public void decreaseZetAsset(Integer totalZet){
+    public void decreaseZetAsset(Integer totalZet) {
         this.zetAsset -= totalZet;
     }
 
-    public void increaseZetAsset(Integer totalZet){
+    public void increaseZetAsset(Integer totalZet) {
         this.zetAsset += totalZet;
     }
 
@@ -115,7 +125,7 @@ public class User {
         this.userPlan.increaseSellableDataAmount(sellMobileDataCapacityGb);
     }
 
-    public void deleteRefresh(){
+    public void deleteRefresh() {
         this.refresh = null;
     }
 
@@ -126,5 +136,9 @@ public class User {
 
     public void updateStatusReported() {
         this.role = Role.ROLE_REPORTED;
+    }
+
+    public void updateRoleUser() {
+        this.role = Role.ROLE_USER;
     }
 }

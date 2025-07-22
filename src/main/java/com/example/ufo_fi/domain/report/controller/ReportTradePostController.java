@@ -2,7 +2,7 @@ package com.example.ufo_fi.domain.report.controller;
 
 import com.example.ufo_fi.domain.report.controller.api.ReportTradePostApiSpec;
 import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
-import com.example.ufo_fi.domain.report.dto.response.ApproveRollBackRes;
+import com.example.ufo_fi.domain.report.dto.request.ReportRollBackReq;
 import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.domain.report.service.ReportService;
 import com.example.ufo_fi.global.response.ResponseBody;
@@ -14,28 +14,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class ReportTradePostController implements ReportTradePostApiSpec {
+
     private final ReportService reportService;
 
     @Override
     public ResponseEntity<ResponseBody<Void>> reportTradePost(
-        DefaultUserPrincipal defaultUserPrincipal,
-        ReportCreateReq reportCreateReq
+            DefaultUserPrincipal defaultUserPrincipal,
+            ReportCreateReq reportCreateReq
     ) {
         reportService.reportTradePost(defaultUserPrincipal.getId(), reportCreateReq);
         return ResponseEntity.ok(ResponseBody.noContent());
     }
 
     @Override
-    public ResponseEntity<ResponseBody<RollBackReportsReadRes>> readRollBackRegistration(
-        DefaultUserPrincipal defaultUserPrincipal
-    ) {
-        return null;
+    public ResponseEntity<ResponseBody<RollBackReportsReadRes>> readRollBackRegistration() {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        reportService.readRollBackRegistration()));
     }
 
     @Override
-    public ResponseEntity<ResponseBody<ApproveRollBackRes>> approveRollBackRegistration(
-        DefaultUserPrincipal defaultUserPrincipal
+    public ResponseEntity<ResponseBody<Void>> approveRollBackRegistration(
+            ReportRollBackReq reportRollBackReq
     ) {
-        return null;
+        reportService.approveRollBackRegistration(reportRollBackReq);
+        return ResponseEntity.ok(ResponseBody.noContent());
     }
 }

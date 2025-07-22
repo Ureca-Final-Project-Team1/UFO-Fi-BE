@@ -1,6 +1,10 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
+import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,22 +16,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RollBackReportReadRes {
 
-    @Schema(description = "신고 게시물 아이디")
-    private Long tradePostId;
+    @Schema(description = "신고된 게시글 아이디입니다.")
+    private Long postId;
 
-    @Schema(description = "신고당한 유저 아이디")
+    @Schema(description = "신고된 게시글의 유저 아이디입니다.")
     private Long userId;
 
-    @Schema(description = "신고당한 유저 닉넴")
-    private String nickname;
+    @Schema(description = "신고된 게시글의 신고 수 입니다.")
+    private Integer reportCount;
 
-    @Schema(description = "신고당한 유저 실명")
-    private String name;
+    @Schema(description = "신고된 게시글의 상태입니다.")
+    private TradePostStatus tradePostStatus;
 
-    @Schema(description = "신고 내용")
-    private String content;
+    @Schema(description = "신고된 게시글의 생성일입니다.")
+    private LocalDateTime createdAt;
 
-    public static RollBackReportReadRes from(){
+    @Schema(description = "신고된 게시글의 신고 사유입니다.")
+    private List<String> reportContents;
 
+    public static RollBackReportReadRes from(final TradePost tradePost) {
+        return RollBackReportReadRes.builder()
+                .postId(tradePost.getId())
+                .userId(tradePost.getUser().getId())
+                .reportCount(tradePost.getReports().size())
+                .tradePostStatus(tradePost.getTradePostStatus())
+                .createdAt(tradePost.getCreatedAt())
+                .build();
     }
 }
