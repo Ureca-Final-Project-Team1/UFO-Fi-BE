@@ -16,5 +16,5 @@ jwt:
 
 payment:
   client-key: secretsecretsecret
-  secrete-key: secretsecretsecret
+  secret-key: secretsecretsecret
   confirmUrl: secretsecretsecret
