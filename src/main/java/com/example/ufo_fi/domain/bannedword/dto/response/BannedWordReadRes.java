@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "금칙어 생성 응답 DTO")
+@Schema(description = "금칙어 조회 응답 DTO")
 public class BannedWordReadRes {
 
     @Schema(description = "금칙어 ID", example = "1")
