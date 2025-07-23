@@ -33,14 +33,14 @@ public interface BannedWordApiSpec {
     @Operation(summary = "금칙어 전체 조회", description = "금칙어 전체 조회 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("v1/admin/bannedword")
-    ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBandWords(
+    ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBannedWords(
         @Valid @ParameterObject BannedWordReadPageReq request
     );
 
     @Operation(summary = "금칙어 단일 삭제", description = "금칙어 단일 삭제 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
     @DeleteMapping("v1/admin/{banwordId}")
-    ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBanWord(
+    ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBannedWord(
         @Parameter(description = "삭제할 금칙어 ID")
         @PathVariable("banwordId") Long id
     );
@@ -50,6 +50,6 @@ public interface BannedWordApiSpec {
     @DeleteMapping("v1/admin/bannedword")
     ResponseEntity<ResponseBody<BannedWordBulkDeleteRes>> deleteBannedWords(
         @Parameter(description = "삭제할 금칙어 ID 목록")
-        @RequestBody BannedWordDeleteBulkReq request
+        @Valid @RequestBody BannedWordDeleteBulkReq request
     );
 }

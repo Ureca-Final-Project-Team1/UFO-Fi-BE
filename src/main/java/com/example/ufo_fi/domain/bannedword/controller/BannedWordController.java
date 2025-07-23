@@ -33,7 +33,7 @@ public class BannedWordController implements BannedWordApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBandWords(
+    public ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBannedWords(
         BannedWordReadPageReq bannedWordReadPageReq) {
 
         return ResponseEntity.ok(
@@ -44,7 +44,7 @@ public class BannedWordController implements BannedWordApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBanWord(Long id) {
+    public ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBannedWord(Long id) {
 
         return ResponseEntity.ok(
             ResponseBody.success(
