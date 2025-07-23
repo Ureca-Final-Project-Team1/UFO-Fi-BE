@@ -5,9 +5,11 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "금칙어 다중 삭제 응답 DTO")
 public class BannedWordBulkDeleteRes {
