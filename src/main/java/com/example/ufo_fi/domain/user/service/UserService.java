@@ -1,7 +1,6 @@
 package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.follow.repository.FollowRepository;
-import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
 import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.plan.exception.PlanErrorCode;
@@ -17,10 +16,10 @@ import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -46,7 +45,7 @@ public class UserService {
      */
     public UserPlanReadRes readUserPlan(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
         if (userPlan == null) {
@@ -68,7 +67,7 @@ public class UserService {
      */
     public AccountReadRes readUserAccount(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserAccount userAccount = user.getUserAccount();
         if (userAccount == null) {
@@ -85,7 +84,7 @@ public class UserService {
      */
     public UserInfoReadRes readUserAndUserPlan(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
         if (userPlan == null) {
@@ -103,7 +102,7 @@ public class UserService {
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId, Long userId) {
 
         User readUser = userRepository.findUserWithUserPlanAndPlan(anotherUserId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
 
@@ -111,7 +110,7 @@ public class UserService {
 
         Long followingCount = followRepository.countByFollowerUser_Id(anotherUserId);
 
-        if(tradePosts.isEmpty()){
+        if (tradePosts.isEmpty()) {
             return AnotherUserInfoReadRes.of(readUser, followerCount, followingCount);
         }
         return AnotherUserInfoReadRes.of(readUser, followerCount, followingCount, tradePosts);
@@ -127,10 +126,10 @@ public class UserService {
     @Transactional
     public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         UserPlan userPlan = user.getUserPlan();
-        if(userPlan == null){
+        if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
 
@@ -158,7 +157,7 @@ public class UserService {
     @Transactional
     public AccountCreateRes createUserAccount(Long userId, AccountCreateReq accountCreateReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         if (user.getUserAccount() != null) {
             throw new GlobalException(UserErrorCode.ALREADY_ACCOUNT_EXIST);
@@ -184,8 +183,11 @@ public class UserService {
     }
 
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
-    public UserRoleReadRes getUserRole(Role role) {
-        return UserRoleReadRes.from(role);
+    public UserRoleReadRes getUserInfo(Long userId, Role role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        String userPhoneNumber = user.getPhoneNumber() != null ? user.getPhoneNumber() : "";
+        return UserRoleReadRes.from(role, userPhoneNumber);
     }
 
     @Transactional
@@ -216,7 +218,7 @@ public class UserService {
     //유저 요금제를 등록/연관관계 등록
     private void registerUserPlan(User user, UserPlanReq userPlanReq) {
         Plan plan = planRepository.findById(userPlanReq.getPlanId())
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_PLAN));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_PLAN));
 
         UserPlan userPlan = UserPlan.from(plan);
         userPlanRepository.save(userPlan);
