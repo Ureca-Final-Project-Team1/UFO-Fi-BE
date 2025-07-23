@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.tradepost.service;
 
+import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.plan.entity.Plan;
@@ -51,6 +52,7 @@ public class TradePostService {
     private final TradePostRepository tradePostRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ApplicationEventPublisher publisher;
+    private final BannedWordFilter bannedWordFilter;
 
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
@@ -80,6 +82,9 @@ public class TradePostService {
         }
 
         TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user);
+
+        validateBannedWord(request.getTitle());
+
         userPlan.subtractSellableDataAmount(requestSellData);
         tradePost.calculateTotalPrice();// total 가격 저장
         TradePost savedTradePost = tradePostRepository.save(tradePost);
@@ -347,5 +352,10 @@ public class TradePostService {
         }
 
         return PurchaseHistoryRes.from(tradeHistory);
+    }
+
+    private void validateBannedWord(String content) {
+
+        bannedWordFilter.filter(content);
     }
 }
