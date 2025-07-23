@@ -44,7 +44,9 @@ public class BannedWordService {
     }
 
     public Page<BannedWordReadRes> readBannedWords(BannedWordReadPageReq bannedWordReadPageReq) {
+
         Pageable pageable = bannedWordReadPageReq.toPageable();
+
         return bannedWordRepository.findAll(pageable).map(BannedWordReadRes::from);
     }
 
@@ -68,9 +70,8 @@ public class BannedWordService {
             BannedWordErrorCode.BANNED_WORD_NOT_FOUND);
 
         bannedWordRepository.deleteAllInBatch(banWords);
-
         bannedWordFilter.reload();
 
-        return BannedWordBulkDeleteRes.of(ids);
+        return BannedWordBulkDeleteRes.from(ids);
     }
 }

@@ -18,7 +18,7 @@ public class BannedWordBulkDeleteRes {
     @Schema(description = "삭제된 금칙어 개수", example = "3")
     private int deletedCount;
 
-    public static BannedWordBulkDeleteRes of(List<Long> ids) {
+    public static BannedWordBulkDeleteRes from(List<Long> ids) {
         return BannedWordBulkDeleteRes.builder()
             .deletedIds(ids)
             .deletedCount(ids.size())
