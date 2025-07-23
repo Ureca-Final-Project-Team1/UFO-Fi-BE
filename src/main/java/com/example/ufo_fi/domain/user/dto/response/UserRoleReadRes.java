@@ -14,16 +14,18 @@ import lombok.NoArgsConstructor;
 public class UserRoleReadRes {
 
     @Schema(example = """
-            ROLE_USER,
-            ROLE_ADMIN,
-            ROLE_NO_INFO,
-            ROLE_REPORTED
-    """, description = "현재 유저의 롤을 가져온다.")
+                    ROLE_USER,
+                    ROLE_ADMIN,
+                    ROLE_NO_INFO,
+                    ROLE_REPORTED
+            """, description = "현재 유저의 롤을 가져온다.")
     private Role role;
+    private String phoneNumber;
 
-    public static UserRoleReadRes from(Role role) {
+    public static UserRoleReadRes from(Role role, String phoneNumber) {
         return UserRoleReadRes.builder()
                 .role(role)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 }

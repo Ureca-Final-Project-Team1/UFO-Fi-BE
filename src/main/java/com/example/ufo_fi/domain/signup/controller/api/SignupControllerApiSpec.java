@@ -37,8 +37,8 @@ public interface SignupControllerApiSpec {
 
     @Operation(summary = "회원가입 API", description = "유저의 ROLE을 가져온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/signup/user-role")
-    ResponseEntity<ResponseBody<UserRoleReadRes>> readUserRole(
+    @GetMapping("/v1/signup/user-info")
+    ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 }
