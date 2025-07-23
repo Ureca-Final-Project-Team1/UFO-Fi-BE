@@ -5,6 +5,8 @@ import com.example.ufo_fi.domain.bannedword.exception.BannedWordErrorCode;
 import com.example.ufo_fi.domain.bannedword.repository.BannedWordRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +22,12 @@ public class BannedWordCommonValidator {
         }
     }
 
-    public void validateAllIdsExist(List<Long> ids, List<?> entities,
+    public void validateAllIdsExist(List<Long> ids, List<BannedWord> entities,
         BannedWordErrorCode errorCode) {
-        if (entities.size() != ids.size()) {
+
+        Set<Long> foundIds = entities.stream().map(BannedWord::getId).collect(Collectors.toSet());
+
+        if (!foundIds.containsAll(ids)) {
             throw new GlobalException(errorCode);
         }
     }
