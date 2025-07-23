@@ -18,6 +18,7 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReadRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReportRes;
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
@@ -109,9 +110,7 @@ public class TradePostService {
         Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
             request, pageable);
 
-        validatePostsExistence(posts);
-
-        return TradePostListRes.of(posts);
+        return TradePostListRes.of(posts, userId);
     }
 
     /**
@@ -212,14 +211,6 @@ public class TradePostService {
 
         return userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
-    }
-
-    private void validatePostsExistence(Slice<TradePost> posts) {
-
-        if (posts.isEmpty()) {
-
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
     }
 
     /**
@@ -347,5 +338,11 @@ public class TradePostService {
         }
 
         return PurchaseHistoryRes.from(tradeHistory);
+    }
+
+    public TradePostReadRes readTradePost(Long sellerId, Long postId) {
+        TradePost tradePost = tradePostRepository.findById(postId)
+            .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+        return TradePostReadRes.of(tradePost, sellerId);
     }
 }

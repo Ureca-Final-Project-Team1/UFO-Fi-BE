@@ -26,10 +26,10 @@ public class TradePostListRes {
         private Long id;
     }
 
-    public static TradePostListRes of(Slice<TradePost> tradePosts) {
+    public static TradePostListRes of(Slice<TradePost> tradePosts, Long userId) {
         
         List<TradePostDetailRes> postDetails = tradePosts.getContent().stream()
-            .map(TradePostDetailRes::from)
+            .map(tradePost -> TradePostDetailRes.of(tradePost, userId))
             .collect(Collectors.toList());
 
         NextCursor nextCursor = null;

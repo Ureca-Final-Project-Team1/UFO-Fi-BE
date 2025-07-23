@@ -6,6 +6,7 @@ import com.example.ufo_fi.domain.tradepost.dto.request.*;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReadRes;
 import com.example.ufo_fi.domain.tradepost.service.TradePostService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -70,5 +71,15 @@ public class TradePostController implements TradePostApiSpec {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         tradePostService.purchase(defaultUserPrincipal.getId(), purchaseReq)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<TradePostReadRes>> readTradePost(
+        DefaultUserPrincipal defaultUserPrincipal,
+        Long postId
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        tradePostService.readTradePost(defaultUserPrincipal.getId(), postId)));
     }
 }

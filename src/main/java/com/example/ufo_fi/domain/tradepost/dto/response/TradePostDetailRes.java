@@ -52,7 +52,10 @@ public class TradePostDetailRes {
     @Schema(description = "판매자 아이디")
     private Long sellerId;
 
-    public static TradePostDetailRes from(final TradePost tradePost) {
+    @Schema(description = "내껀가?")
+    private Boolean isMine;
+
+    public static TradePostDetailRes of(final TradePost tradePost, final Long userId) {
         return TradePostDetailRes.builder()
             .postId(tradePost.getId())
             .title(tradePost.getTitle())
@@ -65,6 +68,7 @@ public class TradePostDetailRes {
             .mobileDataType(tradePost.getMobileDataType())
             .sellerNickname(tradePost.getUser().getNickname())
             .sellerId(tradePost.getUser().getId())
+            .isMine(tradePost.getUser().getId().equals(userId))
             .build();
     }
 }

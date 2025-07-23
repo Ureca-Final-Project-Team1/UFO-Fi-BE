@@ -7,6 +7,7 @@ import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,5 +67,13 @@ public interface TradePostApiSpec {
     ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
             @RequestBody TradePostPurchaseReq purchaseReq
+    );
+
+    @Operation(summary = "판매 게시물 상세 조회 API", description = "판매 게시물을 상세 조회한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @PostMapping("/v1/posts/{postId}")
+    ResponseEntity<ResponseBody<TradePostReadRes>> readTradePost(
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @PathVariable(name = "postId") Long postId
     );
 }
