@@ -35,7 +35,7 @@ public interface SignupControllerApiSpec {
             @RequestBody @Valid SignupReq signupReq
     );
 
-    @Operation(summary = "회원가입 API", description = "유저의 ROLE을 가져온다.")
+    @Operation(summary = "회원가입 API", description = "유저의 ROLE과 핸드폰 번호를 가져온다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/signup/user-info")
     ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(

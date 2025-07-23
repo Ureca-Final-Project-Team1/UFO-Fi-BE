@@ -20,6 +20,8 @@ public class UserRoleReadRes {
                     ROLE_REPORTED
             """, description = "현재 유저의 롤을 가져온다.")
     private Role role;
+
+    @Schema(description = "유저의 핸드폰 번호")
     private String phoneNumber;
 
     public static UserRoleReadRes from(Role role, String phoneNumber) {
