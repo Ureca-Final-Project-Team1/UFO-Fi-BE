@@ -54,12 +54,14 @@ public class ReportService {
 
         reportRepository.save(report);
 
-        int tradePostReportCount = reportRepository.countByPostId(reportCreateReq.getPostId());
+        TradePost tradePostProxy = tradePostRepository.getReferenceById(reportCreateReq.getPostId());
+        int tradePostReportCount = reportRepository.countByTradePost(tradePostProxy);
         if (tradePostReportCount >= 3) {
             tradePost.updateStatusReported();
         }
 
-        int userReportCount = reportRepository.countByUserId(userId);
+        User userProxy = userRepository.getReferenceById(reportCreateReq.getReportedUserId());
+        int userReportCount = reportRepository.countByReportedUser(userProxy);
         if (userReportCount >= 3) {
             reportedUser.updateStatusReported();
             applicationEventPublisher.publishEvent(new AccountSuspendEvent(reportedUser.getId()));

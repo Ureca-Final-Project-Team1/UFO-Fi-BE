@@ -56,7 +56,7 @@ public class Report {
     @JoinColumn(name = "reporting_user_id", nullable = false)
     private User reportingUser;
 
-    @Setter //편의 메서드를 위한 setter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trade_post_id", nullable = false)
     private TradePost tradePost;
