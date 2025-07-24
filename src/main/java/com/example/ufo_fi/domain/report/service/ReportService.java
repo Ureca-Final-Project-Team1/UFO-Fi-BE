@@ -61,8 +61,7 @@ public class ReportService {
             tradePost.updateStatusReported();
         }
 
-        User userProxy = userRepository.getReferenceById(reportCreateReq.getReportedUserId());
-        int userReportCount = reportRepository.countByReportedUser(userProxy);
+        int userReportCount = reportRepository.countByReportedUser(user);
         if (userReportCount >= 3) {
             reportedUser.updateStatusReported();
             applicationEventPublisher.publishEvent(new AccountSuspendEvent(reportedUser.getId()));
