@@ -19,7 +19,7 @@ public enum UserErrorCode implements ErrorCode {
     ALREADY_ACCOUNT_EXIST(HttpStatus.BAD_REQUEST, "이미 유저의 계정이 존재합니다."),
     NO_PLAN(HttpStatus.NOT_FOUND, "모바일 요금제 정보가 없습니다."),
     ALREADY_USER_SIGNUP(HttpStatus.BAD_REQUEST, "이미 유저가 회원가입 하셨습니다."),
-    ;
+    NOT_DEACTIVE(HttpStatus.BAD_REQUEST, "비활성화된 유저가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -4,7 +4,6 @@ import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
 import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,7 +75,7 @@ public class User {
         this.zetAsset -= totalZet;
     }
 
-    public void increaseZetAsset(Integer totalZet){
+    public void increaseZetAsset(Integer totalZet) {
         this.zetAsset += totalZet;
     }
 
@@ -102,5 +101,13 @@ public class User {
     public void updateNickname(UserNicknameUpdateReq userNicknameUpdateReq) {
 
         this.nickname = userNicknameUpdateReq.getNickname() + String.format(" #%03d", id);
+    }
+
+    public void updateStatusReported() {
+        this.role = Role.ROLE_REPORTED;
+    }
+
+    public void updateRoleUser() {
+        this.role = Role.ROLE_USER;
     }
 }

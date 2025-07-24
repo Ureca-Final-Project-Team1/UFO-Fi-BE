@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.report.entity;
 
+import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostReportReq;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
@@ -55,14 +56,18 @@ public class Report {
     @JoinColumn(name = "reporting_user_id", nullable = false)
     private User reportingUser;
 
-    @Setter //편의 메서드를 위한 setter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trade_post_id", nullable = false)
     private TradePost tradePost;
 
-    public static Report of(User reportingUser, User reportedUser, TradePost tradePost, TradePostReportReq tradePostReportReq) {
+    public static Report of(
+        User reportingUser,
+        User reportedUser,
+        TradePost tradePost,
+        ReportCreateReq reportCreateReq) {
         return Report.builder()
-                .content(tradePostReportReq.getContent())
+                .content(reportCreateReq.getContent())
                 .reportedUser(reportedUser)
                 .reportingUser(reportingUser)
                 .tradePost(tradePost)

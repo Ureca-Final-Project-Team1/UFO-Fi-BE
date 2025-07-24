@@ -4,13 +4,11 @@ import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostQueryReq;
-import com.example.ufo_fi.domain.tradepost.dto.request.TradePostReportReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.PurchaseHistoriesRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.PurchaseHistoryRes;
@@ -19,7 +17,6 @@ import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
-import com.example.ufo_fi.domain.tradepost.dto.response.TradePostReportRes;
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
@@ -294,38 +291,6 @@ public class TradePostService {
         publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
 
         return TradePostPurchaseRes.from(buyer);
-    }
-
-    /**
-     * 게시물 신고 로직
-     */
-    @Transactional
-    public TradePostReportRes createReport(Long userId, Long postId,
-        TradePostReportReq tradePostReportReq) {
-        TradePost tradePost = tradePostRepository.findTradePostWithReports(postId);
-
-        User reportingUser = userRepository.getReferenceById(userId);
-        User reportedUser = userRepository.getReferenceById(
-            tradePostReportReq.getPostOwnerUserId()
-        );
-
-        Report report = Report.of(
-            reportingUser,
-            reportedUser,
-            tradePost,
-            tradePostReportReq
-        );
-
-        reportRepository.save(report);
-
-        tradePost.addReport(report);
-
-        int reportCount = tradePost.getReports().size();
-        if (reportCount >= 3) {
-            tradePost.updateStatusReported();
-        }
-
-        return TradePostReportRes.of(report, tradePost, reportCount);
     }
 
     /**

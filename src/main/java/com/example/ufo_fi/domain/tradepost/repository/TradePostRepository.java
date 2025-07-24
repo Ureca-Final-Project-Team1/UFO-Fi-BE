@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.LockModeType;
 import java.util.List;
@@ -18,15 +19,7 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     @Query("select tp from TradePost tp where tp.id = :postId")
     Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
 
-    boolean existsByUser(User user);
-
-    @Query("""
-    SELECT tp
-    FROM TradePost tp
-    JOIN FETCH tp.reports r
-    WHERE tp.id = :postId
-    """)
-    TradePost findTradePostWithReports(@Param("postId") Long postId);
-
     List<TradePost> findAllByUser(User readUser);
+
+    List<TradePost> findTradePostByTradePostStatus(TradePostStatus tradePostStatus);
 }

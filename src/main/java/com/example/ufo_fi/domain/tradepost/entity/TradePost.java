@@ -147,4 +147,12 @@ public class TradePost {
     public void updateStatusReported() {
         this. tradePostStatus = TradePostStatus.REPORTED;
     }
+
+    public void updateStatusSelling() {
+        this.tradePostStatus = TradePostStatus.SELLING;
+    }
+
+    public void updateStatusExpired() {
+        this.tradePostStatus = TradePostStatus.EXPIRED;
+    }
 }
