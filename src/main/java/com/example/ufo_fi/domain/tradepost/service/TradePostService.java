@@ -61,7 +61,7 @@ public class TradePostService {
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
 
-        User user = userRepository.findUserWithUserPlanAndUserAccountWithPessimisticLock(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
 
         UserPlan userPlan = userPlanRepository.findByUser(user);

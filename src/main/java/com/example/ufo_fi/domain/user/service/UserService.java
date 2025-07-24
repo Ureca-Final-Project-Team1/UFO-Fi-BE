@@ -100,7 +100,7 @@ public class UserService {
 
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId, Long userId) {
 
-        User readUser = userRepository.findUserWithUserPlanAndPlan(anotherUserId)
+        User readUser = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
@@ -132,18 +132,15 @@ public class UserService {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
 
-        if (tradePostRepository.existsByUser(user)) {
-            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
-        }
-
-        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
+        Plan updatePlan = planRepository.findById(userPlanUpdateReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(PlanErrorCode.INVALID_PLAN));
+        Plan myPlan = userPlan.getPlan();
 
-        if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
+        if (!(Objects.equals(userPlan.getSellableDataAmount(), myPlan.getSellMobileDataCapacityGb()))) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        userPlan.update(plan);
+        userPlan.update(updatePlan);
 
         return UserPlanUpdateRes.from(userPlan);
     }
