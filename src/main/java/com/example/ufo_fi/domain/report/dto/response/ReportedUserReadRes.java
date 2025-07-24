@@ -1,9 +1,7 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,15 +19,18 @@ public class ReportedUserReadRes {
     @Schema(description = "신고된 유저 닉네임입니다.")
     private String nickname;
 
-    @Schema(description = "신고된 유저의 신고 게시물들입니다.")
-    private List<ReportedUserTradePost> reportedUserTradePosts;
+    @Schema(description = "신고된 유저 실명")
+    private String name;
 
-    public static ReportedUserReadRes from(final User user, final List<TradePost> tradePosts) {
+    @Schema(description = "신고된 유저 이메일")
+    private String email;
+
+    public static ReportedUserReadRes from(final User user) {
         return ReportedUserReadRes.builder()
-                .userid(user.getId())
-                .nickname(user.getNickname())
-                .reportedUserTradePosts(tradePosts.stream()
-                        .map(ReportedUserTradePost::from).toList())
-                .build();
+            .userid(user.getId())
+            .nickname(user.getNickname())
+            .name(user.getName())
+            .email(user.getEmail())
+            .build();
     }
 }

@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.notification.event.AccountSuspendEvent;
 import com.example.ufo_fi.domain.report.dto.request.GrantUserRoleReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportRollBackReq;
+import com.example.ufo_fi.domain.report.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.exception.ReportErrorCode;
@@ -11,6 +12,7 @@ import com.example.ufo_fi.domain.report.repository.ReportRepository;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
+import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
@@ -32,8 +34,15 @@ public class ReportService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
-     * ReportTradePostController 1. 신고 생성 2. 해당 게시물 신고 갯수 조회 3. 3회 이상인가? => 3-1. Yes 해당 게시물 상태 업데이트
-     * => 3-2. No 그냥 진행 4. 해당 게시물의 유저는 몇 회 신고 누적이 있는가? => 4-1. 유저 정지 => 4-2. 그냥 진행
+     * ReportTradePostController
+     * 1. 신고 생성
+     * 2. 해당 게시물 신고 갯수 조회
+     * 3. 3회 이상인가?
+     * => 3-1. Yes 해당 게시물 상태 업데이트
+     * => 3-2. No 그냥 진행
+     * 4. 해당 게시물의 유저는 몇 회 신고 누적이 있는가?
+     * => 4-1. 유저 정지
+     * => 4-2. 그냥 진행
      */
     @Transactional
     public void reportTradePost(Long userId, ReportCreateReq reportCreateReq) {
@@ -97,7 +106,8 @@ public class ReportService {
         user.updateRoleUser();
     }
 
-//    public ReportedUserReadRes readReportedUser() {
-//        List<User> reportedUser =
-//    }
+    public ReportedUsersReadRes readReportedUser() {
+        List<User> reportedUser = userRepository.findAllByRole(Role.ROLE_REPORTED);
+        return ReportedUsersReadRes.from(reportedUser);
+    }
 }

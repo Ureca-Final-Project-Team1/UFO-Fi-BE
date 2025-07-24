@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.user.repository;
 
+import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.LockModeType;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserWithUserPlanAndPlan(Long userId);
 
     User findByKakaoId(String string);
+
+    List<User> findAllByRole(Role role);
 }

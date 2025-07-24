@@ -24,7 +24,7 @@ public interface ReportTradePostApiSpec {
             @RequestBody ReportCreateReq reportCreateReq
     );
 
-    @Operation(summary = "관리자용 신고 해지 요청 목록 조회 API", description = "관리자는 사용자의 신고 해지 요청들을 볼 수 있다.")
+    @Operation(summary = "관리자용 신고된 게시물 조회 API", description = "관리자는 신고된 게시물들을 볼 수 있다.")
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/admin/roll-back-report-requests")
     ResponseEntity<ResponseBody<RollBackReportsReadRes>> readRollBackRegistration();
