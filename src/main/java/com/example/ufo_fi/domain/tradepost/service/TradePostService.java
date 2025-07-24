@@ -279,37 +279,6 @@ public class TradePostService {
     }
 
     /**
-     * 게시물 신고 로직
-     */
-    @Transactional
-    public TradePostReportRes createReport(Long userId, Long postId,
-        TradePostReportReq tradePostReportReq) {
-        TradePost tradePost = tradePostRepository.findTradePostWithReports(postId);
-
-        User reportingUser = userRepository.getReferenceById(userId);
-        User reportedUser = userRepository.getReferenceById(
-            tradePostReportReq.getPostOwnerUserId());
-
-        Report report = Report.of(
-            reportingUser,
-            reportedUser,
-            tradePost,
-            tradePostReportReq
-        );
-
-        reportRepository.save(report);
-
-        tradePost.addReport(report);
-
-        int reportCount = tradePost.getReports().size();
-        if (reportCount >= 3) {
-            tradePost.updateStatusReported();
-        }
-
-        return TradePostReportRes.of(report, tradePost, reportCount);
-    }
-
-    /**
      * MyPageTradeHistoryController
      * 1. 상태가 SALE인 거래 내역을 userId로 찾아옵니다.
      * 2. DTO 매핑하고 리턴합니다.
