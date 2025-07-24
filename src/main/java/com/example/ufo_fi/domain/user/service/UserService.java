@@ -30,13 +30,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
+    private final FollowRepository followRepository;
     private final UserPlanRepository userPlanRepository;
     private final TradePostRepository tradePostRepository;
     private final RandomImageSelector randomImageSelector;
     private final UserAccountRepository userAccountRepository;
-    private final NotificationSettingRepository notificationRepository;
     private final RandomNicknameGenerator randomNicknameGenerator;
-    private final FollowRepository followRepository;
 
     /**
      * MyPageUserPlanController 유저의 요금제 정보를 받아오는 메서드
@@ -47,7 +46,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        UserPlan userPlan = user.getUserPlan();
+        UserPlan userPlan = userPlanRepository.findByUser(user);
         if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
@@ -69,7 +68,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        UserAccount userAccount = user.getUserAccount();
+        UserAccount userAccount = userAccountRepository.findByUser(user);
         if (userAccount == null) {
             throw new GlobalException(UserErrorCode.NO_USER_ACCOUNT);
         }
@@ -86,7 +85,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        UserPlan userPlan = user.getUserPlan();
+        UserPlan userPlan = userPlanRepository.findByUser(user);
         if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
@@ -101,7 +100,7 @@ public class UserService {
 
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId, Long userId) {
 
-        User readUser = userRepository.findUserWithUserPlanAndPlan(anotherUserId)
+        User readUser = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
@@ -128,23 +127,20 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        UserPlan userPlan = user.getUserPlan();
+        UserPlan userPlan = userPlanRepository.findByUser(user);
         if (userPlan == null) {
             throw new GlobalException(UserErrorCode.NO_USER_PLAN);
         }
 
-        if (tradePostRepository.existsByUser(user)) {
-            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
-        }
-
-        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
+        Plan updatePlan = planRepository.findById(userPlanUpdateReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(PlanErrorCode.INVALID_PLAN));
+        Plan myPlan = userPlan.getPlan();
 
-        if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
+        if (!(Objects.equals(userPlan.getSellableDataAmount(), myPlan.getSellMobileDataCapacityGb()))) {
             throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
         }
 
-        userPlan.update(plan);
+        userPlan.update(updatePlan);
 
         return UserPlanUpdateRes.from(userPlan);
     }
@@ -159,15 +155,14 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        if (user.getUserAccount() != null) {
+        if (userAccountRepository.existsByUser(user)) {
             throw new GlobalException(UserErrorCode.ALREADY_ACCOUNT_EXIST);
         }
 
-        UserAccount userAccount = UserAccount.from(accountCreateReq);
-        user.registerUserAccount(userAccount);
-        userAccountRepository.save(userAccount);
+        UserAccount newUserAccount = UserAccount.of(accountCreateReq, user);
+        userAccountRepository.save(newUserAccount);
 
-        return AccountCreateRes.from(userAccount);
+        return AccountCreateRes.from(newUserAccount);
     }
 
     /**
@@ -220,9 +215,7 @@ public class UserService {
         Plan plan = planRepository.findById(userPlanReq.getPlanId())
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_PLAN));
 
-        UserPlan userPlan = UserPlan.from(plan);
+        UserPlan userPlan = UserPlan.of(plan, user);
         userPlanRepository.save(userPlan);
-
-        user.registerUserPlan(userPlan);
     }
 }

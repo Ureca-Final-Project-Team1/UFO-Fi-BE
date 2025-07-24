@@ -7,6 +7,7 @@ import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.user.entity.UserPlan;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -88,15 +89,15 @@ public class TradePost {
         report.setTradePost(this);
     }
 
-    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus, User user) {
+    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus, User user, UserPlan userPlan) {
 
         return TradePost.builder()
             .user(user)
             .title(request.getTitle())
             .zetPerUnit(request.getZetPerUnit())
             .sellMobileDataCapacityGb(request.getSellDataAmount())
-            .carrier(user.getUserPlan().getPlan().getCarrier())
-            .mobileDataType(user.getUserPlan().getPlan().getMobileDataType())
+            .carrier(userPlan.getPlan().getCarrier())
+            .mobileDataType(userPlan.getPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
             .build();
     }

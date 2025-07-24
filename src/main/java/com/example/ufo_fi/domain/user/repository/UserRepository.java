@@ -12,25 +12,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("""
-    SELECT u
-    FROM User u
-    JOIN FETCH u.userPlan
-    JOIN FETCH u.userAccount
-    WHERE u.id = :userId
-    """)
-    Optional<User> findUserWithUserPlanAndUserAccountWithPessimisticLock(@Param("userId") Long userId);
-
-    @Query("""
-    SELECT u
-    FROM User u
-    JOIN FETCH u.userPlan up
-    JOIN FETCH up.plan
-    WHERE u.id = :userId
-    """)
-    Optional<User> findUserWithUserPlanAndPlan(Long userId);
-
     User findByKakaoId(String string);
 
     List<User> findAllByRole(Role role);
