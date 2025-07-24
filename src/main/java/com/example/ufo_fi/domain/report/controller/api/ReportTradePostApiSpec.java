@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public interface ReportTradePostApiSpec {
     @PostMapping("/v1/trade-posts/{tradePostId}/report")
     ResponseEntity<ResponseBody<Void>> reportTradePost(
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+            @PathVariable Long tradePostId,
             @RequestBody ReportCreateReq reportCreateReq
     );
 

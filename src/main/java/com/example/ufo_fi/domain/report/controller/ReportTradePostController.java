@@ -20,9 +20,10 @@ public class ReportTradePostController implements ReportTradePostApiSpec {
     @Override
     public ResponseEntity<ResponseBody<Void>> reportTradePost(
             DefaultUserPrincipal defaultUserPrincipal,
+            Long tradePostId,
             ReportCreateReq reportCreateReq
     ) {
-        reportService.reportTradePost(defaultUserPrincipal.getId(), reportCreateReq);
+        reportService.reportTradePost(defaultUserPrincipal.getId(), reportCreateReq, tradePostId);
         return ResponseEntity.ok(ResponseBody.noContent());
     }
 

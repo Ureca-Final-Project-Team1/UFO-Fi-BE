@@ -2,7 +2,6 @@ package com.example.ufo_fi.domain.report.controller;
 
 import com.example.ufo_fi.domain.report.controller.api.ReportUserApiSpec;
 import com.example.ufo_fi.domain.report.dto.request.GrantUserRoleReq;
-import com.example.ufo_fi.domain.report.dto.response.ReportedUserReadRes;
 import com.example.ufo_fi.domain.report.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.domain.report.service.ReportService;
 import com.example.ufo_fi.global.response.ResponseBody;

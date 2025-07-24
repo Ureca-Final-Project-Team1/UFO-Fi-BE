@@ -47,17 +47,16 @@ public class ReportService {
      * => 4-2. 그냥 진행
      */
     @Transactional
-    public void reportTradePost(Long userId, ReportCreateReq reportCreateReq) {
+    public void reportTradePost(Long userId, ReportCreateReq reportCreateReq, Long tradePostId) {
         User user = userRepository.getReferenceById(userId);
         User reportedUser = userRepository.findById(reportCreateReq.getReportedUserId())
                 .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
-        TradePost tradePost = tradePostRepository.getReferenceById(reportCreateReq.getPostId());
+        TradePost tradePost = tradePostRepository.getReferenceById(tradePostId);
         Report report = Report.of(user, reportedUser, tradePost, reportCreateReq);
 
         reportRepository.save(report);
 
-        TradePost tradePostProxy = tradePostRepository.getReferenceById(reportCreateReq.getPostId());
-        int tradePostReportCount = reportRepository.countByTradePost(tradePostProxy);
+        int tradePostReportCount = reportRepository.countByTradePost(tradePost);
         if (tradePostReportCount >= 3) {
             tradePost.updateStatusReported();
         }
@@ -86,7 +85,7 @@ public class ReportService {
         YearMonth nextMonth = createdMonth.plusMonths(1);
         YearMonth currentMonth = YearMonth.from(LocalDateTime.now());
 
-        if (nextMonth.equals(currentMonth)) {
+        if (currentMonth.isAfter(nextMonth) || currentMonth.equals(nextMonth)) {
             tradePost.updateStatusExpired();
             return;
         }
@@ -108,7 +107,7 @@ public class ReportService {
         User user = userRepository.findById(grantUserRoleReq.getUserId())
                 .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
 
-        if(user.getIsActive() == true){
+        if(user.getIsActive()){
             throw new GlobalException(UserErrorCode.NOT_DEACTIVE);
         }
 
