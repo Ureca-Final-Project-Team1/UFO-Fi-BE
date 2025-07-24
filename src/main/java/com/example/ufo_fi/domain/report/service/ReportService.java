@@ -10,10 +10,12 @@ import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.exception.ReportErrorCode;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.domain.user.exception.UserErrorCode;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.time.LocalDateTime;
@@ -47,7 +49,7 @@ public class ReportService {
     @Transactional
     public void reportTradePost(Long userId, ReportCreateReq reportCreateReq) {
         User user = userRepository.getReferenceById(userId);
-        User reportedUser = userRepository.findById(userId)
+        User reportedUser = userRepository.findById(reportCreateReq.getReportedUserId())
                 .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
         TradePost tradePost = tradePostRepository.getReferenceById(reportCreateReq.getPostId());
         Report report = Report.of(user, reportedUser, tradePost, reportCreateReq);
@@ -96,7 +98,8 @@ public class ReportService {
      * 신고가 3인 모든 게시물을 조회한다. 날짜 순
      */
     public RollBackReportsReadRes readRollBackRegistration() {
-        List<TradePost> reportedPosts = tradePostRepository.findReportedPostsWithAtLeastThreeReports();
+        List<TradePost> reportedPosts = tradePostRepository.findTradePostByTradePostStatus(
+                TradePostStatus.REPORTED);
         return RollBackReportsReadRes.from(reportedPosts);
     }
 
@@ -104,6 +107,10 @@ public class ReportService {
     public void updateUserRoleUser(GrantUserRoleReq grantUserRoleReq) {
         User user = userRepository.findById(grantUserRoleReq.getUserId())
                 .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
+
+        if(user.getIsActive() == true){
+            throw new GlobalException(UserErrorCode.NOT_DEACTIVE);
+        }
 
         user.updateRoleUser();
     }

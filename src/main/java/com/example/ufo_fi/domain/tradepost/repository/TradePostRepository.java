@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.tradepost.repository;
 
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.LockModeType;
 import java.util.List;
@@ -20,13 +21,5 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
 
     List<TradePost> findAllByUser(User readUser);
 
-    @Query("""
-    SELECT DISTINCT tp
-    FROM TradePost tp
-    JOIN FETCH tp.reports r
-    GROUP BY tp
-    HAVING COUNT(r) >= 3
-    ORDER BY tp.createdAt ASC
-    """)
-    List<TradePost> findReportedPostsWithAtLeastThreeReports();
+    List<TradePost> findTradePostByTradePostStatus(TradePostStatus tradePostStatus);
 }
