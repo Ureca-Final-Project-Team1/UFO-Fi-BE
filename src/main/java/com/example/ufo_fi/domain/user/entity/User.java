@@ -52,16 +52,8 @@ public class User {
     private Role role;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_plan_id")
-    private UserPlan userPlan;
-
-    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "refresh_id")
     private Refresh refresh;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_account_id")
-    private UserAccount userAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_photo_id")
@@ -76,16 +68,8 @@ public class User {
                 .build();
     }
 
-    public void registerUserPlan(UserPlan userPlan) {
-        this.userPlan = userPlan;
-    }
-
     public void registerRefresh(final Refresh refresh) {
         this.refresh = refresh;
-    }
-
-    public void registerUserAccount(final UserAccount userAccount) {
-        this.userAccount = userAccount;
     }
 
     public void decreaseZetAsset(Integer totalZet){
@@ -109,10 +93,6 @@ public class User {
         this.profilePhoto = randomProfilePhoto;
         this.isActive = activeStatus;
         this.role = roleUser;
-    }
-
-    public void increaseSellableDataAmount(Integer sellMobileDataCapacityGb) {
-        this.userPlan.increaseSellableDataAmount(sellMobileDataCapacityGb);
     }
 
     public void deleteRefresh(){

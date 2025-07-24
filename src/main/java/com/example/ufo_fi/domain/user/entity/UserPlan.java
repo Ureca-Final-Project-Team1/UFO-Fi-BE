@@ -25,6 +25,13 @@ public class UserPlan {
     @Column(name = "sellable_data_amount")
     private Integer sellableDataAmount;
 
+    @Column(name = "purchase_data_amount")
+    private Integer purchaseDataAmount;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id")
     private Plan plan;
@@ -32,6 +39,16 @@ public class UserPlan {
     public static UserPlan from(final Plan plan) {
         return UserPlan.builder()
                 .sellableDataAmount(plan.getSellMobileDataCapacityGb())
+                .purchaseDataAmount(0)
+                .plan(plan)
+                .build();
+    }
+
+    public static UserPlan of(Plan plan, User user) {
+        return UserPlan.builder()
+                .sellableDataAmount(plan.getSellMobileDataCapacityGb())
+                .purchaseDataAmount(0)
+                .user(user)
                 .plan(plan)
                 .build();
     }

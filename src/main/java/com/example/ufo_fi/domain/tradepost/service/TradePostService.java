@@ -30,6 +30,8 @@ import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
+import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
+import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
@@ -48,19 +50,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class TradePostService {
 
     private final UserRepository userRepository;
+    private final BannedWordFilter bannedWordFilter;
     private final ReportRepository reportRepository;
+    private final UserPlanRepository userPlanRepository;
     private final TradePostRepository tradePostRepository;
+    private final UserAccountRepository userAccountRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ApplicationEventPublisher publisher;
-    private final BannedWordFilter bannedWordFilter;
 
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
 
-        User user = userRepository.findUserWithUserPlanAndUserAccountWithPessimisticLock(userId)
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
 
-        UserPlan userPlan = user.getUserPlan();
+        UserPlan userPlan = userPlanRepository.findByUser(user);
         if (userPlan == null) {
             throw new GlobalException(TradePostErrorCode.USER_PLAN_NOT_FOUND);
         }
@@ -70,7 +74,7 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.PLAN_NOT_FOUND);
         }
 
-        UserAccount userAccount = user.getUserAccount();
+        UserAccount userAccount = userAccountRepository.findByUser(user);
         if (userAccount == null) {
             throw new GlobalException(TradePostErrorCode.ACCOUNT_NOT_REGISTERED);
         }
@@ -81,7 +85,7 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
         }
 
-        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user);
+        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user, userPlan);
 
         validateBannedWord(request.getTitle());
 
@@ -91,8 +95,14 @@ public class TradePostService {
 
         // 판매 게시물 생성 이벤트 발생
         publisher.publishEvent(
-            new CreatedPostEvent(user.getId(), savedTradePost.getId(), savedTradePost.getCarrier(),
-                savedTradePost.getTotalZet(), savedTradePost.getSellMobileDataCapacityGb()));
+            new CreatedPostEvent(
+                    user.getId(),
+                    savedTradePost.getId(),
+                    savedTradePost.getCarrier(),
+                    savedTradePost.getTotalZet(),
+                    savedTradePost.getSellMobileDataCapacityGb()
+            )
+        );
 
         return new TradePostCommonRes(savedTradePost.getId());
     }
@@ -112,7 +122,9 @@ public class TradePostService {
         Pageable pageable = PageRequest.of(0, pageSize);
 
         Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
-            request, pageable);
+                request,
+                pageable
+        );
 
         validatePostsExistence(posts);
 
@@ -128,6 +140,8 @@ public class TradePostService {
 
         User user = getUser(userId);
 
+        UserPlan userPlan = userPlanRepository.findByUser(user);
+
         TradePost tradePost = tradePostRepository.findByIdWithLock(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
 
@@ -136,15 +150,15 @@ public class TradePostService {
         if (request.getSellMobileDataCapacityGb() != null) {
 
             int originalDataAmount = tradePost.getSellMobileDataCapacityGb();
-            user.getUserPlan().increaseSellableDataAmount(originalDataAmount);
+            userPlan.increaseSellableDataAmount(originalDataAmount);
 
             int newDataAmount = request.getSellMobileDataCapacityGb();
 
-            if (newDataAmount > user.getUserPlan().getSellableDataAmount()) {
+            if (newDataAmount > userPlan.getSellableDataAmount()) {
                 throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
             }
 
-            user.getUserPlan().subtractSellableDataAmount(newDataAmount);
+            userPlan.subtractSellableDataAmount(newDataAmount);
         }
 
         tradePost.calculateTotalPrice();
@@ -161,6 +175,8 @@ public class TradePostService {
 
         User user = getUser(userId);
 
+        UserPlan userPlan = userPlanRepository.findByUser(user);
+
         TradePost tradePost = tradePostRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
 
@@ -172,7 +188,7 @@ public class TradePostService {
         }
 
         int dataToRestore = tradePost.getSellMobileDataCapacityGb();
-        user.getUserPlan().increaseSellableDataAmount(dataToRestore);
+        userPlan.increaseSellableDataAmount(dataToRestore);
 
         tradePost.softDeleteAndStatusDelete();
 
@@ -188,9 +204,11 @@ public class TradePostService {
 
         User user = getUser(userId);
 
+        UserPlan userPlan = userPlanRepository.findByUser(user);
+
         List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
-            user.getUserPlan().getPlan().getCarrier(),
-            user.getUserPlan().getPlan().getMobileDataType(), userId);
+            userPlan.getPlan().getCarrier(),
+            userPlan.getPlan().getMobileDataType(), userId);
 
         List<TradePost> recommendationList = new ArrayList<>();
 
@@ -266,7 +284,7 @@ public class TradePostService {
 
         buyer.decreaseZetAsset(tradePost.getTotalZet());
         seller.increaseZetAsset(tradePost.getTotalZet());
-        buyer.increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
+        //buyer.increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
         tradePost.updateStatusSoldOut();
 
         //sellable Data 증가
@@ -288,7 +306,8 @@ public class TradePostService {
 
         User reportingUser = userRepository.getReferenceById(userId);
         User reportedUser = userRepository.getReferenceById(
-            tradePostReportReq.getPostOwnerUserId());
+            tradePostReportReq.getPostOwnerUserId()
+        );
 
         Report report = Report.of(
             reportingUser,
@@ -316,10 +335,8 @@ public class TradePostService {
      */
     public SaleHistoriesRes readSaleHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(
-            TradeType.SALE, userId);
-        if (tradeHistories.isEmpty()) {
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
+            TradeType.SALE, userId
+        );
 
         return SaleHistoriesRes.from(tradeHistories);
     }
@@ -331,10 +348,8 @@ public class TradePostService {
      */
     public PurchaseHistoriesRes readPurchaseHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(
-            TradeType.PURCHASE, userId);
-        if (tradeHistories.isEmpty()) {
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
+            TradeType.PURCHASE, userId
+        );
 
         return PurchaseHistoriesRes.from(tradeHistories);
     }
@@ -346,7 +361,8 @@ public class TradePostService {
      */
     public PurchaseHistoryRes readPurchaseHistory(Long purchaseHistoryId) {
         TradeHistory tradeHistory = tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(
-            TradeType.PURCHASE, purchaseHistoryId);
+            TradeType.PURCHASE, purchaseHistoryId
+        );
         if (tradeHistory == null) {
             throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
         }
@@ -355,7 +371,6 @@ public class TradePostService {
     }
 
     private void validateBannedWord(String content) {
-
         bannedWordFilter.filter(content);
     }
 }
