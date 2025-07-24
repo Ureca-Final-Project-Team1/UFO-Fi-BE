@@ -13,6 +13,8 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+// TODO: 리팩토링 시 InfraLayer로 이동
+
 /**
  * Firebase 설정 클래스
  * - Firebase와 연동하기 위한 초기화 작업을 수행하며, Firebase 관련 Bean(FirebaseApp, FirebaseMessaging)을 등록함

@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "User API", description = "유저 API")
 public interface UserProfileApiSpec {
@@ -18,7 +18,7 @@ public interface UserProfileApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/profile/{anotherUserId}")
     ResponseEntity<ResponseBody<AnotherUserInfoReadRes>> readUser(
-            @RequestParam(name = "anotherUserId") Long anotherUserId,
+            @PathVariable Long anotherUserId,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 }

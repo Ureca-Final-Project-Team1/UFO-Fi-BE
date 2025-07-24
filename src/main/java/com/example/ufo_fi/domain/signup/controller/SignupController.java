@@ -22,7 +22,7 @@ public class SignupController implements SignupControllerApiSpec {
     @Override
     public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
             String rawCarrier
-    ){
+    ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         planService.readPlans(rawCarrier)));
@@ -32,18 +32,18 @@ public class SignupController implements SignupControllerApiSpec {
     public ResponseEntity<ResponseBody<SignupRes>> signup(
             DefaultUserPrincipal defaultUserPrincipal,
             SignupReq signupReq
-    ){
+    ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
                         userService.updateUserAndUserPlan(defaultUserPrincipal.getId(), signupReq)));
     }
 
     @Override
-    public ResponseEntity<ResponseBody<UserRoleReadRes>> readUserRole(
+    public ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
             DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
                 ResponseBody.success(
-                        userService.getUserRole(defaultUserPrincipal.getRole())));
+                        userService.getUserInfo(defaultUserPrincipal.getId(), defaultUserPrincipal.getRole())));
     }
 }
