@@ -20,10 +20,7 @@ public class SlackMessageBuilder {
             ```%s```
             """;
 
-
-
-    public String buildMessage(){
-        LogTrace logTrace = LogTraceContext.get();
+    public String buildMessage(LogTrace logTrace){
         return MESSAGE_TEMPLATE.formatted(
                 logTrace.getErrorName(),
                 logTrace.getUserId(),

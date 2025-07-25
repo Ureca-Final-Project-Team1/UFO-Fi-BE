@@ -80,7 +80,6 @@ public class PaymentService {
         String url = jsonResponse.get("receipt").get("url").asText();
 
         // TODO: 실제 ZET 충전되어야 함
-
         return ConfirmRes.from(url);
     }
 
