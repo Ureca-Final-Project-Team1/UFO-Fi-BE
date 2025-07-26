@@ -1,0 +1,14 @@
+package com.example.ufo_fi.domain.payment.state;
+
+import com.example.ufo_fi.domain.payment.entity.Payment;
+import com.example.ufo_fi.domain.payment.entity.PaymentStatus;
+
+public class FailState implements State {
+    @Override
+    public void proceed(Payment payment) {
+        // 유효성 검증, 외부 API 호출 등
+        System.out.println("Fail → ?");
+
+        payment.changeState(PaymentStatus.READY);
+    }
+}
