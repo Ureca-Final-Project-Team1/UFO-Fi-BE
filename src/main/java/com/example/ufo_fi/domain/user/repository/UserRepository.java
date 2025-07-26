@@ -15,4 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByKakaoId(String string);
 
     List<User> findAllByRole(Role role);
+
+    long countByRole(Role role);
+
+    long countByRoleNot(Role role);
 }

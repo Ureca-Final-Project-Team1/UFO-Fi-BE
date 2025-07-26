@@ -22,4 +22,18 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     List<TradePost> findAllByUser(User readUser);
 
     List<TradePost> findTradePostByTradePostStatus(TradePostStatus tradePostStatus);
+
+    Long countByTradePostStatus(TradePostStatus tradePostStatus);
+
+    @Query(value = """
+    SELECT COUNT(*) FROM (
+        SELECT tp.id
+        FROM trade_posts tp
+        JOIN reports r ON r.trade_post_id = tp.id
+        WHERE tp.status <> 'REPORTED'
+        GROUP BY tp.id
+        HAVING COUNT(r.id) >= 3
+    ) AS sub
+    """, nativeQuery = true)
+    Long countPendingReportedPosts();
 }
