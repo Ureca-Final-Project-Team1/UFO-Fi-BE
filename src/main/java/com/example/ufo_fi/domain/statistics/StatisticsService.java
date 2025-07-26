@@ -14,13 +14,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StatisticsService {
     private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
     private final TradePostRepository tradePostRepository;
 
     public StatisticsRes readStatistics(){
         long allUsersCount = userRepository.count();
         long notReportedUsersCount = userRepository.countByRoleNot(Role.ROLE_REPORTED);
         long allTradePostsCount = tradePostRepository.count();
-        long allReportCount = tradePostRepository.count();
+        long allReportCount = reportRepository.count();
 
         return StatisticsRes.of(
             allUsersCount,
