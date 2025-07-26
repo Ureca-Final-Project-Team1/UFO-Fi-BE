@@ -113,7 +113,6 @@ public class JwtUtil {
     public void deleteJwtCookie(HttpServletResponse response) {
         Cookie cookie = new Cookie("Authorization", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
