@@ -9,9 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "주문번호에 해당하는 내역을 찾을 수 없습니다."),
-    PAYMENT_VERIFY_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 검증 요청에 실패했습니다."),
-    PAYMENT_CONFIRM_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 승인 요청에 실패했습니다."),
-    PAYMENT_CONFIRM_PARSE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "승인 응답 파싱에 실패했습니다.");
+    PAYMENT_VERIFY_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 검증 요청에 실패했습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;

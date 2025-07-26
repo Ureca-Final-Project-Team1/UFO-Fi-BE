@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.payment.entity;
 
 
 import com.example.ufo_fi.domain.payment.dto.request.PaymentReq;
+import com.example.ufo_fi.domain.payment.state.State;
 import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,7 +42,7 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private PaymentStatus paymentStatus;
+    private PaymentStatus status;
 
     @Column(name = "requested_at")
     private LocalDateTime requestedAt;
@@ -56,7 +57,7 @@ public class Payment {
                 .orderId(request.getOrderId())
                 .packageName(request.getPackageName())
                 .amount(request.getAmount())
-                .paymentStatus(PaymentStatus.READY)
+                .status(PaymentStatus.CREATE)
                 .requestedAt(LocalDateTime.now())
                 .build();
     }
@@ -64,7 +65,19 @@ public class Payment {
     public void update(String paymentKey, String method, LocalDateTime approvedAt) {
         this.paymentKey = paymentKey;
         this.method = method;
-        this.paymentStatus = PaymentStatus.DONE;
+        this.status = PaymentStatus.DONE;
         this.approvedAt = approvedAt;
+    }
+
+    public void proceed() {
+        getState().proceed(this);
+    }
+
+    public State getState() {
+        return status.getState();
+    }
+
+    public void changeState(PaymentStatus nextStatus) {
+        this.status = nextStatus;
     }
 }
