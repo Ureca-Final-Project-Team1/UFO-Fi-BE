@@ -192,7 +192,7 @@ Repository: DB 영속 관리
 
 ### 8-2. 결제 프로세스
 
-<img width="500" height="800" alt="image" src="https://github.com/user-attachments/assets/72492d1a-f15e-41b0-9d8b-98a8bd749e7f" />
+<img width="1600" height="1000" alt="image" src="https://github.com/user-attachments/assets/0691a4c9-4f82-4583-885b-48f5efbbf46b" />
 
 1. 클라이언트 UFO_FI 서버로 요청 -> 클라이언트에게 sendRedirect()
 2. 클라이언트 결제 수행
