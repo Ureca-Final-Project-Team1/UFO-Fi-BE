@@ -106,6 +106,19 @@ public class JwtUtil {
         validateJwt(jwt, response);                                   // 4
     }
 
+    /**
+     * 1. jwt 토큰을 무효화한다.
+     * 2. 만료시간을 0으로 해서 바로 만료될 수 있도록 설정한다.
+     */
+    public void deleteJwtCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
     // 1.Authorization 헤더에 값이 있는지 검증
     private void validateNotNullAuthorization(Cookie cookie, HttpServletResponse response)
             throws AuthenticationException, IOException {
