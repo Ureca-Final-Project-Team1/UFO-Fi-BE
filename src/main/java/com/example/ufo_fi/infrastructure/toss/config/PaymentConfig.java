@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.payment.config;
+package com.example.ufo_fi.infrastructure.toss.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
