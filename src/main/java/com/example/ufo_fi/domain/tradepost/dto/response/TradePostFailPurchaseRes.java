@@ -79,4 +79,16 @@ public class TradePostFailPurchaseRes {
             .reason(reason)
             .build();
     }
+
+    public static TradePostFailPurchaseRes ofNotFound(Long postId, String reason) {
+
+        return TradePostFailPurchaseRes.builder()
+            .postId(postId)
+            .reason(reason)
+            .title("존재하지 않는 게시물")
+            .totalPrice(0)
+            .sellMobileDataCapacityGb(0)
+            .pricePerUnit(0)
+            .build();
+    }
 }

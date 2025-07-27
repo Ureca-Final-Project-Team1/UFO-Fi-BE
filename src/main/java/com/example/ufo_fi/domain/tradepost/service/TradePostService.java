@@ -260,7 +260,9 @@ public class TradePostService {
             Optional<TradePost> optPost = tradePostRepository.findByIdWithLock(postId);
 
             if (optPost.isEmpty()) {
-                throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
+                failedPurchases.add(
+                    TradePostFailPurchaseRes.ofNotFound(postId, "존재하지 않는 게시물 입니다."));
+                continue;
             }
 
             TradePost lockedPost = optPost.get();
@@ -302,21 +304,25 @@ public class TradePostService {
 
             successfulPurchases.add(lockedPost);
 
-            User seller = lockedPost.getUser();
-            seller.increaseZetAsset(lockedPost.getTotalZet());
-            lockedPost.updateStatusSoldOut();
-
-            publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
         }
 
         int totalCost = successfulPurchases.stream().mapToInt(TradePost::getTotalZet).sum();
-        int totalGb = successfulPurchases.stream().mapToInt(TradePost::getSellMobileDataCapacityGb)
-            .sum();
 
         if (buyer.getZetAsset() < totalCost) {
 
             throw new GlobalException(TradePostErrorCode.ZET_LACK);
         }
+
+        for (TradePost postToBuy : successfulPurchases) {
+            User seller = postToBuy.getUser();
+            seller.increaseZetAsset(postToBuy.getTotalZet());
+            postToBuy.updateStatusSoldOut();
+
+            publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
+        }
+
+        int totalGb = successfulPurchases.stream().mapToInt(TradePost::getSellMobileDataCapacityGb)
+            .sum();
 
         buyer.decreaseZetAsset(totalCost);
         buyerPlan.increasePurchaseAmount(totalGb);
