@@ -39,7 +39,7 @@ public interface BannedWordApiSpec {
 
     @Operation(summary = "금칙어 단일 삭제", description = "금칙어 단일 삭제 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("v1/admin/{banwordId}")
+    @DeleteMapping("v1/admin/bannedword/{banwordId}")
     ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBannedWord(
         @Parameter(description = "삭제할 금칙어 ID")
         @PathVariable("banwordId") Long id
