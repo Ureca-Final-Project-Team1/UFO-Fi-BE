@@ -255,6 +255,7 @@ public class TradePostService {
 
         List<TradePost> successfulPurchases = new ArrayList<>();
         List<TradePostFailPurchaseRes> failedPurchases = new ArrayList<>();
+        List<TradeHistory> historiesToSave = new ArrayList<>();
 
         for (Long postId : postIds) {
             Optional<TradePost> optPost = tradePostRepository.findByIdWithLock(postId);
@@ -318,7 +319,14 @@ public class TradePostService {
             seller.increaseZetAsset(postToBuy.getTotalZet());
             postToBuy.updateStatusSoldOut();
 
+            historiesToSave.add(TradeHistory.toPurchase(postToBuy, buyer));
+            historiesToSave.add(TradeHistory.toSale(postToBuy, seller));
+
             publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
+        }
+
+        if (!historiesToSave.isEmpty()) {
+            tradeHistoryRepository.saveAll(historiesToSave);
         }
 
         int totalGb = successfulPurchases.stream().mapToInt(TradePost::getSellMobileDataCapacityGb)
@@ -358,6 +366,8 @@ public class TradePostService {
         User buyer = userRepository.findById(userId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF));
 
+        UserPlan buyerPlan = userPlanRepository.findByUser(buyer);
+
         User seller = tradePost.getUser();
 
         if (Objects.equals(buyer.getId(), seller.getId())) {
@@ -369,12 +379,12 @@ public class TradePostService {
         }
 
         buyer.decreaseZetAsset(tradePost.getTotalZet());
+        buyerPlan.increasePurchaseAmount(tradePost.getSellMobileDataCapacityGb());
         seller.increaseZetAsset(tradePost.getTotalZet());
-        //buyer.increaseSellableDataAmount(tradePost.getSellMobileDataCapacityGb());
         tradePost.updateStatusSoldOut();
 
-        //sellable Data 증가
         //saveHistories(); 내역 저장 로직 후에 추가
+        saveTradeHistories(tradePost, buyer, seller);
 
         // 거래 완료 이벤트 발행
         publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
@@ -422,6 +432,14 @@ public class TradePostService {
         }
 
         return PurchaseHistoryRes.from(tradeHistory);
+    }
+
+    private void saveTradeHistories(TradePost tradePost, User buyer, User seller) {
+
+        TradeHistory purchaseHistory = TradeHistory.toPurchase(tradePost, buyer);
+        TradeHistory saleHistory = TradeHistory.toSale(tradePost, seller);
+
+        tradeHistoryRepository.saveAll(List.of(purchaseHistory, saleHistory));
     }
 
     private void validateBannedWord(String content) {
