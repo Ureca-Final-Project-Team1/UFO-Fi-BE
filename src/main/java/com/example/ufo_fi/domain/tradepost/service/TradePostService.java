@@ -71,11 +71,6 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.PLAN_NOT_FOUND);
         }
 
-        UserAccount userAccount = userAccountRepository.findByUser(user);
-        if (userAccount == null) {
-            throw new GlobalException(TradePostErrorCode.ACCOUNT_NOT_REGISTERED);
-        }
-
         int userAvailableData = userPlan.getSellableDataAmount();
         int requestSellData = request.getSellDataAmount();
         if (requestSellData > userAvailableData) {
