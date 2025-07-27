@@ -10,6 +10,7 @@ import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordDeleteRes;
 import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordReadRes;
 import com.example.ufo_fi.domain.bannedword.service.BannedWordService;
 import com.example.ufo_fi.global.response.ResponseBody;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class BannedWordController implements BannedWordApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBannedWords(
-        BannedWordReadPageReq bannedWordReadPageReq) {
+        @Valid BannedWordReadPageReq bannedWordReadPageReq) {
 
         return ResponseEntity.ok(
             ResponseBody.success(
