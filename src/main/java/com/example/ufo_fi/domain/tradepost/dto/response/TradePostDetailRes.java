@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.tradepost.entity.TradePost;
 import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
+import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,10 @@ public class TradePostDetailRes {
     private Carrier carrier;
 
     @Schema(example = "SELLING : 판매 중\n"
-            + "SOLD_OUT : 판매 완료\n"
-            + "REPORTED : 신고 완료\n"
-            + "EXPIRED : 판매 종료\n"
-            + "DELETED ", description = "판매 게시글 상태")
+        + "SOLD_OUT : 판매 완료\n"
+        + "REPORTED : 신고 완료\n"
+        + "EXPIRED : 판매 종료\n"
+        + "DELETED ", description = "판매 게시글 상태")
     private TradePostStatus status;
 
     @Schema(description = "게시글 생성일")
@@ -52,7 +53,13 @@ public class TradePostDetailRes {
     @Schema(description = "판매자 아이디")
     private Long sellerId;
 
+    @Schema(description = "판매자 프로필 url id")
+    private Long sellerProfileId;
+
     public static TradePostDetailRes from(final TradePost tradePost) {
+
+        User seller = tradePost.getUser();
+
         return TradePostDetailRes.builder()
             .postId(tradePost.getId())
             .title(tradePost.getTitle())
@@ -63,8 +70,9 @@ public class TradePostDetailRes {
             .status(tradePost.getTradePostStatus())
             .pricePerUnit(tradePost.getZetPerUnit())
             .mobileDataType(tradePost.getMobileDataType())
-            .sellerNickname(tradePost.getUser().getNickname())
-            .sellerId(tradePost.getUser().getId())
+            .sellerNickname(seller.getNickname())
+            .sellerId(seller.getId())
+            .sellerProfileId(seller.getProfilePhoto().getId())
             .build();
     }
 }
