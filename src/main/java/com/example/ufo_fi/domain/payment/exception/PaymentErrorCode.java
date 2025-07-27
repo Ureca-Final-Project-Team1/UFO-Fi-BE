@@ -8,8 +8,15 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum PaymentErrorCode implements ErrorCode {
+    NO_USER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "주문번호에 해당하는 내역을 찾을 수 없습니다."),
-    PAYMENT_VERIFY_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 검증 요청에 실패했습니다.");
+    PAYMENT_ORDER_ID_NOT_EQUAL(HttpStatus.BAD_REQUEST, "주문번호가 다른 요청입니다."),
+    PAYMENT_AMOUNT_CONFLICT(HttpStatus.CONFLICT, "주문번호의 ZET 량과 요청 량이 다릅니다."),
+    PAYMENT_DUPLICATE_ORDER(HttpStatus.BAD_REQUEST, "중복된 승인 요청입니다."),
+    PAYMENT_VERIFY_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 검증 요청에 실패했습니다."),
+    CONFIRM_REQUEST_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "승인 요청을 분실했습니다."),
+    CONFIRM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "토스 통신과의 문제가 있습니다."),
+    PAYMENT_SERIALIZE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "직렬화/역직렬화 실패했습니다.");
 
 
     private final HttpStatus httpStatus;
