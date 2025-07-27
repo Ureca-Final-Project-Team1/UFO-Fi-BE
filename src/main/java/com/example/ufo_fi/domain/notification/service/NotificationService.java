@@ -45,13 +45,13 @@ public class NotificationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
-        // 2. url 조립
+        // 2. URL 조립
         String targetUrl = baseUrl + url;
 
-        // 2. 알림 생성
+        // 3. 알림 내역 생성
         NotificationHistory history = NotificationHistory.of(user, title, body, type, targetUrl);
 
-        // 3. 저장
+        // 4. 저장
         notificationHistoryRepository.save(history);
     }
 
@@ -67,7 +67,7 @@ public class NotificationService {
         // 2. URL 조립
         String targetUrl = baseUrl + url;
 
-        // 3. 알림 리스트 생성
+        // 3. 알림 내역 리스트 생성
         List<NotificationHistory> notifications = users.stream()
                 .map(user -> NotificationHistory.of(user, title, body, type, targetUrl))
                 .toList();
