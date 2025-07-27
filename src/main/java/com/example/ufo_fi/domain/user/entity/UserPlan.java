@@ -83,9 +83,9 @@ public class UserPlan {
         this.sellableDataAmount += restore;
     }
 
-    public void increasePurchaseAmount(int restore) {
+    public void increasePurchaseAmount(int purchaseDataAmount) {
 
-        this.purchaseDataAmount += restore;
+        this.purchaseDataAmount += purchaseDataAmount;
     }
 
     public void update(Plan plan) {
