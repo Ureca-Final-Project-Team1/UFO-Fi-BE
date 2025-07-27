@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.event.NotificationTemplate;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.notification.service.FcmService;
+import com.example.ufo_fi.domain.notification.service.NotificationService;
 import com.example.ufo_fi.domain.notification.service.NotificationSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ public class TradeCompletedNotificationProcessor {
 
     private final NotificationSettingService notificationSettingService;
     private final FcmService fcmService;
+    private final NotificationService notificationService;
 
     public void process(TradeCompletedEvent event) {
         Long userId = event.getSellerId();
@@ -28,8 +30,10 @@ public class TradeCompletedNotificationProcessor {
         NotificationTemplate template = NotificationTemplate.DATA_SELL;
         String title = template.getTitle();
         String body = template.getBody();
+        String url = template.getUrl();
 
         // 3. 전송
-        fcmService.sendUnicastByUserId(userId, title, body);
+        fcmService.sendUnicastByUserId(userId, title, body, url);
+        notificationService.saveNotification(userId, title, body, NotificationType.SELL, url);
     }
 }

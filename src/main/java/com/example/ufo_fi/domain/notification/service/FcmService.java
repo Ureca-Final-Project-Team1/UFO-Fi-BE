@@ -9,6 +9,7 @@ import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,9 @@ public class FcmService {
     private final FirebaseMessaging firebaseMessaging;
     private final UserRepository userRepository;
     private final FcmRepository fcmTokenRepository;
+
+    @Value("${firebase.base-url}")
+    private String baseUrl;
 
     /**
      * FCM 토큰을 저장
@@ -42,7 +46,7 @@ public class FcmService {
     /**
      * 멀티 캐스트 (다수 유저용)
      */
-    public void sendMulticastByUserIds(List<Long> userIds, String title, String body) {
+    public void sendMulticastByUserIds(List<Long> userIds, String title, String body, String url) {
         List<String> tokens = fcmTokenRepository.findTokensByUserIds(userIds);
         if (tokens.isEmpty()) return;
 
@@ -52,6 +56,7 @@ public class FcmService {
                         .setBody(body)
                         .build())
                 .addAllTokens(tokens)
+                .putData("url", baseUrl + url)
                 .build();
 
         try {
@@ -65,7 +70,7 @@ public class FcmService {
     /**
      * 유니 캐스트 (단일 유저용)
      */
-    public void sendUnicastByUserId(Long userId, String title, String body) {
+    public void sendUnicastByUserId(Long userId, String title, String body, String url) {
         Optional<String> tokenOpt = fcmTokenRepository.findByUserId(userId);
         tokenOpt.ifPresent(token -> {
             Message message = Message.builder()
@@ -73,6 +78,7 @@ public class FcmService {
                             .setTitle(title)
                             .setBody(body)
                             .build())
+                    .putData("url", baseUrl + url)
                     .setToken(token)
                     .build();
 

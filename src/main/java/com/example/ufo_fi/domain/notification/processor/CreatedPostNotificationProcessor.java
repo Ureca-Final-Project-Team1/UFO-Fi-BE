@@ -1,10 +1,12 @@
 package com.example.ufo_fi.domain.notification.processor;
 
+import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.NotificationTemplate;
 import com.example.ufo_fi.domain.notification.repository.InterestedPostRepository;
 import com.example.ufo_fi.domain.notification.service.FcmService;
 import com.example.ufo_fi.domain.notification.service.InterestedCarriers;
+import com.example.ufo_fi.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class CreatedPostNotificationProcessor {
     private final InterestedPostRepository interestedPostRepository;
     private final FcmService fcmService;
+    private final NotificationService notificationService;
 
     public void process(CreatedPostEvent event) {
         Long sellerId = event.getSellerId();
@@ -33,12 +36,15 @@ public class CreatedPostNotificationProcessor {
         // TODO: 관심상품에 데이터 타입 없음
         List<Long> enabledUserIds = interestedPostRepository.findMatchedUserIdsWithNotificationEnabled(zet, capacity, carrier, sellerId);
 
-        // 3. 메시지 조립 (템플릿 기반)
+        // 3. 메시지 조립 (템플릿)
         NotificationTemplate template = NotificationTemplate.INTERESTED_PRODUCT;
         String title = template.getTitle();
         String body = template.getBody();
+        String url = template.getUrl();
 
         // 4. 전송
-        fcmService.sendMulticastByUserIds(enabledUserIds, title, body);
+        fcmService.sendMulticastByUserIds(enabledUserIds, title, body, url);
+        notificationService.saveAllNotification(enabledUserIds, title, body, NotificationType.INTERESTED_POST, url);
+
     }
 }

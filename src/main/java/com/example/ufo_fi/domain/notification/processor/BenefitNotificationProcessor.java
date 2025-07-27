@@ -1,9 +1,11 @@
 package com.example.ufo_fi.domain.notification.processor;
 
+import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.event.BenefitEvent;
 import com.example.ufo_fi.domain.notification.event.NotificationTemplate;
 import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
 import com.example.ufo_fi.domain.notification.service.FcmService;
+import com.example.ufo_fi.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class BenefitNotificationProcessor {
     private final NotificationSettingRepository notificationSettingRepository;
     private final FcmService fcmService;
+    private final NotificationService notificationService;
 
     public void process(BenefitEvent event) {
 
@@ -27,8 +30,10 @@ public class BenefitNotificationProcessor {
         NotificationTemplate template = NotificationTemplate.EVENT_BENEFIT;
         String title = template.getTitle();
         String body = template.getBody();
+        String url = template.getUrl();
 
         // 4. 전송
-        fcmService.sendMulticastByUserIds(enabledUserIds, title, body);
+        fcmService.sendMulticastByUserIds(enabledUserIds, title, body, url);
+        notificationService.saveAllNotification(enabledUserIds, title, body, NotificationType.BENEFIT, url);
     }
 }

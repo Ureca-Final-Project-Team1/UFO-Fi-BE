@@ -4,6 +4,7 @@ import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.event.AccountSuspendEvent;
 import com.example.ufo_fi.domain.notification.event.NotificationTemplate;
 import com.example.ufo_fi.domain.notification.service.FcmService;
+import com.example.ufo_fi.domain.notification.service.NotificationService;
 import com.example.ufo_fi.domain.notification.service.NotificationSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class AccountSuspendNotificationProcessor {
     private final NotificationSettingService notificationSettingService;
     private final FcmService fcmService;
+    private final NotificationService notificationService;
 
     public void process(AccountSuspendEvent event) {
         Long userId = event.getUserId();
@@ -27,8 +29,10 @@ public class AccountSuspendNotificationProcessor {
         NotificationTemplate template = NotificationTemplate.USER_BLOCK;
         String title = template.getTitle();
         String body = template.getBody();
+        String url = template.getUrl();
 
         // 3. 전송
-        fcmService.sendUnicastByUserId(userId, title, body);
+        fcmService.sendUnicastByUserId(userId, title, body, url);
+        notificationService.saveNotification(userId, title, body, NotificationType.REPORTED, url);
     }
 }
