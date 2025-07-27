@@ -18,3 +18,6 @@ payment:
   client-key: secretsecretsecret
   secret-key: secretsecretsecret
   confirmUrl: secretsecretsecret
+
+firebase:
+  base-url: ${BASE_URL}
