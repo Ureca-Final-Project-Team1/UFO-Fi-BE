@@ -4,8 +4,8 @@ import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.report.repository.ReportRepository;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostBulkPurchaseReq;
+import com.example.ufo_fi.domain.tradepost.dto.request.TradePostConfirmBulkReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.dto.request.TradePostQueryReq;
@@ -13,8 +13,10 @@ import com.example.ufo_fi.domain.tradepost.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.dto.response.PurchaseHistoriesRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.PurchaseHistoryRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.SaleHistoriesRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseConfirmRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.domain.tradepost.dto.response.TradePostFailPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.entity.TradeHistory;
@@ -25,15 +27,14 @@ import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.domain.tradepost.repository.TradeHistoryRepository;
 import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserAccount;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
 import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
@@ -48,10 +49,8 @@ public class TradePostService {
 
     private final UserRepository userRepository;
     private final BannedWordFilter bannedWordFilter;
-    private final ReportRepository reportRepository;
     private final UserPlanRepository userPlanRepository;
     private final TradePostRepository tradePostRepository;
-    private final UserAccountRepository userAccountRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ApplicationEventPublisher publisher;
 
@@ -88,11 +87,11 @@ public class TradePostService {
         // 판매 게시물 생성 이벤트 발생
         publisher.publishEvent(
             new CreatedPostEvent(
-                    user.getId(),
-                    savedTradePost.getId(),
-                    savedTradePost.getCarrier(),
-                    savedTradePost.getTotalZet(),
-                    savedTradePost.getSellMobileDataCapacityGb()
+                user.getId(),
+                savedTradePost.getId(),
+                savedTradePost.getCarrier(),
+                savedTradePost.getTotalZet(),
+                savedTradePost.getSellMobileDataCapacityGb()
             )
         );
 
@@ -114,8 +113,8 @@ public class TradePostService {
         Pageable pageable = PageRequest.of(0, pageSize);
 
         Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
-                request,
-                pageable
+            request,
+            pageable
         );
 
         validatePostsExistence(posts);
@@ -138,6 +137,7 @@ public class TradePostService {
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
 
         tradePost.verifyOwner(tradePost, user);
+        validateBannedWord(request.getTitle());
 
         if (request.getSellMobileDataCapacityGb() != null) {
 
@@ -236,6 +236,100 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
         }
     }
+
+    /**
+     * 일괄 구매 구매 요청
+     */
+    @Transactional
+    public TradePostBulkPurchaseConfirmRes bulkPurchase(TradePostConfirmBulkReq request,
+        Long userId) {
+
+        List<Long> postIds = request.getPostIds();
+
+        if (postIds == null || postIds.isEmpty()) {
+            throw new GlobalException(TradePostErrorCode.POST_NOT_FOUND);
+        }
+
+        User buyer = getUser(userId);
+        UserPlan buyerPlan = userPlanRepository.findByUser(buyer);
+
+        List<TradePost> successfulPurchases = new ArrayList<>();
+        List<TradePostFailPurchaseRes> failedPurchases = new ArrayList<>();
+
+        for (Long postId : postIds) {
+            Optional<TradePost> optPost = tradePostRepository.findByIdWithLock(postId);
+
+            if (optPost.isEmpty()) {
+                failedPurchases.add(
+                    TradePostFailPurchaseRes.ofNotFound(postId, "존재하지 않는 게시물 입니다."));
+                continue;
+            }
+
+            TradePost lockedPost = optPost.get();
+
+            if (!lockedPost.getCarrier().equals(buyerPlan.getPlan().getCarrier())) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "통신사가 다릅니다."));
+                continue;
+            }
+
+            if (!lockedPost.getMobileDataType().equals(buyerPlan.getPlan().getMobileDataType())) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "데이터 타입이 다릅니다."));
+                continue;
+            }
+
+            if (lockedPost.getTradePostStatus().equals(TradePostStatus.DELETED)) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "삭제된 상품입니다."));
+                continue;
+            }
+
+            if (lockedPost.getTradePostStatus().equals(TradePostStatus.REPORTED)) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "신고된 상품입니다."));
+                continue;
+            }
+
+            if (lockedPost.getTradePostStatus().equals(TradePostStatus.EXPIRED)) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "만료된 상품입니다."));
+                continue;
+            }
+
+            if (lockedPost.getTradePostStatus().equals(TradePostStatus.SOLD_OUT)) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "판매된 상품입니다."));
+                continue;
+            }
+
+            if (lockedPost.getUser().getId().equals(userId)) {
+                failedPurchases.add(TradePostFailPurchaseRes.of(lockedPost, "자신의 상품은 구매할 수 없습니다."));
+                continue;
+            }
+
+            successfulPurchases.add(lockedPost);
+
+        }
+
+        int totalCost = successfulPurchases.stream().mapToInt(TradePost::getTotalZet).sum();
+
+        if (buyer.getZetAsset() < totalCost) {
+
+            throw new GlobalException(TradePostErrorCode.ZET_LACK);
+        }
+
+        for (TradePost postToBuy : successfulPurchases) {
+            User seller = postToBuy.getUser();
+            seller.increaseZetAsset(postToBuy.getTotalZet());
+            postToBuy.updateStatusSoldOut();
+
+            publisher.publishEvent(new TradeCompletedEvent(seller.getId()));
+        }
+
+        int totalGb = successfulPurchases.stream().mapToInt(TradePost::getSellMobileDataCapacityGb)
+            .sum();
+
+        buyer.decreaseZetAsset(totalCost);
+        buyerPlan.increasePurchaseAmount(totalGb);
+
+        return TradePostBulkPurchaseConfirmRes.of(successfulPurchases, failedPurchases);
+    }
+
 
     /**
      * TradePostPurchaseController

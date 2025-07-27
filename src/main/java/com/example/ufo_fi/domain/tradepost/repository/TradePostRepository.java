@@ -16,7 +16,11 @@ import org.springframework.stereotype.Repository;
 public interface TradePostRepository extends JpaRepository<TradePost, Long>, TradePostQueryDsl {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select tp from TradePost tp where tp.id = :postId")
+    @Query("""
+        select tp
+        from TradePost tp
+        where tp.id = :postId
+        """)
     Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
 
     List<TradePost> findAllByUser(User readUser);
@@ -26,14 +30,14 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     Long countByTradePostStatus(TradePostStatus tradePostStatus);
 
     @Query(value = """
-    SELECT COUNT(*) FROM (
-        SELECT tp.id
-        FROM trade_posts tp
-        JOIN reports r ON r.trade_post_id = tp.id
-        WHERE tp.status <> 'REPORTED'
-        GROUP BY tp.id
-        HAVING COUNT(r.id) >= 3
-    ) AS sub
-    """, nativeQuery = true)
+        SELECT COUNT(*) FROM (
+            SELECT tp.id
+            FROM trade_posts tp
+            JOIN reports r ON r.trade_post_id = tp.id
+            WHERE tp.status <> 'REPORTED'
+            GROUP BY tp.id
+            HAVING COUNT(r.id) >= 3
+        ) AS sub
+        """, nativeQuery = true)
     Long countPendingReportedPosts();
 }
