@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.payment.dto.request;
+package com.example.ufo_fi.domain.payment.presentation.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

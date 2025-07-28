@@ -1,11 +1,11 @@
-package com.example.ufo_fi.domain.payment.controller;
+package com.example.ufo_fi.domain.payment.presentation;
 
-import com.example.ufo_fi.domain.payment.controller.api.PaymentApiSpec;
-import com.example.ufo_fi.domain.payment.dto.request.ConfirmReq;
-import com.example.ufo_fi.domain.payment.dto.request.PaymentReq;
-import com.example.ufo_fi.domain.payment.dto.response.ConfirmRes;
-import com.example.ufo_fi.domain.payment.dto.response.PaymentRes;
-import com.example.ufo_fi.domain.payment.service.PaymentService;
+import com.example.ufo_fi.domain.payment.presentation.api.PaymentApiSpec;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.ConfirmRes;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.PaymentRes;
+import com.example.ufo_fi.domain.payment.application.PaymentService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +24,12 @@ public class PaymentController implements PaymentApiSpec {
      */
     @Override
     public ResponseEntity<ResponseBody<PaymentRes>> chargeZet(
-            PaymentReq request,
+            PaymentReq paymentReq,
             DefaultUserPrincipal defaultUserPrincipal) {
 
         return ResponseEntity
                 .ok(ResponseBody
-                        .success(chargeService.charge(defaultUserPrincipal.getId(), request)));
+                        .success(chargeService.charge(defaultUserPrincipal.getId(), paymentReq)));
     }
 
     /**

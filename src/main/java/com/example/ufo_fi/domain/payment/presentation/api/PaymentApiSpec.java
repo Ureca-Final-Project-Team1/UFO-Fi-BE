@@ -1,9 +1,9 @@
-package com.example.ufo_fi.domain.payment.controller.api;
+package com.example.ufo_fi.domain.payment.presentation.api;
 
-import com.example.ufo_fi.domain.payment.dto.request.ConfirmReq;
-import com.example.ufo_fi.domain.payment.dto.request.PaymentReq;
-import com.example.ufo_fi.domain.payment.dto.response.ConfirmRes;
-import com.example.ufo_fi.domain.payment.dto.response.PaymentRes;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.ConfirmRes;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.PaymentRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
