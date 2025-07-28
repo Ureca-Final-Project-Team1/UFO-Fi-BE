@@ -3,7 +3,8 @@ package com.example.ufo_fi.domain.payment.domain.state;
 import com.example.ufo_fi.domain.payment.domain.Payment;
 import com.example.ufo_fi.domain.payment.domain.PaymentManager;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
-import com.example.ufo_fi.domain.payment.infrastructure.toss.PaymentClient;
+import com.example.ufo_fi.domain.payment.application.PaymentClient;
+import com.example.ufo_fi.domain.payment.domain.StateMetaData;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.request.ConfirmCommand;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class InProgressState implements State<Void> {
+public class InProgressState implements State {
     private final PaymentClient paymentClient;
     private final PaymentManager paymentManager;
 
     @Override
-    public void proceed(Payment payment, Void unused) {
+    public void proceed(Payment payment, StateMetaData stateMetaData) {
         ConfirmCommand confirmCommand = createConfirmCommand(payment);
         ConfirmResult confirmResult = paymentClient.confirmPayment(confirmCommand);
         updatePaymentByConfirmResult(payment, confirmResult);

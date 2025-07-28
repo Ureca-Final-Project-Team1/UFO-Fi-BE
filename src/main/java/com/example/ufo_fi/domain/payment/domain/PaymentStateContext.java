@@ -5,27 +5,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class PaymentStateContext {
-    private final Map<PaymentStatus, State<?>> states;
+    private final Map<PaymentStatus, State> states;
 
-    public PaymentStateContext(List<State<?>> paymentStates){
+    @Autowired
+    public PaymentStateContext(List<State> paymentStates){
         this.states = paymentStates.stream()
                 .collect(Collectors.toMap(State::status, paymentState -> paymentState));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> void proceed(Payment payment, T param) {
-        State<T> state = (State<T>) states.get(payment.getStatus());
-        state.proceed(payment, param);
+    public void proceed(Payment payment, StateMetaData stateMetaData) {
+        State state = states.get(payment.getStatus());
+        state.proceed(payment, stateMetaData);
     }
 
-    public <T> void proceedAll(Payment payment, T param) {
+    public <T> void proceedAll(Payment payment, StateMetaData stateMetaData) {
         while (!isTerminal(payment)) {
-            proceed(payment, param);
+            proceed(payment, stateMetaData);
         }
     }
 

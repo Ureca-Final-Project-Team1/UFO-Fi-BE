@@ -2,6 +2,7 @@ package com.example.ufo_fi.domain.payment.domain.state;
 
 import com.example.ufo_fi.domain.payment.domain.Payment;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.StateMetaData;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -11,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class DoneState implements State<Void> {
+public class DoneState implements State {
     private final EntityManager entityManager;
 
     @Override
     @Transactional
-    public void proceed(Payment payment, Void unused) {
+    public void proceed(Payment payment, StateMetaData stateMetaData) {
         User user = payment.getUser();
         entityManager.merge(user);
         user.increaseZetAsset(payment.getAmount());

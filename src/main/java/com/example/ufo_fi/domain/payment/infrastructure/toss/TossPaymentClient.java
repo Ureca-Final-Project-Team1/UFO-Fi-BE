@@ -1,10 +1,10 @@
 package com.example.ufo_fi.domain.payment.infrastructure.toss;
 
+import com.example.ufo_fi.domain.payment.application.PaymentClient;
 import com.example.ufo_fi.domain.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.request.ConfirmCommand;
 import com.example.ufo_fi.global.exception.GlobalException;
-import com.example.ufo_fi.domain.payment.exception.TossPaymentErrorCode;
 import java.net.http.HttpTimeoutException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
