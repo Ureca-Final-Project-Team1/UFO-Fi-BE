@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.payment.application;
 
+import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
 import com.example.ufo_fi.domain.payment.domain.PaymentStateContext;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
 import com.example.ufo_fi.domain.payment.domain.PaymentVerifier;
@@ -42,29 +43,33 @@ public class PaymentService {
         Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY);
         paymentRepository.save(payment);
 
-        return PaymentRes.of(user, payment.getOrderId(), payment.getAmount());
+        return PaymentRes.of(user, payment);
     }
 
     /**
-     * 결제 정보 검증 -> 아닐 시 에러
-     * 최종 결제 승인 요청
-     * 충전 내역 업데이트
-     * 필요한 정보 반환
+     * 1. payment 엔티티를 찾아온다.
+     * 2. stateMetaData 생성
+     * 3. proceedAll() => 상태 실행
+     * 4. response 응답
      */
     public ConfirmRes confirm(ConfirmReq confirmReq) {
         Payment payment = findPayment(confirmReq.getOrderId());
-        StateMetaData stateMetaData = getStateMetaData();
-        stateMetaData.setConfirmReq(confirmReq);
+
+        StateMetaData stateMetaData = createStateMetaData();
+        stateMetaData.put(MetaDataKey.CONFIRM_REQUEST, confirmReq);
+
         paymentStateContext.proceedAll(payment, stateMetaData);
-        return ConfirmRes.from(payment);
+
+        User user = payment.getUser();
+        return ConfirmRes.of(payment, user);
+    }
+
+    private StateMetaData createStateMetaData() {
+        return new StateMetaData();
     }
 
     private Payment findPayment(String orderId) {
         return paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
-    }
-
-    private StateMetaData getStateMetaData(){
-        return new StateMetaData();
     }
 }

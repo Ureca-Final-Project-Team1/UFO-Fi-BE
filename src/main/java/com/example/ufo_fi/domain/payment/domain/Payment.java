@@ -30,7 +30,10 @@ public class Payment {
     @Column(name = "package_name")
     private String packageName;  // 충전 패키지 이름(상품명)
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "amount")
     private Integer amount;
 
     @Column(name = "requested_at")
@@ -71,6 +74,7 @@ public class Payment {
                 .orderId(paymentReq.getOrderId())
                 .packageName(paymentReq.getPackageName())
                 .amount(paymentReq.getAmount())
+                .price(paymentReq.getPrice())
                 .status(paymentStatus)
                 .requestedAt(LocalDateTime.now())
                 .build();

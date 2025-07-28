@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.payment.presentation.dto.response;
 
 import com.example.ufo_fi.domain.payment.domain.Payment;
+import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +17,13 @@ public class ConfirmRes {
     @Schema(description = "충전된 데이터량입니다.")
     private Integer amount;
 
-    public static ConfirmRes from(Payment payment) {
+    @Schema(description = "보유한 데이터량입니다.")
+    private Integer zetAsset;
+
+    public static ConfirmRes of(Payment payment, User user) {
         return ConfirmRes.builder()
                 .amount(payment.getAmount())
+                .zetAsset(user.getZetAsset())
                 .build();
     }
 }

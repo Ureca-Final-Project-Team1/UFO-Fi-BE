@@ -14,6 +14,7 @@ public class FailState implements State {
 
     @Override
     public void proceed(Payment payment, StateMetaData stateMetaData) {
+        verifyStatus(payment, PaymentStatus.FAIL);
 
     }
 
