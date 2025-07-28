@@ -19,7 +19,7 @@ public class InProgressState implements State {
 
     @Override
     public void proceed(Payment payment, StateMetaData stateMetaData) {
-        ConfirmCommand confirmCommand = createConfirmCommand(payment);
+        ConfirmCommand confirmCommand = createConfirmCommand(stateMetaData);
         ConfirmResult confirmResult = paymentClient.confirmPayment(confirmCommand);
         updatePaymentByConfirmResult(payment, confirmResult);
 
@@ -40,11 +40,11 @@ public class InProgressState implements State {
         return PaymentStatus.IN_PROGRESS;
     }
 
-    private ConfirmCommand createConfirmCommand(Payment payment){
+    private ConfirmCommand createConfirmCommand(StateMetaData stateMetaData){
         return ConfirmCommand.of(
-                payment.getPaymentKey(),
-                payment.getOrderId(),
-                payment.getAmount()
+                stateMetaData.getConfirmReq().getPaymentKey(),
+                stateMetaData.getConfirmReq().getOrderId(),
+                stateMetaData.getConfirmReq().getAmount()
         );
     }
 

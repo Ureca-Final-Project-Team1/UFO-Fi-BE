@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TossClientUtil {
     private static final String AUTHORIZATION = "Authorization";
-    private static final String BASIC = "basic ";
+    private static final String BASIC = "Basic ";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String JSON = "application/json";
     private static final long TIME_OUT_LIMIT = 3;
