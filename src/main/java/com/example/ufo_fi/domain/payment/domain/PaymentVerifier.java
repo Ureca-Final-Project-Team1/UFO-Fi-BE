@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 public class PaymentVerifier {
 
     public void verify(Payment payment, ConfirmReq request) {
-        if (isSameOrder(payment, request)) {
+        if (!isSameOrder(payment, request)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_ORDER_ID_NOT_EQUAL);
         }
-        if (isSameAmount(payment, request)) {
+        if (!isSameAmount(payment, request)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_AMOUNT_CONFLICT);
         }
-        if (isPaymentStatusReady(payment)) {
+        if (!isPaymentStatusReady(payment)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_DUPLICATE_ORDER);
         }
     }
