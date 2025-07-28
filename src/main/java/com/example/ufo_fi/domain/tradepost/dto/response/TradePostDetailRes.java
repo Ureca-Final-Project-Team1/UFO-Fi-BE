@@ -54,7 +54,7 @@ public class TradePostDetailRes {
     private Long sellerId;
 
     @Schema(description = "판매자 프로필 url id")
-    private Long sellerProfileId;
+    private String sellerProfileUrl;
 
     public static TradePostDetailRes from(final TradePost tradePost) {
 
@@ -72,7 +72,7 @@ public class TradePostDetailRes {
             .mobileDataType(tradePost.getMobileDataType())
             .sellerNickname(seller.getNickname())
             .sellerId(seller.getId())
-            .sellerProfileId(seller.getProfilePhoto().getId())
+            .sellerProfileUrl(seller.getProfilePhoto().getProfilePhotoUrl())
             .build();
     }
 }
