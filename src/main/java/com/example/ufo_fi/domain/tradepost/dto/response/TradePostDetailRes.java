@@ -54,7 +54,7 @@ public class TradePostDetailRes {
     private Long sellerId;
 
     @Schema(description = "판매자 프로필 url id")
-    private Long sellerProfileId;
+    private String sellerProfileUrl;
 
     public static TradePostDetailRes from(final TradePost tradePost) {
 

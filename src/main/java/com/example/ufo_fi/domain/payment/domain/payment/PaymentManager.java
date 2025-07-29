@@ -55,9 +55,10 @@ public class PaymentManager {
     }
 
     @Transactional
-    public void updateUserZetAmount(User user, Integer zetAmount){
-        User mergedUser = entityManager.merge(user);
-        mergedUser.increaseZetAsset(zetAmount);
+    public void updateUserZetAmount(Payment payment, Integer zetAmount){
+        Payment mergedPayment = entityManager.merge(payment);
+        User user = mergedPayment.getUser();
+        user.increaseZetAsset(zetAmount);
     }
 
     //유저의 아이디 삭제 + 유저 신고 사유 생성
