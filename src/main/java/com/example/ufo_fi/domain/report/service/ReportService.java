@@ -9,10 +9,10 @@ import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.exception.ReportErrorCode;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
-import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
+import com.example.ufo_fi.domain.tradepost.domain.TradePost;
+import com.example.ufo_fi.domain.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
-import com.example.ufo_fi.domain.tradepost.repository.TradePostRepository;
+import com.example.ufo_fi.domain.tradepost.infrastructure.TradePostRepository;
 import com.example.ufo_fi.domain.user.entity.Role;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.exception.UserErrorCode;
@@ -39,18 +39,14 @@ public class ReportService {
      * ReportTradePostController
      * 1. 신고 생성
      * 2. 해당 게시물 신고 갯수 조회
-     * 3. 3회 이상인가?
-     * => 3-1. Yes 해당 게시물 상태 업데이트
-     * => 3-2. No 그냥 진행
-     * 4. 해당 게시물의 유저는 몇 회 신고 누적이 있는가?
-     * => 4-1. 유저 정지
-     * => 4-2. 그냥 진행
+     * 3. 3회 이상인가? => 3-1. Yes 해당 게시물 상태 업데이트 => 3-2. No 그냥 진행
+     * 4. 해당 게시물의 유저는 몇 회 신고 누적이 있는가? => 4-1. 유저 정지 => 4-2. 그냥 진행
      */
     @Transactional
     public void reportTradePost(Long userId, ReportCreateReq reportCreateReq, Long tradePostId) {
         User user = userRepository.getReferenceById(userId);
         User reportedUser = userRepository.findById(reportCreateReq.getReportedUserId())
-                .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
+            .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
         TradePost tradePost = tradePostRepository.getReferenceById(tradePostId);
         Report report = Report.of(user, reportedUser, tradePost, reportCreateReq);
 
@@ -75,7 +71,7 @@ public class ReportService {
     @Transactional
     public void approveRollBackRegistration(ReportRollBackReq reportRollBackReq) {
         TradePost tradePost = tradePostRepository.findById(reportRollBackReq.getTradePostId())
-                .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+            .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
         List<Report> reports = reportRepository.findByTradePost(tradePost);
         reportRepository.deleteAll(reports);
@@ -97,16 +93,16 @@ public class ReportService {
      */
     public RollBackReportsReadRes readRollBackRegistration() {
         List<TradePost> reportedPosts = tradePostRepository.findTradePostByTradePostStatus(
-                TradePostStatus.REPORTED);
+            TradePostStatus.REPORTED);
         return RollBackReportsReadRes.from(reportedPosts);
     }
 
     @Transactional
     public void updateUserRoleUser(GrantUserRoleReq grantUserRoleReq) {
         User user = userRepository.findById(grantUserRoleReq.getUserId())
-                .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
+            .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
 
-        if(user.getIsActive()){
+        if (user.getIsActive()) {
             throw new GlobalException(UserErrorCode.NOT_DEACTIVE);
         }
 

@@ -1,7 +1,7 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
-import com.example.ufo_fi.domain.tradepost.entity.TradePostStatus;
+import com.example.ufo_fi.domain.tradepost.domain.TradePost;
+import com.example.ufo_fi.domain.tradepost.domain.TradePostStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,11 +36,11 @@ public class RollBackReportReadRes {
 
     public static RollBackReportReadRes from(final TradePost tradePost) {
         return RollBackReportReadRes.builder()
-                .postId(tradePost.getId())
-                .userId(tradePost.getUser().getId())
-                .reportCount(tradePost.getReports().size())
-                .tradePostStatus(tradePost.getTradePostStatus())
-                .createdAt(tradePost.getCreatedAt())
-                .build();
+            .postId(tradePost.getId())
+            .userId(tradePost.getUser().getId())
+            .reportCount(tradePost.getReports().size())
+            .tradePostStatus(tradePost.getTradePostStatus())
+            .createdAt(tradePost.getCreatedAt())
+            .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.user.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.domain.TradePost;
 import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
@@ -44,7 +43,8 @@ public class AnotherUserInfoReadRes {
             .build();
     }
 
-    public static AnotherUserInfoReadRes of(User user, Long followerCount, Long followingCount, List<TradePost> tradePosts) {
+    public static AnotherUserInfoReadRes of(User user, Long followerCount, Long followingCount,
+        List<TradePost> tradePosts) {
         return AnotherUserInfoReadRes.builder()
             .userId(user.getId())
             .nickname(user.getNickname())
