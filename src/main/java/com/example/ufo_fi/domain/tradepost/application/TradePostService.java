@@ -3,7 +3,6 @@ package com.example.ufo_fi.domain.tradepost.application;
 import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
-import com.example.ufo_fi.domain.plan.entity.Plan;
 import com.example.ufo_fi.domain.tradepost.domain.TradeHistory;
 import com.example.ufo_fi.domain.tradepost.domain.TradePost;
 import com.example.ufo_fi.domain.tradepost.domain.TradePostStatus;
@@ -28,8 +27,8 @@ import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostLi
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.domain.user.service.UserManager;
+import com.example.ufo_fi.domain.user.service.UserPlanManager;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,44 +46,29 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TradePostService {
 
-    private final UserRepository userRepository;
+    private final UserManager userManager;
+    private final UserPlanManager userPlanManager;
     private final BannedWordFilter bannedWordFilter;
-    private final UserPlanRepository userPlanRepository;
     private final TradePostRepository tradePostRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ApplicationEventPublisher publisher;
 
+
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
 
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
+        User user = userManager.validateUserExistence(userId);
 
-        UserPlan userPlan = userPlanRepository.findByUser(user);
-        if (userPlan == null) {
-            throw new GlobalException(TradePostErrorCode.USER_PLAN_NOT_FOUND);
-        }
+        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
-        Plan plan = userPlan.getPlan();
-        if (plan == null) {
-            throw new GlobalException(TradePostErrorCode.PLAN_NOT_FOUND);
-        }
-
-        int userAvailableData = userPlan.getSellableDataAmount();
-        int requestSellData = request.getSellDataAmount();
-        if (requestSellData > userAvailableData) {
-            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
-        }
-
-        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user, userPlan);
+        userPlan.validateAndSubtractForSale(request.getSellDataAmount());
 
         validateBannedWord(request.getTitle());
 
-        userPlan.subtractSellableDataAmount(requestSellData);
-        tradePost.calculateTotalPrice();// total 가격 저장
+        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user, userPlan);
+
         TradePost savedTradePost = tradePostRepository.save(tradePost);
 
-        // 판매 게시물 생성 이벤트 발생
         publisher.publishEvent(
             new CreatedPostEvent(
                 user.getId(),
@@ -129,9 +113,9 @@ public class TradePostService {
     public TradePostCommonRes updateTradePost(Long postId, TradePostUpdateReq request,
         Long userId) {
 
-        User user = getUser(userId);
+        User user = userManager.validateUserExistence(userId);
 
-        UserPlan userPlan = userPlanRepository.findByUser(user);
+        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
         TradePost tradePost = tradePostRepository.findByIdWithLock(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
@@ -153,7 +137,7 @@ public class TradePostService {
             userPlan.subtractSellableDataAmount(newDataAmount);
         }
 
-        tradePost.calculateTotalPrice();
+        tradePost.saveTotalPrice();
         tradePost.update(request);
 
         return new TradePostCommonRes(tradePost.getId());
@@ -165,9 +149,9 @@ public class TradePostService {
     @Transactional
     public TradePostCommonRes deleteTradePost(Long postId, Long userId) {
 
-        User user = getUser(userId);
+        User user = userManager.validateUserExistence(userId);
 
-        UserPlan userPlan = userPlanRepository.findByUser(user);
+        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
         TradePost tradePost = tradePostRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
@@ -194,9 +178,9 @@ public class TradePostService {
     public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request,
         Long userId) {
 
-        User user = getUser(userId);
+        User user = userManager.validateUserExistence(userId);
 
-        UserPlan userPlan = userPlanRepository.findByUser(user);
+        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
         List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
             userPlan.getPlan().getCarrier(),
@@ -223,12 +207,6 @@ public class TradePostService {
         return TradePostBulkPurchaseRes.from(recommendationList);
     }
 
-    private User getUser(Long userId) {
-
-        return userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.USER_NOT_FOUND));
-    }
-
     private void validatePostsExistence(Slice<TradePost> posts) {
 
         if (posts.isEmpty()) {
@@ -250,8 +228,8 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.POST_NOT_FOUND);
         }
 
-        User buyer = getUser(userId);
-        UserPlan buyerPlan = userPlanRepository.findByUser(buyer);
+        User buyer = userManager.validateUserExistence(userId);
+        UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
 
         List<TradePost> successfulPurchases = new ArrayList<>();
         List<TradePostFailPurchaseRes> failedPurchases = new ArrayList<>();
@@ -363,10 +341,9 @@ public class TradePostService {
             throw new GlobalException(TradePostErrorCode.ALREADY_REPORTED);
         }
 
-        User buyer = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF));
+        User buyer = userManager.validateUserExistence(userId);
 
-        UserPlan buyerPlan = userPlanRepository.findByUser(buyer);
+        UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
 
         User seller = tradePost.getUser();
 
@@ -445,4 +422,5 @@ public class TradePostService {
     private void validateBannedWord(String content) {
         bannedWordFilter.filter(content);
     }
+
 }
