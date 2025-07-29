@@ -72,7 +72,7 @@ public class TradePostDetailRes {
             .mobileDataType(tradePost.getMobileDataType())
             .sellerNickname(seller.getNickname())
             .sellerId(seller.getId())
-            .sellerProfileId(seller.getProfilePhoto().getId())
+            .sellerProfileUrl(seller.getProfilePhoto().getProfilePhotoUrl())
             .build();
     }
 }
