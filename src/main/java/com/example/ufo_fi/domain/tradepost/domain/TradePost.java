@@ -21,8 +21,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -84,15 +82,10 @@ public class TradePost {
     @Builder.Default
     private List<Report> reports = new ArrayList<>();
 
-    public void addReport(Report report) {
-        this.reports.add(report);
-        report.setTradePost(this);
-    }
-
     public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus,
         User user, UserPlan userPlan) {
 
-        return TradePost.builder()
+        TradePost tradePost = TradePost.builder()
             .user(user)
             .title(request.getTitle())
             .zetPerUnit(request.getZetPerUnit())
@@ -101,11 +94,13 @@ public class TradePost {
             .mobileDataType(userPlan.getPlan().getMobileDataType())
             .tradePostStatus(tradePostStatus)
             .build();
+
+        tradePost.saveTotalPrice();
+
+        return tradePost;
     }
 
-    @PrePersist
-    @PreUpdate
-    public void calculateTotalPrice() {
+    public void saveTotalPrice() {
 
         if (this.zetPerUnit != null && this.sellMobileDataCapacityGb > 0) {
             this.totalZet = this.zetPerUnit * this.sellMobileDataCapacityGb;
