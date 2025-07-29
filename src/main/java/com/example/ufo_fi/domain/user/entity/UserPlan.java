@@ -72,7 +72,6 @@ public class UserPlan {
         this.sellableDataAmount -= requestSellData;
     }
 
-    // TODO: 판매가능량과 구매량 분리 필요
     public void increaseSellableDataAmount(int restore) {
 
         if (restore < 0 || restore + this.sellableDataAmount > plan.getSellMobileDataCapacityGb()) {
@@ -91,5 +90,23 @@ public class UserPlan {
     public void update(Plan plan) {
         this.plan = plan;
         this.sellableDataAmount = plan.getSellMobileDataCapacityGb();
+    }
+
+    public Plan getValidatedPlan() {
+
+        if (this.plan == null) {
+            throw new GlobalException(TradePostErrorCode.PLAN_NOT_FOUND);
+        }
+
+        return this.plan;
+    }
+
+    public void validateAndSubtractForSale(int dataAmountToSell) {
+
+        if (dataAmountToSell > this.sellableDataAmount) {
+            throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
+        }
+
+        this.sellableDataAmount -= dataAmountToSell;
     }
 }
