@@ -11,9 +11,9 @@ public interface State {
 
     void proceed(Payment payment, StateMetaData stateMetaData);
 
-    default void validateParam(StateMetaData stateMetaData){
-        if(stateMetaData == null){
-            throw new GlobalException(PaymentErrorCode.CONFIRM_REQUEST_NULL);
+    default void verifyStatus(Payment payment, PaymentStatus paymentStatus){
+        if(!payment.getStatus().equals(paymentStatus)){
+            throw new GlobalException(PaymentErrorCode.PAYMENT_STATUS_ERROR);
         }
     }
 }

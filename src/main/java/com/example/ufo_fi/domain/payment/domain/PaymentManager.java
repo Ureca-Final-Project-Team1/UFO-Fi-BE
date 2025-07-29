@@ -1,6 +1,7 @@
 package com.example.ufo_fi.domain.payment.domain;
 
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.domain.user.entity.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -45,5 +46,12 @@ public class PaymentManager {
     public void updateByConfirmSuccessResult(Payment payment, ConfirmSuccessResult confirmResult) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.update(confirmResult);
+    }
+
+    @Transactional
+    public void updateUserZetAmount(Payment payment, Integer zetAmount){
+        Payment mergedPayment = entityManager.merge(payment);
+        User user = mergedPayment.getUser();
+        user.increaseZetAsset(zetAmount);
     }
 }
