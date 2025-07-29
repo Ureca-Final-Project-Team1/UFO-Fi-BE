@@ -25,9 +25,12 @@ public class PaymentStateContext {
         state.proceed(payment, stateMetaData);
     }
 
-    public <T> void proceedAll(Payment payment, StateMetaData stateMetaData) {
-        while (!isTerminal(payment)) {
+    public void proceedAll(Payment payment, StateMetaData stateMetaData) {
+        while (true) {
             proceed(payment, stateMetaData);
+
+            Boolean isContinue = stateMetaData.get(MetaDataKey.PAYMENT_DONE, Boolean.class);
+            if(isContinue != null && isContinue) break;
         }
     }
 

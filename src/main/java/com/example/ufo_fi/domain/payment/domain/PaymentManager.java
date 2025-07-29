@@ -49,8 +49,9 @@ public class PaymentManager {
     }
 
     @Transactional
-    public void updateUserZetAmount(User user, Integer zetAmount){
-        User mergedUser = entityManager.merge(user);
-        mergedUser.increaseZetAsset(zetAmount);
+    public void updateUserZetAmount(Payment payment, Integer zetAmount){
+        Payment mergedPayment = entityManager.merge(payment);
+        User user = mergedPayment.getUser();
+        user.increaseZetAsset(zetAmount);
     }
 }
