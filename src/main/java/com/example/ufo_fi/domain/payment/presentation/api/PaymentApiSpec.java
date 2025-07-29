@@ -2,8 +2,10 @@ package com.example.ufo_fi.domain.payment.presentation.api;
 
 import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.domain.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.SlackRecoverReq;
 import com.example.ufo_fi.domain.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.domain.payment.presentation.dto.response.PaymentRes;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.SlackRecoverRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -33,5 +36,12 @@ public interface PaymentApiSpec {
     ResponseEntity<ResponseBody<ConfirmRes>> confirm(
             @RequestBody ConfirmReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+    );
+
+    @Operation(summary = "슬랙 복구 API", description = "슬랙의 알림을 보고 사용자의 ZET를 충전시킬 수 있다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @PostMapping("/v1/payment/recover/confirm")
+    ResponseEntity<ResponseBody<SlackRecoverRes>> recover(
+            @ModelAttribute SlackRecoverReq slackRecoverReq
     );
 }

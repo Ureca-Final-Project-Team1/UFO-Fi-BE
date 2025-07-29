@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.payment.presentation.dto.response;
 
-import com.example.ufo_fi.domain.payment.domain.Payment;
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

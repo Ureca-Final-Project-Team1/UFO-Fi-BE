@@ -1,5 +1,6 @@
-package com.example.ufo_fi.domain.payment.domain;
+package com.example.ufo_fi.domain.payment.domain.payment;
 
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.domain.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.global.exception.GlobalException;
