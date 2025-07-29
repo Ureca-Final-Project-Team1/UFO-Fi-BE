@@ -1,8 +1,8 @@
-package com.example.ufo_fi.domain.payment.domain.state;
+package com.example.ufo_fi.domain.payment.domain.payment.state;
 
-import com.example.ufo_fi.domain.payment.domain.Payment;
-import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
-import com.example.ufo_fi.domain.payment.domain.StateMetaData;
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.domain.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 
