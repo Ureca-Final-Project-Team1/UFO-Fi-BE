@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.bannedword.entity;
+package com.example.ufo_fi.v2.bannedword.domain;
 
-import com.example.ufo_fi.domain.bannedword.dto.request.BannedWordCreateReq;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,11 +27,4 @@ public class BannedWord {
 
     @Column(name = "word", nullable = false)
     private String word;
-
-
-    public static BannedWord from(final BannedWordCreateReq request) {
-        return BannedWord.builder()
-            .word(request.getBanWord())
-            .build();
-    }
 }
