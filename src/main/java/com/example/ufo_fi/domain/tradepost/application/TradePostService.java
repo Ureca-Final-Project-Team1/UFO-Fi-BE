@@ -1,6 +1,5 @@
 package com.example.ufo_fi.domain.tradepost.application;
 
-import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
 import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.domain.tradepost.domain.TradeHistory;
@@ -48,7 +47,8 @@ public class TradePostService {
 
     private final UserManager userManager;
     private final UserPlanManager userPlanManager;
-    private final BannedWordFilter bannedWordFilter;
+    private final TradePostManager tradePostManager;
+    private final TradePostMapper tradePostMapper;
     private final TradePostRepository tradePostRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
     private final ApplicationEventPublisher publisher;
@@ -57,17 +57,18 @@ public class TradePostService {
     @Transactional
     public TradePostCommonRes createTradePost(TradePostCreateReq request, Long userId) {
 
+        tradePostManager.validateBannedWord(request.getTitle());
+
         User user = userManager.validateUserExistence(userId);
 
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
         userPlan.validateAndSubtractForSale(request.getSellDataAmount());
 
-        validateBannedWord(request.getTitle());
+        TradePost tradePost = tradePostMapper.toTradePost(request, TradePostStatus.SELLING,
+            user, userPlan);
 
-        TradePost tradePost = TradePost.of(request, TradePostStatus.SELLING, user, userPlan);
-
-        TradePost savedTradePost = tradePostRepository.save(tradePost);
+        TradePost savedTradePost = tradePostManager.saveTradePost(tradePost);
 
         publisher.publishEvent(
             new CreatedPostEvent(
@@ -79,7 +80,7 @@ public class TradePostService {
             )
         );
 
-        return new TradePostCommonRes(savedTradePost.getId());
+        return TradePostCommonRes.from(savedTradePost.getId());
     }
 
 
@@ -96,12 +97,10 @@ public class TradePostService {
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
-        Slice<TradePost> posts = tradePostRepository.findPostsByConditions(
-            request,
-            pageable
+        Slice<TradePost> posts = tradePostManager.findPostsByCondition(request, pageable
         );
 
-        validatePostsExistence(posts);
+        tradePostManager.validatePostsExistence(posts);
 
         return TradePostListRes.of(posts);
     }
@@ -113,34 +112,26 @@ public class TradePostService {
     public TradePostCommonRes updateTradePost(Long postId, TradePostUpdateReq request,
         Long userId) {
 
+        tradePostManager.validateBannedWord(request.getTitle());
+
         User user = userManager.validateUserExistence(userId);
 
-        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
+        TradePost tradePost = tradePostManager.validateAndFindByIdWithLock(postId);
 
-        TradePost tradePost = tradePostRepository.findByIdWithLock(postId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
-
-        tradePost.verifyOwner(tradePost, user);
-        validateBannedWord(request.getTitle());
+        tradePost.verifyOwner(user);
 
         if (request.getSellMobileDataCapacityGb() != null) {
+            UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
             int originalDataAmount = tradePost.getSellMobileDataCapacityGb();
-            userPlan.increaseSellableDataAmount(originalDataAmount);
-
             int newDataAmount = request.getSellMobileDataCapacityGb();
 
-            if (newDataAmount > userPlan.getSellableDataAmount()) {
-                throw new GlobalException(TradePostErrorCode.EXCEED_SELL_CAPACITY);
-            }
-
-            userPlan.subtractSellableDataAmount(newDataAmount);
+            userPlan.updateSellableDataAmount(originalDataAmount, newDataAmount);
         }
 
-        tradePost.saveTotalPrice();
         tradePost.update(request);
 
-        return new TradePostCommonRes(tradePost.getId());
+        return TradePostCommonRes.from(tradePost.getId());
     }
 
     /**
@@ -151,24 +142,14 @@ public class TradePostService {
 
         User user = userManager.validateUserExistence(userId);
 
+        TradePost tradePost = tradePostManager.validateAndFindById(postId);
+        tradePost.verifyOwner(user);
+
+        int dataToRestore = tradePost.delete();
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
-
-        TradePost tradePost = tradePostRepository.findById(postId)
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
-
-        tradePost.verifyOwner(tradePost, user);
-
-        if (!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
-
-            throw new GlobalException(TradePostErrorCode.CANNOT_DELETE_NOT_SELLING_POST);
-        }
-
-        int dataToRestore = tradePost.getSellMobileDataCapacityGb();
         userPlan.increaseSellableDataAmount(dataToRestore);
 
-        tradePost.softDeleteAndStatusDelete();
-
-        return new TradePostCommonRes(tradePost.getId());
+        return TradePostCommonRes.from(tradePost.getId());
     }
 
     /**
@@ -205,14 +186,6 @@ public class TradePostService {
         }
 
         return TradePostBulkPurchaseRes.from(recommendationList);
-    }
-
-    private void validatePostsExistence(Slice<TradePost> posts) {
-
-        if (posts.isEmpty()) {
-
-            throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);
-        }
     }
 
     /**
@@ -419,8 +392,5 @@ public class TradePostService {
         tradeHistoryRepository.saveAll(List.of(purchaseHistory, saleHistory));
     }
 
-    private void validateBannedWord(String content) {
-        bannedWordFilter.filter(content);
-    }
 
 }
