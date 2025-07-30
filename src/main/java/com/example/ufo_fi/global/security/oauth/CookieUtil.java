@@ -13,7 +13,7 @@ public class CookieUtil {
     // TODO: 배포->로컬, 로컬->배포 시 쿠키 설정 바꾸기
     public void setResponseBasicCookie(String key, String value, int expiredMs, HttpServletResponse response) {
         String cookieValue = String.format(
-                "%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=Lax; Secure",
+                "%s=%s; Path=/; Domain=.ufo-fi.store; Max-Age=%d; HttpOnly; SameSite=None; Secure",
                 key, value, expiredMs);
 
         response.addHeader("Set-Cookie", cookieValue);
