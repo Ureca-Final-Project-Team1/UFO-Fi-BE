@@ -61,8 +61,6 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Prod 배포 스크립트 실행 via SSM CLI
-        env:
-          FIREBASE_JSON_B64: ${{ secrets.FIREBASE_JSON_B64 }}
         run: |
           INSTANCE_ID=$(aws ec2 describe-instances \
             --filters "Name=tag:Name,Values=ufo_fi_prod_1" \
@@ -76,7 +74,6 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --targets "Key=instanceIds,Values=$INSTANCE_ID" \
             --parameters "commands=[
-            \"export FIREBASE_JSON_B64='$FIREBASE_JSON_B64'\",
             \"sudo bash /home/ubuntu/deploy_prod.sh\"
             ]" \
             --comment "Prod 배포 스크립트 실행" \
