@@ -1,13 +1,13 @@
-package com.example.ufo_fi.domain.bannedword.controller.api;
+package com.example.ufo_fi.v2.bannedword.presentation.api;
 
-import com.example.ufo_fi.domain.bannedword.dto.request.BannedWordCreateReq;
-import com.example.ufo_fi.domain.bannedword.dto.request.BannedWordDeleteBulkReq;
-import com.example.ufo_fi.domain.bannedword.dto.request.BannedWordReadPageReq;
-import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordBulkDeleteRes;
-import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordCreateRes;
-import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordDeleteRes;
-import com.example.ufo_fi.domain.bannedword.dto.response.BannedWordReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.request.BannedWordCreateReq;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.request.BannedWordDeleteBulkReq;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.request.BannedWordReadPageReq;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.response.BannedWordBulkDeleteRes;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.response.BannedWordCreateRes;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.response.BannedWordDeleteRes;
+import com.example.ufo_fi.v2.bannedword.presentation.dto.response.BannedWordReadRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,4 +52,5 @@ public interface BannedWordApiSpec {
         @Parameter(description = "삭제할 금칙어 ID 목록")
         @Valid @RequestBody BannedWordDeleteBulkReq request
     );
+
 }
