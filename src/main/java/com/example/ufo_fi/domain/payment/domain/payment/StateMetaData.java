@@ -1,10 +1,7 @@
-package com.example.ufo_fi.domain.payment.domain;
+package com.example.ufo_fi.domain.payment.domain.payment;
 
-import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
-import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

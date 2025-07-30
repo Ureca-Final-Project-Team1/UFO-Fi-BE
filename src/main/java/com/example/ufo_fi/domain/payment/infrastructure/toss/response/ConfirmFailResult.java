@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.payment.infrastructure.toss.response;
 
-import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

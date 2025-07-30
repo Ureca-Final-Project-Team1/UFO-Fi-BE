@@ -1,11 +1,11 @@
-package com.example.ufo_fi.domain.payment.domain.state;
+package com.example.ufo_fi.domain.payment.domain.payment.state;
 
-import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
-import com.example.ufo_fi.domain.payment.domain.Payment;
-import com.example.ufo_fi.domain.payment.domain.PaymentManager;
-import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentManager;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.domain.payment.application.PaymentClient;
-import com.example.ufo_fi.domain.payment.domain.StateMetaData;
+import com.example.ufo_fi.domain.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.request.ConfirmCommand;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
@@ -34,8 +34,8 @@ public class InProgressState implements State {
         ConfirmCommand confirmCommand = createConfirmCommand(confirmReq);
 
         ConfirmResult confirmResult = paymentClient.confirmPayment(confirmCommand);
-        stateMetaData.put(MetaDataKey.CONFIRM_RESULT, ConfirmResult.class);
-        updatePaymentByConfirmResult(payment, confirmResult);
+        stateMetaData.put(MetaDataKey.CONFIRM_RESULT, confirmResult);
+        updatePaymentByConfirmResultIfConfirmSuccess(payment, confirmResult);
 
         updateStatus(payment, confirmResult);
     }
@@ -55,7 +55,8 @@ public class InProgressState implements State {
     }
 
     //confirm이 성공 시 ConfirmSuccessResult로 payment를 업데이트한다.
-    private void updatePaymentByConfirmResult(Payment payment, ConfirmResult confirmResult){
+    private void updatePaymentByConfirmResultIfConfirmSuccess(
+            Payment payment, ConfirmResult confirmResult){
         if(confirmResult instanceof ConfirmSuccessResult){
             paymentManager.updateByConfirmSuccessResult(
                     payment,

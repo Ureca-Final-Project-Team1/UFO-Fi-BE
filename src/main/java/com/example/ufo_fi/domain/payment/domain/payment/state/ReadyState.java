@@ -1,11 +1,11 @@
-package com.example.ufo_fi.domain.payment.domain.state;
+package com.example.ufo_fi.domain.payment.domain.payment.state;
 
-import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
-import com.example.ufo_fi.domain.payment.domain.Payment;
-import com.example.ufo_fi.domain.payment.domain.PaymentManager;
-import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
-import com.example.ufo_fi.domain.payment.domain.PaymentVerifier;
-import com.example.ufo_fi.domain.payment.domain.StateMetaData;
+import com.example.ufo_fi.domain.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentManager;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentVerifier;
+import com.example.ufo_fi.domain.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

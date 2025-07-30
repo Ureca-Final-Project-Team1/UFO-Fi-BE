@@ -1,32 +1,36 @@
 package com.example.ufo_fi.domain.payment.application;
 
-import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
-import com.example.ufo_fi.domain.payment.domain.PaymentStateContext;
-import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
-import com.example.ufo_fi.domain.payment.domain.PaymentVerifier;
-import com.example.ufo_fi.domain.payment.domain.StateMetaData;
+import com.example.ufo_fi.domain.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStateContext;
+import com.example.ufo_fi.domain.payment.domain.payment.PaymentStatus;
+import com.example.ufo_fi.domain.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.domain.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.SlackRecoverConfirmReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.SlackRecoverReq;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.SlackRecoverUserReq;
 import com.example.ufo_fi.domain.payment.presentation.dto.response.ConfirmRes;
-import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
 import com.example.ufo_fi.domain.payment.presentation.dto.response.PaymentRes;
-import com.example.ufo_fi.domain.payment.domain.Payment;
+import com.example.ufo_fi.domain.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.domain.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.domain.payment.infrastructure.mysql.PaymentRepository;
+import com.example.ufo_fi.domain.payment.presentation.dto.response.SlackRecoverRes;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
 
+    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final PaymentStateContext paymentStateContext;
@@ -40,7 +44,7 @@ public class PaymentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(PaymentErrorCode.NO_USER));
 
-        Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY);
+        Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY, 0);
         paymentRepository.save(payment);
 
         return PaymentRes.of(user, payment);
@@ -71,5 +75,21 @@ public class PaymentService {
     private Payment findPayment(String orderId) {
         return paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+    }
+
+    @Transactional
+    public SlackRecoverRes recover(SlackRecoverReq slackRecoverReq) {
+        try{
+            JsonNode jsonNode = objectMapper.readTree(slackRecoverReq.getText());
+
+            SlackRecoverConfirmReq slackRecoverConfirmReq = objectMapper
+                    .treeToValue(jsonNode.get(0), SlackRecoverConfirmReq.class);
+            SlackRecoverUserReq slackRecoverUserReq = objectMapper
+                    .treeToValue(jsonNode.get(1), SlackRecoverUserReq.class);
+
+            return null;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
