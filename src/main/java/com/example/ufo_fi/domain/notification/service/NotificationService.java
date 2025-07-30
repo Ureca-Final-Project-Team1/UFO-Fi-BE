@@ -4,9 +4,9 @@ import com.example.ufo_fi.domain.notification.dto.response.NotificationListRes;
 import com.example.ufo_fi.domain.notification.entity.NotificationHistory;
 import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.domain.notification.repository.NotificationHistoryRepository;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.exception.UserErrorCode;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.user.exception.UserErrorCode;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class NotificationService {
     public void saveNotification(Long userId, String title, String body, NotificationType type, String url) {
         // 1. 유저 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         // 2. URL 조립
         String targetUrl = baseUrl + url;

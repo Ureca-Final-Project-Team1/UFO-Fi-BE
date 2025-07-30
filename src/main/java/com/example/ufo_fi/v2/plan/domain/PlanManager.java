@@ -24,4 +24,9 @@ public class PlanManager {
 
         return planRepository.findAllByCarrier(Carrier.valueOf(rawCarrier));
     }
+
+    public Plan findPlanById(Long planId) {
+        return planRepository.findById(planId)
+            .orElseThrow(() -> new GlobalException(PlanErrorCode.NOT_FOUND_PLAN));
+    }
 }

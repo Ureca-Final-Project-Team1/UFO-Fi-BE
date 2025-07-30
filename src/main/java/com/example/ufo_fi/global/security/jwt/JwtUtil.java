@@ -1,6 +1,6 @@
 package com.example.ufo_fi.global.security.jwt;
 
-import com.example.ufo_fi.domain.user.entity.Role;
+import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.global.security.exception.SecurityErrorCode;
 import com.example.ufo_fi.global.security.exception.SecurityExceptionResponseSetter;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;

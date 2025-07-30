@@ -1,8 +1,8 @@
 package com.example.ufo_fi.domain.user.dto.response;
 
-import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
+import com.example.ufo_fi.v2.plan.domain.Plan;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

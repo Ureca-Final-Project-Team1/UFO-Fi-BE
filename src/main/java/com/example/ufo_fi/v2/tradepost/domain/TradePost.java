@@ -1,11 +1,11 @@
 package com.example.ufo_fi.v2.tradepost.domain;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
-import com.example.ufo_fi.domain.plan.entity.MobileDataType;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
+import com.example.ufo_fi.v2.plan.domain.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

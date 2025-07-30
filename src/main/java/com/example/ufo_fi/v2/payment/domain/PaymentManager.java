@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.payment.domain;
 
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

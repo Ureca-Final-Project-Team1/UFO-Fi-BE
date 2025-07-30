@@ -24,10 +24,10 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommon
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostFailPurchaseRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.service.UserManager;
-import com.example.ufo_fi.domain.user.service.UserPlanManager;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
+import com.example.ufo_fi.v2.user.domain.UserManager;
+import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.ArrayList;
 import java.util.List;

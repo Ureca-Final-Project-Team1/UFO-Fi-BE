@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.notification.event;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

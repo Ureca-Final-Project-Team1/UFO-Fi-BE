@@ -1,6 +1,5 @@
 package com.example.ufo_fi.domain.mypage.controller.api;
 
-import com.example.ufo_fi.domain.plan.dto.response.PlansReadRes;
 import com.example.ufo_fi.domain.user.dto.request.UserPlanUpdateReq;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanReadRes;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;
@@ -14,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Mypage API", description = "마이페이지 요금제 API")
 public interface MyPagePlanApiSpec {

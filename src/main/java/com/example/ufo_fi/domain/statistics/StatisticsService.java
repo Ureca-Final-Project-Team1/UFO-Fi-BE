@@ -5,8 +5,8 @@ import com.example.ufo_fi.domain.statistics.dto.response.StatisticsReportsRes;
 import com.example.ufo_fi.domain.statistics.dto.response.StatisticsRes;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
-import com.example.ufo_fi.domain.user.entity.Role;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,36 +1,37 @@
 package com.example.ufo_fi.domain.user.service;
 
 import com.example.ufo_fi.domain.follow.repository.FollowRepository;
-import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.plan.exception.PlanErrorCode;
-import com.example.ufo_fi.domain.plan.repository.PlanRepository;
+import com.example.ufo_fi.v2.plan.domain.Plan;
+import com.example.ufo_fi.v2.plan.exception.PlanErrorCode;
+import com.example.ufo_fi.v2.plan.infrastructure.PlanRepository;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
 import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
-import com.example.ufo_fi.domain.user.dto.request.SignupReq;
-import com.example.ufo_fi.domain.user.dto.request.UserInfoReq;
+import com.example.ufo_fi.v2.userplan.presentation.dto.request.SignupReq;
+import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserInfoReq;
 import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
-import com.example.ufo_fi.domain.user.dto.request.UserPlanReq;
+import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserPlanReq;
 import com.example.ufo_fi.domain.user.dto.request.UserPlanUpdateReq;
 import com.example.ufo_fi.domain.user.dto.response.AccountCreateRes;
 import com.example.ufo_fi.domain.user.dto.response.AccountReadRes;
 import com.example.ufo_fi.domain.user.dto.response.AnotherUserInfoReadRes;
-import com.example.ufo_fi.domain.user.dto.response.SignupRes;
+import com.example.ufo_fi.v2.userplan.presentation.dto.response.SignupRes;
 import com.example.ufo_fi.domain.user.dto.response.UserInfoReadRes;
 import com.example.ufo_fi.domain.user.dto.response.UserNicknameUpdateRes;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanReadRes;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;
-import com.example.ufo_fi.domain.user.dto.response.UserRoleReadRes;
-import com.example.ufo_fi.domain.user.entity.ProfilePhoto;
-import com.example.ufo_fi.domain.user.entity.Role;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserAccount;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
-import com.example.ufo_fi.domain.user.exception.UserErrorCode;
-import com.example.ufo_fi.domain.user.repository.UserAccountRepository;
-import com.example.ufo_fi.domain.user.repository.UserPlanRepository;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
+import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
+import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.user.domain.UserAccount;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
+import com.example.ufo_fi.v2.user.exception.UserErrorCode;
+import com.example.ufo_fi.v2.user.infrastructure.UserAccountRepository;
+import com.example.ufo_fi.v2.userplan.infrastructure.UserPlanRepository;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
@@ -60,7 +61,7 @@ public class UserService {
      */
     public UserPlanReadRes readUserPlan(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
@@ -76,7 +77,7 @@ public class UserService {
      */
     public AccountReadRes readUserAccount(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         UserAccount userAccount = userAccountRepository.findByUser(user);
         if (userAccount == null) {
@@ -93,7 +94,7 @@ public class UserService {
      */
     public UserInfoReadRes readUserAndUserPlan(Long userId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
@@ -105,7 +106,7 @@ public class UserService {
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId, Long userId) {
 
         User readUser = userRepository.findById(anotherUserId)
-                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
 
@@ -129,7 +130,7 @@ public class UserService {
     @Transactional
     public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
@@ -155,7 +156,7 @@ public class UserService {
     @Transactional
     public AccountCreateRes createUserAccount(Long userId, AccountCreateReq accountCreateReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         if (userAccountRepository.existsByUser(user)) {
             throw new GlobalException(UserErrorCode.ALREADY_ACCOUNT_EXIST);
@@ -182,7 +183,7 @@ public class UserService {
     //유저를 찾아와 기본 정보(랜덤 닉네임, 랜덤 이미지, 실명, 핸드폰 번호)를 업데이트
     public UserRoleReadRes getUserInfo(Long userId, Role role) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
         String userPhoneNumber = user.getPhoneNumber() != null ? user.getPhoneNumber() : "";
         return UserRoleReadRes.from(role, userPhoneNumber);
     }
@@ -191,7 +192,7 @@ public class UserService {
     public UserNicknameUpdateRes updateUserNicknames(Long userId,
         UserNicknameUpdateReq userNicknameUpdateReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         user.updateNickname(userNicknameUpdateReq);
 
@@ -200,7 +201,7 @@ public class UserService {
 
     private User signupUser(Long userId, UserInfoReq userInfoReq) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+            .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
 
         if (user.getRole() == Role.ROLE_USER || user.getRole() == Role.ROLE_ADMIN) {
             throw new GlobalException(UserErrorCode.ALREADY_USER_SIGNUP);

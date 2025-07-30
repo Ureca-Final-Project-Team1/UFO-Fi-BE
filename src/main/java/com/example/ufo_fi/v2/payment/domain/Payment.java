@@ -3,7 +3,7 @@ package com.example.ufo_fi.v2.payment.domain;
 
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 

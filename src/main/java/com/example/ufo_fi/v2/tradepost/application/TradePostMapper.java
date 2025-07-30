@@ -3,8 +3,8 @@ package com.example.ufo_fi.v2.tradepost.application;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import org.springframework.stereotype.Component;
 
 @Component
