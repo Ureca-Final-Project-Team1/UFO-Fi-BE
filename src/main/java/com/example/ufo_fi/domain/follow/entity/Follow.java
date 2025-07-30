@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.follow.entity;
 
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.presentation.dto.request;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

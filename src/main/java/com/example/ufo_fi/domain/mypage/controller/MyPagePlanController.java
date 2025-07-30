@@ -1,8 +1,6 @@
 package com.example.ufo_fi.domain.mypage.controller;
 
 import com.example.ufo_fi.domain.mypage.controller.api.MyPagePlanApiSpec;
-import com.example.ufo_fi.domain.plan.dto.response.PlansReadRes;
-import com.example.ufo_fi.domain.plan.service.PlanService;
 import com.example.ufo_fi.domain.user.dto.request.UserPlanUpdateReq;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanReadRes;
 import com.example.ufo_fi.domain.user.dto.response.UserPlanUpdateRes;

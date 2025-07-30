@@ -1,8 +1,7 @@
 package com.example.ufo_fi.global.security.oauth;
 
-import com.example.ufo_fi.domain.user.entity.Refresh;
-import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.v2.user.domain.Refresh;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
 import com.example.ufo_fi.global.security.principal.CustomOAuth2User;
 import com.example.ufo_fi.global.security.refresh.RefreshUtil;

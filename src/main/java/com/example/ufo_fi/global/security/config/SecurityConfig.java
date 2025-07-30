@@ -1,7 +1,7 @@
 package com.example.ufo_fi.global.security.config;
 
-import com.example.ufo_fi.domain.user.entity.Role;
-import com.example.ufo_fi.domain.user.repository.UserRepository;
+import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.security.jwt.JwtFilter;
 import com.example.ufo_fi.global.security.jwt.JwtUtil;
 import com.example.ufo_fi.global.security.noinfo.NoInfoRoleFilter;

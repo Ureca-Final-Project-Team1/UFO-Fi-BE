@@ -1,11 +1,11 @@
 package com.example.ufo_fi.domain.signup.controller;
 
-import com.example.ufo_fi.domain.plan.dto.response.PlansReadRes;
-import com.example.ufo_fi.domain.plan.service.PlanService;
+import com.example.ufo_fi.v2.plan.presentation.dto.response.PlansReadRes;
+import com.example.ufo_fi.v2.plan.application.PlanService;
 import com.example.ufo_fi.domain.signup.controller.api.SignupControllerApiSpec;
-import com.example.ufo_fi.domain.user.dto.request.SignupReq;
-import com.example.ufo_fi.domain.user.dto.response.SignupRes;
-import com.example.ufo_fi.domain.user.dto.response.UserRoleReadRes;
+import com.example.ufo_fi.v2.userplan.presentation.dto.request.SignupReq;
+import com.example.ufo_fi.v2.userplan.presentation.dto.response.SignupRes;
+import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.domain.user.service.UserService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;

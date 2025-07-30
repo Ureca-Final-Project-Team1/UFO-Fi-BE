@@ -1,7 +1,7 @@
 package com.example.ufo_fi.global.security.principal;
 
-import com.example.ufo_fi.domain.user.entity.Role;
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.domain.User;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;

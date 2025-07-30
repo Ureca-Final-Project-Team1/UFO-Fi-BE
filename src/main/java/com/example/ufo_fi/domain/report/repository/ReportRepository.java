@@ -2,7 +2,7 @@ package com.example.ufo_fi.domain.report.repository;
 
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
-import com.example.ufo_fi.domain.user.entity.User;
+import com.example.ufo_fi.v2.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

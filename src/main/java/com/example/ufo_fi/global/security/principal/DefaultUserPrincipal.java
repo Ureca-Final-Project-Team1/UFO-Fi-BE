@@ -1,6 +1,6 @@
 package com.example.ufo_fi.global.security.principal;
 
-import com.example.ufo_fi.domain.user.entity.Role;
+import com.example.ufo_fi.v2.user.domain.Role;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
