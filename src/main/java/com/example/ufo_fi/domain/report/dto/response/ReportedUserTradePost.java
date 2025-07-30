@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.domain.TradePost;
+import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

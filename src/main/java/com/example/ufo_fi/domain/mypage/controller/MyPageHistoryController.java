@@ -1,10 +1,10 @@
 package com.example.ufo_fi.domain.mypage.controller;
 
 import com.example.ufo_fi.domain.mypage.controller.api.MyPageHistoryApiSpec;
-import com.example.ufo_fi.domain.tradepost.application.TradePostService;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.PurchaseHistoriesRes;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.PurchaseHistoryRes;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.SaleHistoriesRes;
+import com.example.ufo_fi.v2.tradepost.application.TradePostService;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoriesRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoryRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.SaleHistoriesRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;

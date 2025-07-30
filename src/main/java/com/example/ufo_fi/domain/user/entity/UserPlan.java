@@ -1,7 +1,7 @@
 package com.example.ufo_fi.domain.user.entity;
 
 import com.example.ufo_fi.domain.plan.entity.Plan;
-import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
+import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

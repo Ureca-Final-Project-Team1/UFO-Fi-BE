@@ -1,9 +1,9 @@
 package com.example.ufo_fi.domain.mypage.controller.api;
 
 
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.PurchaseHistoriesRes;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.PurchaseHistoryRes;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.response.SaleHistoriesRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoriesRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoryRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.SaleHistoriesRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
