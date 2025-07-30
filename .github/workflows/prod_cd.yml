@@ -62,9 +62,17 @@ jobs:
 
       - name: Prod 배포 스크립트 실행 via SSM CLI
         run: |
+          INSTANCE_ID=$(aws ec2 describe-instances \
+            --filters "Name=tag:Name,Values=ufo_fi_prod_1" \
+            --region ap-northeast-2 \
+            --query "Reservations[].Instances[].InstanceId" \
+            --output text)
+      
+          echo "Instance ID: $INSTANCE_ID"
+      
           COMMAND_ID=$(aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=tag:Name,Values=ufo_fi_prod_1" \
+            --targets "Key=instanceIds,Values=$INSTANCE_ID" \
             --parameters '{"commands":["export FIREBASE_JSON_B64=${{ secrets.FIREBASE_JSON_B64 }} && sudo bash /home/ubuntu/deploy_prod.sh"]}' \
             --comment "Prod 배포 스크립트 실행" \
             --region ap-northeast-2 \
@@ -73,13 +81,9 @@ jobs:
       
           echo "SSM Command ID: $COMMAND_ID"
       
-          # 명령어 실행이 완료될 때까지 대기
+          # wait에는 반드시 --instance-id가 필요
           aws ssm wait command-executed \
             --command-id "$COMMAND_ID" \
-            --instance-ids $(aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=ufo_fi_prod_1" \
-              --region ap-northeast-2 \
-              --query "Reservations[*].Instances[*].InstanceId" \
-              --output text) \
+            --instance-id "$INSTANCE_ID" \
             --region ap-northeast-2
 
