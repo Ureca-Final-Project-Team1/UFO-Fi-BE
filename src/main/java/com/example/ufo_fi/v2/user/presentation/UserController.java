@@ -1,5 +1,9 @@
 package com.example.ufo_fi.v2.user.presentation;
 
+import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
+import com.example.ufo_fi.v2.user.presentation.dto.response.UserInfoReadRes;
+import com.example.ufo_fi.v2.user.presentation.dto.response.UserNicknameUpdateRes;
+import com.example.ufo_fi.v2.user.presentation.dto.response.AnotherUserInfoReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -22,5 +26,33 @@ public class UserController implements UserApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 userService.readUserInfo(defaultUserPrincipal.getId(), defaultUserPrincipal.getRole())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<AnotherUserInfoReadRes>> readUser(
+        Long anotherUserId
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userService.readAnotherUser(anotherUserId)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserInfoReadRes>> readMyPageUserInfo(
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userService.readUserAndUserPlan(defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserNicknameUpdateRes>> updateMyPageUserNicknames(
+        DefaultUserPrincipal defaultUserPrincipal,
+        UserNicknameUpdateReq userNicknameUpdateReq
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userService.updateUserNicknames(defaultUserPrincipal.getId(), userNicknameUpdateReq)));
     }
 }

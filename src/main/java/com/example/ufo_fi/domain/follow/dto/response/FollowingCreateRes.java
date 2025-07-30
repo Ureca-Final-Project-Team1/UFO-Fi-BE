@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.follow.dto.response;
 
-import com.example.ufo_fi.domain.follow.entity.Follow;
+import com.example.ufo_fi.v2.follow.domain.Follow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

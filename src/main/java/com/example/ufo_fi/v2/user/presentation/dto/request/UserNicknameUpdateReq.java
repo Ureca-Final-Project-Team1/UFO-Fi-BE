@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.user.dto.request;
+package com.example.ufo_fi.v2.user.presentation.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;

@@ -1,5 +1,8 @@
 package com.example.ufo_fi.v2.userplan.presentation;
 
+import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserPlanUpdateReq;
+import com.example.ufo_fi.v2.userplan.presentation.dto.response.UserPlanReadRes;
+import com.example.ufo_fi.v2.userplan.presentation.dto.response.UserPlanUpdateRes;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.userplan.application.UserPlanService;
@@ -24,5 +27,24 @@ public class UserPlanController implements UserPlanApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 userPlanService.updateUserAndUserPlan(defaultUserPrincipal.getId(), signupReq)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserPlanReadRes>> readUserPlan(
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userPlanService.readUserPlan(defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(
+        DefaultUserPrincipal defaultUserPrincipal,
+        UserPlanUpdateReq userPlanUpdateReq
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userPlanService.updateUserPlan(defaultUserPrincipal.getId(), userPlanUpdateReq)));
     }
 }

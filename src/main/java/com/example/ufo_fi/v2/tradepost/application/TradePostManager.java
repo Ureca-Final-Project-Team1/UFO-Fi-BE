@@ -6,6 +6,8 @@ import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.user.domain.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -55,5 +57,7 @@ public class TradePostManager {
         }
     }
 
-
+    public List<TradePost> findPostsByAnotherUser(User anotherUser) {
+        return tradePostRepository.findAllByUser(anotherUser);
+    }
 }

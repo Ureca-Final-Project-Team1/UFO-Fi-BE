@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.follow.dto.response;
 
-import com.example.ufo_fi.domain.follow.entity.Follow;
+import com.example.ufo_fi.v2.follow.domain.Follow;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

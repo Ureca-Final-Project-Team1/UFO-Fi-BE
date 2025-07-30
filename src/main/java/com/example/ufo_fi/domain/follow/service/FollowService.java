@@ -4,7 +4,7 @@ import com.example.ufo_fi.domain.follow.dto.response.FollowerDeleteRes;
 import com.example.ufo_fi.domain.follow.dto.response.FollowersReadRes;
 import com.example.ufo_fi.domain.follow.dto.response.FollowingCreateRes;
 import com.example.ufo_fi.domain.follow.dto.response.FollowingsReadRes;
-import com.example.ufo_fi.domain.follow.entity.Follow;
+import com.example.ufo_fi.v2.follow.domain.Follow;
 import com.example.ufo_fi.domain.follow.exception.FollowErrorCode;
 import com.example.ufo_fi.domain.follow.repository.FollowRepository;
 import com.example.ufo_fi.v2.user.domain.User;

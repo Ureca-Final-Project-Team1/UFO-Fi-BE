@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.follow.entity;
+package com.example.ufo_fi.v2.follow.domain;
 
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
