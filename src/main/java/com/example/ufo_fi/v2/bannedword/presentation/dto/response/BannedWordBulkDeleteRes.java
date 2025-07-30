@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.bannedword.dto.response;
+package com.example.ufo_fi.v2.bannedword.presentation.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -19,11 +19,4 @@ public class BannedWordBulkDeleteRes {
 
     @Schema(description = "삭제된 금칙어 개수", example = "3")
     private int deletedCount;
-
-    public static BannedWordBulkDeleteRes from(List<Long> ids) {
-        return BannedWordBulkDeleteRes.builder()
-            .deletedIds(ids)
-            .deletedCount(ids.size())
-            .build();
-    }
 }
