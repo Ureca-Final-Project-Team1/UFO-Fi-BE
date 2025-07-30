@@ -51,7 +51,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
         log.info("JWT {}", jwt);
         log.info("Refresh-Token {}", refresh);
 
-        response.sendRedirect("https://ufo-fi.store/login/success");
+        response.sendRedirect("https://www.ufo-fi.store/login/success");
     }
 
     //jwt 토큰 생성
