@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.plan.exception;
+package com.example.ufo_fi.v2.plan.exception;
 
 import com.example.ufo_fi.global.exception.ErrorCode;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.plan.entity;
+package com.example.ufo_fi.v2.plan.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

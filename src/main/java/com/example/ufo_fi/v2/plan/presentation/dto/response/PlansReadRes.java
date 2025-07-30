@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.plan.dto.response;
+package com.example.ufo_fi.v2.plan.presentation.dto.response;
 
-import com.example.ufo_fi.domain.plan.entity.Plan;
+import com.example.ufo_fi.v2.plan.domain.Plan;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

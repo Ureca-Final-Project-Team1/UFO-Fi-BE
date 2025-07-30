@@ -1,7 +1,7 @@
-package com.example.ufo_fi.domain.plan.repository;
+package com.example.ufo_fi.v2.plan.infrastructure;
 
-import com.example.ufo_fi.domain.plan.entity.Carrier;
-import com.example.ufo_fi.domain.plan.entity.Plan;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
+import com.example.ufo_fi.v2.plan.domain.Plan;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
