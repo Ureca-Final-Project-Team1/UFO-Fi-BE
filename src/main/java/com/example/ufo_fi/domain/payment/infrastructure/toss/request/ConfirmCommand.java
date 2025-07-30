@@ -13,13 +13,13 @@ public class ConfirmCommand {
 
     private String paymentKey;
     private String orderId;
-    private int amount;
+    private Integer amount;
 
-    static public ConfirmCommand of(String paymentKey, String orderId, int amount) {
+    static public ConfirmCommand of(String paymentKey, String orderId, int price) {
         return ConfirmCommand.builder()
                 .paymentKey(paymentKey)
                 .orderId(orderId)
-                .amount(amount)
+                .amount(price)
                 .build();
     }
 }

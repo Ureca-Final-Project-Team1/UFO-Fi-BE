@@ -23,6 +23,9 @@ public class PaymentVerifier {
         if (!isSameAmount(payment, request)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_AMOUNT_CONFLICT);
         }
+        if(!isSamePrice(payment, request)){
+            throw new GlobalException(PaymentErrorCode.PAYMENT_PRICE_ERROR);
+        }
         if (!isPaymentStatusReady(payment)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_DUPLICATE_ORDER);
         }
@@ -32,8 +35,12 @@ public class PaymentVerifier {
         return payment.getOrderId().equals(request.getOrderId());
     }
 
-    private boolean isSameAmount(Payment payment, ConfirmReq confirmReq){
-        return payment.getAmount() == confirmReq.getAmount();
+    private boolean isSamePrice(Payment payment, ConfirmReq request) {
+        return payment.getPrice().equals(request.getPrice());
+    }
+
+    private boolean isSameAmount(Payment payment, ConfirmReq request){
+        return payment.getAmount().equals(request.getAmount());
     }
 
     private boolean isPaymentStatusReady(Payment payment) {

@@ -1,8 +1,13 @@
 package com.example.ufo_fi.domain.payment.domain.state;
 
+import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
 import com.example.ufo_fi.domain.payment.domain.Payment;
+import com.example.ufo_fi.domain.payment.domain.PaymentManager;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
 import com.example.ufo_fi.domain.payment.domain.StateMetaData;
+import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
+import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
@@ -13,14 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class DoneState implements State {
-    private final EntityManager entityManager;
+    private final PaymentManager paymentManager;
 
     @Override
-    @Transactional
     public void proceed(Payment payment, StateMetaData stateMetaData) {
-        User user = payment.getUser();
-        entityManager.merge(user);
-        user.increaseZetAsset(payment.getAmount());
+        verifyStatus(payment, PaymentStatus.DONE);
+
+        ConfirmReq confirmReq = stateMetaData.get(MetaDataKey.CONFIRM_REQUEST, ConfirmReq.class);
+
+        paymentManager.updateUserZetAmount(payment, confirmReq.getAmount());
+
+        stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
     }
 
     @Override

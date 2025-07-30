@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.payment.domain.state;
 
+import com.example.ufo_fi.domain.payment.domain.MetaDataKey;
 import com.example.ufo_fi.domain.payment.domain.Payment;
 import com.example.ufo_fi.domain.payment.domain.PaymentManager;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
@@ -8,6 +9,7 @@ import com.example.ufo_fi.domain.payment.domain.StateMetaData;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.request.ConfirmCommand;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.domain.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.domain.payment.presentation.dto.request.ConfirmReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +19,53 @@ public class InProgressState implements State {
     private final PaymentClient paymentClient;
     private final PaymentManager paymentManager;
 
+    /**
+     * IN_PROGRESS 상태는 토스 승인을 책임진다.
+     * 1. ConfirmReq를 가져온다.
+     * 2. ConfirmCommand를 생성한다.
+     * 3. 토스 API와 요청/응답. => 결제 검증
+     * 4. PaymentStatus를 고친다.
+     */
     @Override
     public void proceed(Payment payment, StateMetaData stateMetaData) {
-        ConfirmCommand confirmCommand = createConfirmCommand(stateMetaData);
+        verifyStatus(payment, PaymentStatus.IN_PROGRESS);
+
+        ConfirmReq confirmReq = stateMetaData.get(MetaDataKey.CONFIRM_REQUEST, ConfirmReq.class);
+        ConfirmCommand confirmCommand = createConfirmCommand(confirmReq);
+
         ConfirmResult confirmResult = paymentClient.confirmPayment(confirmCommand);
+        stateMetaData.put(MetaDataKey.CONFIRM_RESULT, ConfirmResult.class);
         updatePaymentByConfirmResult(payment, confirmResult);
 
+        updateStatus(payment, confirmResult);
+    }
+
+    @Override
+    public PaymentStatus status() {
+        return PaymentStatus.IN_PROGRESS;
+    }
+
+    //confirm을 위한 command를 생성한다.
+    private ConfirmCommand createConfirmCommand(ConfirmReq confirmReq){
+        return ConfirmCommand.of(
+                confirmReq.getPaymentKey(),
+                confirmReq.getOrderId(),
+                confirmReq.getPrice()
+        );
+    }
+
+    //confirm이 성공 시 ConfirmSuccessResult로 payment를 업데이트한다.
+    private void updatePaymentByConfirmResult(Payment payment, ConfirmResult confirmResult){
+        if(confirmResult instanceof ConfirmSuccessResult){
+            paymentManager.updateByConfirmSuccessResult(
+                    payment,
+                    (ConfirmSuccessResult) confirmResult
+            );
+        }
+    }
+
+    //DONE,FAIL,TIME_OUT 으로 분기 가능
+    private void updateStatus(Payment payment, ConfirmResult confirmResult) {
         if(confirmResult.resultStatus().equals(PaymentStatus.DONE)) {
             paymentManager.updateDone(payment);
             return;
@@ -32,28 +75,5 @@ public class InProgressState implements State {
             return;
         }
         paymentManager.updateTimeout(payment);
-    }
-
-
-    @Override
-    public PaymentStatus status() {
-        return PaymentStatus.IN_PROGRESS;
-    }
-
-    private ConfirmCommand createConfirmCommand(StateMetaData stateMetaData){
-        return ConfirmCommand.of(
-                stateMetaData.getConfirmReq().getPaymentKey(),
-                stateMetaData.getConfirmReq().getOrderId(),
-                stateMetaData.getConfirmReq().getAmount()
-        );
-    }
-
-    private void updatePaymentByConfirmResult(Payment payment, ConfirmResult confirmResult){
-        if(confirmResult instanceof ConfirmSuccessResult){
-            paymentManager.updateByConfirmSuccessResult(
-                    payment,
-                    (ConfirmSuccessResult) confirmResult
-            );
-        }
     }
 }

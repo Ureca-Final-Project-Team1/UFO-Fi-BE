@@ -39,6 +39,7 @@ out/
 ### properties ###
 src/main/resources/*.properties
 src/test/resources/*.properties
+src/main/resources/*.p12
 
 ### FCM key ###
 src/main/resources/*.json

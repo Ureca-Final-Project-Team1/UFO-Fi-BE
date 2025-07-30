@@ -14,6 +14,8 @@ public class TimeoutState implements State {
 
     @Override
     public void proceed(Payment payment, StateMetaData stateMetaData) {
+        verifyStatus(payment, PaymentStatus.TIMEOUT);
+
 
     }
 

@@ -104,8 +104,8 @@ public class UserService {
 
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId, Long userId) {
 
-        User readUser = userRepository.findById(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
+        User readUser = userRepository.findById(anotherUserId)
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
 
         List<TradePost> tradePosts = tradePostRepository.findAllByUser(readUser);
 

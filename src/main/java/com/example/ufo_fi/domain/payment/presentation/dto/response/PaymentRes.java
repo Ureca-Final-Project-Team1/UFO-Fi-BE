@@ -1,5 +1,6 @@
 package com.example.ufo_fi.domain.payment.presentation.dto.response;
 
+import com.example.ufo_fi.domain.payment.domain.Payment;
 import com.example.ufo_fi.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -25,12 +26,16 @@ public class PaymentRes {
     @Schema(description = "구매 패키지에 해당된 zet량 입니다.")
     private Integer amount;
 
-    public static PaymentRes of(User user, String orderId, Integer amount) {
+    @Schema(description = "구매 패키지 가격입니다.")
+    private Integer price;
+
+    public static PaymentRes of(User user, Payment payment) {
         return PaymentRes.builder()
                 .name(user.getName())
                 .email(user.getEmail())
-                .orderId(orderId)
-                .amount(amount)
+                .orderId(payment.getOrderId())
+                .amount(payment.getAmount())
+                .price(payment.getPrice())
                 .build();
     }
 }

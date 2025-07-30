@@ -3,6 +3,8 @@ package com.example.ufo_fi.domain.payment.infrastructure.toss.response;
 import com.example.ufo_fi.domain.payment.domain.PaymentStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +26,13 @@ public class ConfirmSuccessResult implements ConfirmResult{
     }
 
     public static ConfirmSuccessResult from(JsonNode jsonNode) {
+        String raw = jsonNode.get("approvedAt").asText(); // 예: "2025-07-29T02:37:23+09:00"
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(raw);
+
         return ConfirmSuccessResult.builder()
                 .orderId(jsonNode.get("orderId").asText())
                 .paymentKey(jsonNode.get("paymentKey").asText())
-                .approvedAt(LocalDateTime.parse(jsonNode.get("approvedAt").asText()))
+                .approvedAt(offsetDateTime.toLocalDateTime())
                 .method(jsonNode.get("method").asText())
                 .build();
     }
