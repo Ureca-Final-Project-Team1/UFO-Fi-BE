@@ -62,7 +62,13 @@ public class UserPlan {
             .build();
     }
 
-    public void subtractSellableDataAmount(int requestSellData) {
+    public void updateSellableDataAmount(int originData, int newData) {
+
+        this.increaseSellableDataAmount(originData);
+        this.subtractSellableDataAmount(newData);
+    }
+
+    private void subtractSellableDataAmount(int requestSellData) {
 
         if (requestSellData < 0 || requestSellData > this.sellableDataAmount) {
 
