@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.domain.TradePost;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +21,8 @@ public class ReportedUserTradePost {
 
     public static ReportedUserTradePost from(final TradePost tradePost) {
         return ReportedUserTradePost.builder()
-                .postId(tradePost.getId())
-                .postTitle(tradePost.getTitle())
-                .build();
+            .postId(tradePost.getId())
+            .postTitle(tradePost.getTitle())
+            .build();
     }
 }

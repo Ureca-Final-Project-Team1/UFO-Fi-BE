@@ -1,6 +1,6 @@
 package com.example.ufo_fi.domain.report.dto.response;
 
-import com.example.ufo_fi.domain.tradepost.entity.TradePost;
+import com.example.ufo_fi.domain.tradepost.domain.TradePost;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +17,8 @@ public class RollBackReportsReadRes {
 
     public static RollBackReportsReadRes from(final List<TradePost> tradePosts) {
         return RollBackReportsReadRes.builder()
-                .rollBackReportsReadRes(tradePosts.stream()
-                        .map(RollBackReportReadRes::from).toList())
-                .build();
+            .rollBackReportsReadRes(tradePosts.stream()
+                .map(RollBackReportReadRes::from).toList())
+            .build();
     }
 }
