@@ -4,10 +4,8 @@ import com.example.ufo_fi.domain.plan.entity.Carrier;
 import com.example.ufo_fi.domain.plan.entity.MobileDataType;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.tradepost.exception.TradePostErrorCode;
-import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.user.entity.User;
-import com.example.ufo_fi.domain.user.entity.UserPlan;
 import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -82,23 +80,6 @@ public class TradePost {
     @Builder.Default
     private List<Report> reports = new ArrayList<>();
 
-    public static TradePost of(TradePostCreateReq request, TradePostStatus tradePostStatus,
-        User user, UserPlan userPlan) {
-
-        TradePost tradePost = TradePost.builder()
-            .user(user)
-            .title(request.getTitle())
-            .zetPerUnit(request.getZetPerUnit())
-            .sellMobileDataCapacityGb(request.getSellDataAmount())
-            .carrier(userPlan.getPlan().getCarrier())
-            .mobileDataType(userPlan.getPlan().getMobileDataType())
-            .tradePostStatus(tradePostStatus)
-            .build();
-
-        tradePost.saveTotalPrice();
-
-        return tradePost;
-    }
 
     public void saveTotalPrice() {
 
@@ -107,6 +88,18 @@ public class TradePost {
         } else {
             this.totalZet = 0;
         }
+    }
+
+    public int delete() {
+
+        if (!this.tradePostStatus.equals(TradePostStatus.SELLING)) {
+
+            throw new GlobalException(TradePostErrorCode.CANNOT_DELETE_NOT_SELLING_POST);
+        }
+
+        this.softDeleteAndStatusDelete();
+
+        return this.sellMobileDataCapacityGb;
     }
 
     public void softDeleteAndStatusDelete() {
@@ -126,11 +119,13 @@ public class TradePost {
         if (request.getSellMobileDataCapacityGb() != null) {
             this.sellMobileDataCapacityGb = request.getSellMobileDataCapacityGb();
         }
+
+        saveTotalPrice();
     }
 
-    public void verifyOwner(TradePost tradePost, User user) {
+    public void verifyOwner(User anotehrUser) {
 
-        if (!tradePost.getUser().getId().equals(user.getId())) {
+        if (!this.user.getId().equals(anotehrUser.getId())) {
 
             throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
         }
