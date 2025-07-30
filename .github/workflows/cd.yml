@@ -2,7 +2,7 @@ name: ufo_fi CD
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
     paths-ignore:
       - 'README.md'
 
