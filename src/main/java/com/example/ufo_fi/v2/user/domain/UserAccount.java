@@ -39,21 +39,4 @@ public class UserAccount {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    public static UserAccount from(final AccountCreateReq accountCreateReq) {
-        return UserAccount.builder()
-                .bank(accountCreateReq.getBank())
-                .bankAccount(accountCreateReq.getBankAccount())
-                .password(accountCreateReq.getPassword())
-                .build();
-    }
-
-    public static UserAccount of(AccountCreateReq accountCreateReq, User user) {
-        return UserAccount.builder()
-                .bank(accountCreateReq.getBank())
-                .bankAccount(accountCreateReq.getBankAccount())
-                .password(accountCreateReq.getPassword())
-                .user(user)
-                .build();
-    }
 }
