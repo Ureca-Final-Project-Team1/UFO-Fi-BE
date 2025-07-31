@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.application;
 
-import com.example.ufo_fi.domain.bannedword.filter.BannedWordFilter;
+import com.example.ufo_fi.v2.bannedword.domain.filter.BannedWordFilter;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;

@@ -1,5 +1,7 @@
 package com.example.ufo_fi.v2.follow.domain;
 
+import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.follow.exception.FollowErrorCode;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +42,13 @@ public class Follow {
     @JoinColumn(name = "following_user_id", nullable = false)
     private User followingUser;
 
+
     public static Follow createFollow(User follower, User following) {
+
+        if (follower.getId().equals(following.getId())) {
+            throw new GlobalException(FollowErrorCode.INVALID_REQUEST);
+        }
+
         return Follow.builder()
             .followerUser(follower)
             .followingUser(following)
