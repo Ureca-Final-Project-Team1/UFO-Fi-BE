@@ -1,6 +1,8 @@
 package com.example.ufo_fi.v2.auth.config;
 
+import com.example.ufo_fi.v2.auth.domain.RefreshManager;
 import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.domain.UserManager;
 import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.v2.auth.application.jwt.JwtFilter;
 import com.example.ufo_fi.v2.auth.application.jwt.JwtUtil;
@@ -35,8 +37,8 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
     private final RefreshUtil refreshUtil;
-    private final UserRepository userRepository;
-    private final RefreshRepository refreshRepository;
+    private final UserManager userManager;
+    private final RefreshManager refreshManager;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -81,8 +83,8 @@ public class SecurityConfig {
                 jwtUtil,
                 cookieUtil,
                 refreshUtil,
-                userRepository,
-                refreshRepository
+                userManager,
+                refreshManager
         );
     }
 
