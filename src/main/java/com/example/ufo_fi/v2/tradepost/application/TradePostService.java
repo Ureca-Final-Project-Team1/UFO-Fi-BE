@@ -1,7 +1,8 @@
 package com.example.ufo_fi.v2.tradepost.application;
 
-import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
-import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
+import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.notification.send.domain.event.CreatedPostEvent;
+import com.example.ufo_fi.v2.notification.send.domain.event.TradeCompletedEvent;
 import com.example.ufo_fi.v2.tradepost.domain.TradeHistory;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
@@ -9,30 +10,12 @@ import com.example.ufo_fi.v2.tradepost.domain.TradeType;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradeHistoryRepository;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostPurchaseReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoriesRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoryRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.SaleHistoriesRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostFailPurchaseRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.request.*;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.*;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.user.domain.UserManager;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
-import com.example.ufo_fi.global.exception.GlobalException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +23,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,18 +54,18 @@ public class TradePostService {
         userPlan.validateAndSubtractForSale(request.getSellDataAmount());
 
         TradePost tradePost = tradePostMapper.toTradePost(request, TradePostStatus.SELLING,
-            user, userPlan);
+                user, userPlan);
 
         TradePost savedTradePost = tradePostManager.saveTradePost(tradePost);
 
         publisher.publishEvent(
-            new CreatedPostEvent(
-                user.getId(),
-                savedTradePost.getId(),
-                savedTradePost.getCarrier(),
-                savedTradePost.getTotalZet(),
-                savedTradePost.getSellMobileDataCapacityGb()
-            )
+                new CreatedPostEvent(
+                        user.getId(),
+                        savedTradePost.getId(),
+                        savedTradePost.getCarrier(),
+                        savedTradePost.getTotalZet(),
+                        savedTradePost.getSellMobileDataCapacityGb()
+                )
         );
 
         return TradePostCommonRes.from(savedTradePost.getId());
@@ -110,7 +98,7 @@ public class TradePostService {
      */
     @Transactional
     public TradePostCommonRes updateTradePost(Long postId, TradePostUpdateReq request,
-        Long userId) {
+                                              Long userId) {
 
         tradePostManager.validateBannedWord(request.getTitle());
 
@@ -157,15 +145,15 @@ public class TradePostService {
      */
     @Transactional(readOnly = true)
     public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request,
-        Long userId) {
+                                                     Long userId) {
 
         User user = userManager.validateUserExistence(userId);
 
         UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
 
         List<TradePost> candidates = tradePostRepository.findCheapestCandidates(request,
-            userPlan.getPlan().getCarrier(),
-            userPlan.getPlan().getMobileDataType(), userId);
+                userPlan.getPlan().getCarrier(),
+                userPlan.getPlan().getMobileDataType(), userId);
 
         List<TradePost> recommendationList = new ArrayList<>();
 
@@ -175,7 +163,7 @@ public class TradePostService {
 
         for (TradePost post : candidates) {
             if (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb
-                && post.getZetPerUnit() <= unitPrice) {
+                    && post.getZetPerUnit() <= unitPrice) {
 
                 recommendationList.add(post);
                 cumulativeGb += post.getSellMobileDataCapacityGb();
@@ -193,7 +181,7 @@ public class TradePostService {
      */
     @Transactional
     public TradePostBulkPurchaseConfirmRes bulkPurchase(TradePostConfirmBulkReq request,
-        Long userId) {
+                                                        Long userId) {
 
         List<Long> postIds = request.getPostIds();
 
@@ -213,7 +201,7 @@ public class TradePostService {
 
             if (optPost.isEmpty()) {
                 failedPurchases.add(
-                    TradePostFailPurchaseRes.ofNotFound(postId, "존재하지 않는 게시물 입니다."));
+                        TradePostFailPurchaseRes.ofNotFound(postId, "존재하지 않는 게시물 입니다."));
                 continue;
             }
 
@@ -281,7 +269,7 @@ public class TradePostService {
         }
 
         int totalGb = successfulPurchases.stream().mapToInt(TradePost::getSellMobileDataCapacityGb)
-            .sum();
+                .sum();
 
         buyer.decreaseZetAsset(totalCost);
         buyerPlan.increasePurchaseAmount(totalGb);
@@ -300,7 +288,7 @@ public class TradePostService {
     @Transactional
     public TradePostPurchaseRes purchase(Long userId, TradePostPurchaseReq purchaseReq) {
         TradePost tradePost = tradePostRepository.findById(purchaseReq.getPostId())
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
         if (tradePost.getTradePostStatus().equals(TradePostStatus.SOLD_OUT)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
@@ -349,7 +337,7 @@ public class TradePostService {
      */
     public SaleHistoriesRes readSaleHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(
-            TradeType.SALE, userId
+                TradeType.SALE, userId
         );
 
         return SaleHistoriesRes.from(tradeHistories);
@@ -362,7 +350,7 @@ public class TradePostService {
      */
     public PurchaseHistoriesRes readPurchaseHistories(Long userId) {
         List<TradeHistory> tradeHistories = tradeHistoryRepository.findByUserIdAndStatus(
-            TradeType.PURCHASE, userId
+                TradeType.PURCHASE, userId
         );
 
         return PurchaseHistoriesRes.from(tradeHistories);
@@ -375,7 +363,7 @@ public class TradePostService {
      */
     public PurchaseHistoryRes readPurchaseHistory(Long purchaseHistoryId) {
         TradeHistory tradeHistory = tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(
-            TradeType.PURCHASE, purchaseHistoryId
+                TradeType.PURCHASE, purchaseHistoryId
         );
         if (tradeHistory == null) {
             throw new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND);

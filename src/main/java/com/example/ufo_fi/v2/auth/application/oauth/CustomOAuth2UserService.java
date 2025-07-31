@@ -1,11 +1,12 @@
 package com.example.ufo_fi.v2.auth.application.oauth;
 
-import com.example.ufo_fi.domain.notification.entity.InterestedPost;
-import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
-import com.example.ufo_fi.domain.notification.repository.InterestedPostRepository;
-import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
+
 import com.example.ufo_fi.v2.auth.domain.Refresh;
 import com.example.ufo_fi.v2.auth.domain.RefreshManager;
+import com.example.ufo_fi.v2.interestedpost.domain.InterestedPost;
+import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
+import com.example.ufo_fi.v2.notification.setting.domain.NotificationSetting;
+import com.example.ufo_fi.v2.notification.setting.persistence.NotificationSettingRepository;
 import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
