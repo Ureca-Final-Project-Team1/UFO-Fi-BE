@@ -2,7 +2,7 @@ package com.example.ufo_fi.v2.tradepost.domain;
 
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;
-import com.example.ufo_fi.domain.report.entity.Report;
+import com.example.ufo_fi.v2.report.domain.Report;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.user.domain.User;
@@ -21,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -145,5 +146,15 @@ public class TradePost {
 
     public void updateStatusExpired() {
         this.tradePostStatus = TradePostStatus.EXPIRED;
+    }
+
+    public void updateStatus(TradePostStatus tradePostStatus) {
+        this.tradePostStatus = tradePostStatus;
+    }
+
+    public boolean canSellingNow() {
+        YearMonth created = YearMonth.from(this.createdAt);
+        YearMonth current = YearMonth.from(LocalDateTime.now());
+        return !current.isAfter(created.plusMonths(1));
     }
 }

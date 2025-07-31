@@ -1,8 +1,8 @@
-package com.example.ufo_fi.domain.report.controller.api;
+package com.example.ufo_fi.v2.report.presentation.api;
 
-import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
-import com.example.ufo_fi.domain.report.dto.request.ReportRollBackReq;
-import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
+import com.example.ufo_fi.v2.report.presentation.dto.request.ReportCreateReq;
+import com.example.ufo_fi.v2.report.presentation.dto.request.ReportRollBackReq;
+import com.example.ufo_fi.v2.report.presentation.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Report API", description = "신고 관련 API")
-public interface ReportTradePostApiSpec {
+public interface ReportApiSpec {
 
     @Operation(summary = "신고하기 API", description = "신고를 한다.")
     @ApiResponse(useReturnTypeSchema = true)
