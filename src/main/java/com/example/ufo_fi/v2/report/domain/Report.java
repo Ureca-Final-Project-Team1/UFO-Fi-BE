@@ -1,6 +1,6 @@
-package com.example.ufo_fi.domain.report.entity;
+package com.example.ufo_fi.v2.report.domain;
 
-import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
+import com.example.ufo_fi.v2.report.presentation.dto.request.ReportCreateReq;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
