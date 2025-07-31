@@ -1,5 +1,6 @@
 package com.example.ufo_fi.v2.notification.setting.domain;
 
+import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

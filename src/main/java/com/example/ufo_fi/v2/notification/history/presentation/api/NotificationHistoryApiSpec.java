@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Tag(name = "Notification API", description = "알림 API")
-public interface NotificationApiSpec {
+public interface NotificationHistoryApiSpec {
 
     @Operation(summary = "최근 알림 내역 조회 API", description = "가장 최근에 발행된 알림 내역을 조회합니다.")
     @ApiResponse(useReturnTypeSchema = true)

@@ -31,7 +31,7 @@ public class FcmService {
         return fcmMapper.toFcmTokenCommonRes(fcmToken);
         // return new FcmTokenCommonRes(userId);
     }
-
+// infra 계층으로 분리함
 //    /**
 //     * 멀티 캐스트 (다수 유저용)
 //     */

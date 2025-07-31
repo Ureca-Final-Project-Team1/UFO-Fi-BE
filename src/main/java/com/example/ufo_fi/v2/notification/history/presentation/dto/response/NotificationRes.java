@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.notification.history.presentation.dto.response;
 
+import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.notification.history.domain.NotificationHistory;
-import com.example.ufo_fi.v2.notification.setting.domain.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -2,11 +2,13 @@ package com.example.ufo_fi.v2.notification.send.application.processor;
 
 import com.example.ufo_fi.v2.interestedpost.domain.InterestedCarriers;
 import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
-import com.example.ufo_fi.v2.notification.history.applicaton.NotificationService;
+import com.example.ufo_fi.v2.notification.common.NotificationMessage;
+import com.example.ufo_fi.v2.notification.common.NotificationType;
+import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
 import com.example.ufo_fi.v2.notification.send.application.FcmService;
+import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
 import com.example.ufo_fi.v2.notification.send.domain.event.CreatedPostEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
-import com.example.ufo_fi.v2.notification.setting.domain.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,9 @@ import java.util.List;
 public class CreatedPostNotificationProcessor {
     private final InterestedPostRepository interestedPostRepository;
     private final FcmService fcmService;
-    private final NotificationService notificationService;
+    private final NotificationHistoryService notificationService;
+
+    private final WebPushClient webPushClient;
 
     public void process(CreatedPostEvent event) {
         Long sellerId = event.getSellerId();
@@ -42,9 +46,12 @@ public class CreatedPostNotificationProcessor {
         String body = template.getBody();
         String url = template.getUrl();
 
+        NotificationMessage message = NotificationMessage.from(enabledUserIds, title, body, NotificationType.INTERESTED_POST, url);
+
         // 4. 전송
-        fcmService.sendMulticastByUserIds(enabledUserIds, title, body, url);
-        notificationService.saveAllNotification(enabledUserIds, title, body, NotificationType.INTERESTED_POST, url);
+        // 토큰 조회필요
+        webPushClient.sendMulticast(message);
+        notificationService.saveAllNotification(message);
 
     }
 }

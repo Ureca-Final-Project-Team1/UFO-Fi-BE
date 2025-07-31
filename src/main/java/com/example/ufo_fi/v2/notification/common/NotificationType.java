@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.notification.setting.domain;
+package com.example.ufo_fi.v2.notification.common;
 
 /**
  * 알림 타입 ENUM 값

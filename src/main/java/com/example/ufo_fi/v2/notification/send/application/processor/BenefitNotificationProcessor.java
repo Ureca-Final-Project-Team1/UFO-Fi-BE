@@ -1,10 +1,11 @@
 package com.example.ufo_fi.v2.notification.send.application.processor;
 
-import com.example.ufo_fi.v2.notification.history.applicaton.NotificationService;
-import com.example.ufo_fi.v2.notification.send.application.FcmService;
+import com.example.ufo_fi.v2.notification.common.NotificationMessage;
+import com.example.ufo_fi.v2.notification.common.NotificationType;
+import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
+import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
 import com.example.ufo_fi.v2.notification.send.domain.event.BenefitEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
-import com.example.ufo_fi.v2.notification.setting.domain.NotificationType;
 import com.example.ufo_fi.v2.notification.setting.persistence.NotificationSettingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BenefitNotificationProcessor {
     private final NotificationSettingRepository notificationSettingRepository;
-    private final FcmService fcmService;
-    private final NotificationService notificationService;
+    private final NotificationHistoryService notificationHistoryService;
+
+    private final WebPushClient webPushClient;
 
     public void process(BenefitEvent event) {
 
@@ -32,8 +34,11 @@ public class BenefitNotificationProcessor {
         String body = template.getBody();
         String url = template.getUrl();
 
+        NotificationMessage message = NotificationMessage.from(enabledUserIds, title, body, NotificationType.BENEFIT, url);
+
         // 4. 전송
-        fcmService.sendMulticastByUserIds(enabledUserIds, title, body, url);
-        notificationService.saveAllNotification(enabledUserIds, title, body, NotificationType.BENEFIT, url);
+        // 토큰 조회필요
+        webPushClient.sendMulticast(message);
+        notificationHistoryService.saveAllNotification(message);
     }
 }

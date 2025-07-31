@@ -1,13 +1,17 @@
 package com.example.ufo_fi.v2.notification.send.application.processor;
 
-import com.example.ufo_fi.v2.notification.history.applicaton.NotificationService;
+import com.example.ufo_fi.v2.notification.common.NotificationMessage;
+import com.example.ufo_fi.v2.notification.common.NotificationType;
+import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
 import com.example.ufo_fi.v2.notification.send.application.FcmService;
+import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
 import com.example.ufo_fi.v2.notification.send.domain.event.AccountSuspendEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
 import com.example.ufo_fi.v2.notification.setting.application.NotificationSettingService;
-import com.example.ufo_fi.v2.notification.setting.domain.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 신고 누적 알림 프로세서
@@ -17,7 +21,9 @@ import org.springframework.stereotype.Component;
 public class AccountSuspendNotificationProcessor {
     private final NotificationSettingService notificationSettingService;
     private final FcmService fcmService;
-    private final NotificationService notificationService;
+    private final NotificationHistoryService notificationService;
+
+    private final WebPushClient webPushClient;
 
     public void process(AccountSuspendEvent event) {
         Long userId = event.getUserId();
@@ -31,8 +37,10 @@ public class AccountSuspendNotificationProcessor {
         String body = template.getBody();
         String url = template.getUrl();
 
+        NotificationMessage message = NotificationMessage.from(List.of(userId), title, body, NotificationType.REPORTED, url);
+
         // 3. 전송
-        fcmService.sendUnicastByUserId(userId, title, body, url);
-        notificationService.saveNotification(userId, title, body, NotificationType.REPORTED, url);
+        webPushClient.sendUnicast(message);
+        notificationService.saveNotification(message);
     }
 }

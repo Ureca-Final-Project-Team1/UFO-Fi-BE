@@ -22,7 +22,7 @@ public class InterestedPostService {
 
         int carrierBit = interestedPostManager.encodeCarriers(request.getCarriers());
 
-        // TODO dto는 어디까지 전달되도 되는가
+        // TODO dto는 어디까지 전달
         interestedPostManager.updateInterestedPost(interestedPost, request, carrierBit);
     }
 }

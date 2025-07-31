@@ -1,6 +1,7 @@
 package com.example.ufo_fi.v2.notification.history.domain;
 
-import com.example.ufo_fi.v2.notification.setting.domain.NotificationType;
+import com.example.ufo_fi.v2.notification.common.NotificationMessage;
+import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,11 +47,11 @@ public class NotificationHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static NotificationHistory of(User user, String title, String body, NotificationType type, String url) {
+    public static NotificationHistory of(NotificationMessage message, User user, String url) {
         return NotificationHistory.builder()
-                .type(type)
-                .title(title)
-                .content(body)
+                .type(message.getType())
+                .title(message.getTitle())
+                .content(message.getBody())
                 .url(url)
                 .user(user)
                 .build();
