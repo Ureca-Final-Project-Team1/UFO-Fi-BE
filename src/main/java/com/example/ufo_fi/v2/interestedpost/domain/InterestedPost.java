@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.interestedpost.domain;
 
 import com.example.ufo_fi.v2.interestedpost.presentation.dto.request.InterestedPostUpdateReq;
-import com.example.ufo_fi.v2.notification.domain.Reputation;
+import com.example.ufo_fi.v2.notification.setting.domain.Reputation;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

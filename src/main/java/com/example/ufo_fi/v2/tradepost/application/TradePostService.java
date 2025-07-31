@@ -1,8 +1,8 @@
 package com.example.ufo_fi.v2.tradepost.application;
 
 import com.example.ufo_fi.global.exception.GlobalException;
-import com.example.ufo_fi.v2.notification.domain.event.CreatedPostEvent;
-import com.example.ufo_fi.v2.notification.domain.event.TradeCompletedEvent;
+import com.example.ufo_fi.v2.notification.send.domain.event.CreatedPostEvent;
+import com.example.ufo_fi.v2.notification.send.domain.event.TradeCompletedEvent;
 import com.example.ufo_fi.v2.tradepost.domain.TradeHistory;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;

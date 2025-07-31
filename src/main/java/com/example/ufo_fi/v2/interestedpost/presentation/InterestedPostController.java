@@ -15,7 +15,6 @@ public class InterestedPostController implements InterestedPostApiSpec {
 
     private final InterestedPostService interestedPostService;
 
-    // PatchMapping, 관심 상품 조건 업데이트
     @Override
     public ResponseEntity<ResponseBody<Void>> updateInterestedPost(
             InterestedPostUpdateReq request,

@@ -2,7 +2,6 @@ package com.example.ufo_fi.v2.interestedpost.application;
 
 import com.example.ufo_fi.v2.interestedpost.domain.InterestedPost;
 import com.example.ufo_fi.v2.interestedpost.domain.InterestedPostManager;
-import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
 import com.example.ufo_fi.v2.interestedpost.presentation.dto.request.InterestedPostUpdateReq;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.EntityManager;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InterestedPostService {
 
-    private final InterestedPostRepository interestedPostRepository;
     private final InterestedPostManager interestedPostManager;
     private final EntityManager entityManager;
 
@@ -24,6 +22,7 @@ public class InterestedPostService {
 
         int carrierBit = interestedPostManager.encodeCarriers(request.getCarriers());
 
+        // TODO dto는 어디까지 전달되도 되는가
         interestedPostManager.updateInterestedPost(interestedPost, request, carrierBit);
     }
 }
