@@ -7,6 +7,7 @@ import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
 import com.example.ufo_fi.v2.notification.send.domain.FcmManager;
 import com.example.ufo_fi.v2.notification.send.domain.event.AccountSuspendEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
+import com.example.ufo_fi.v2.notification.send.infrastructure.firebase.dto.request.PushMassageCommand;
 import com.example.ufo_fi.v2.notification.setting.application.NotificationSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -40,8 +41,9 @@ public class AccountSuspendNotificationProcessor {
         NotificationMessage message = NotificationMessage.from(List.of(userId), title, body, NotificationType.REPORTED, url);
 
         // 3. 전송
-        fcmManager.readFcmTokens(List.of(userId));
-        webPushClient.sendUnicast(message);
+        List<String> tokens = fcmManager.readFcmTokens(List.of(userId));
+        PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
+        webPushClient.sendUnicast(pushMassageCommand);
         notificationService.saveNotification(message);
     }
 }

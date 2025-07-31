@@ -4,8 +4,10 @@ import com.example.ufo_fi.v2.notification.common.NotificationMessage;
 import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
 import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
+import com.example.ufo_fi.v2.notification.send.domain.FcmManager;
 import com.example.ufo_fi.v2.notification.send.domain.event.BenefitEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
+import com.example.ufo_fi.v2.notification.send.infrastructure.firebase.dto.request.PushMassageCommand;
 import com.example.ufo_fi.v2.notification.setting.persistence.NotificationSettingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ public class BenefitNotificationProcessor {
     private final NotificationHistoryService notificationHistoryService;
 
     private final WebPushClient webPushClient;
+    private final FcmManager fcmManager;
 
     public void process(BenefitEvent event) {
 
@@ -37,8 +40,9 @@ public class BenefitNotificationProcessor {
         NotificationMessage message = NotificationMessage.from(enabledUserIds, title, body, NotificationType.BENEFIT, url);
 
         // 4. 전송
-        // 토큰 조회필요
-        webPushClient.sendMulticast(message);
+        List<String> tokens = fcmManager.readFcmTokens(enabledUserIds);
+        PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
+        webPushClient.sendMulticast(pushMassageCommand);
         notificationHistoryService.saveAllNotification(message);
     }
 }

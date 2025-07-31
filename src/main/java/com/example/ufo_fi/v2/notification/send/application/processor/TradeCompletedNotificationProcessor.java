@@ -3,10 +3,11 @@ package com.example.ufo_fi.v2.notification.send.application.processor;
 import com.example.ufo_fi.v2.notification.common.NotificationMessage;
 import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
-import com.example.ufo_fi.v2.notification.send.application.FcmService;
 import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
+import com.example.ufo_fi.v2.notification.send.domain.FcmManager;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
 import com.example.ufo_fi.v2.notification.send.domain.event.TradeCompletedEvent;
+import com.example.ufo_fi.v2.notification.send.infrastructure.firebase.dto.request.PushMassageCommand;
 import com.example.ufo_fi.v2.notification.setting.application.NotificationSettingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,10 @@ import java.util.List;
 public class TradeCompletedNotificationProcessor {
 
     private final NotificationSettingService notificationSettingService;
-    private final FcmService fcmService;
     private final NotificationHistoryService notificationService;
 
     private final WebPushClient webPushClient;
+    private final FcmManager fcmManager;
 
     public void process(TradeCompletedEvent event) {
         Long userId = event.getSellerId();
@@ -41,8 +42,9 @@ public class TradeCompletedNotificationProcessor {
         NotificationMessage message = NotificationMessage.from(List.of(userId), title, body, NotificationType.SELL, url);
 
         // 3. 전송
-        // 토큰 조회필요
-        webPushClient.sendUnicast(message);
+        List<String> tokens = fcmManager.readFcmTokens(List.of(userId));
+        PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
+        webPushClient.sendUnicast(pushMassageCommand);
         notificationService.saveNotification(message);
     }
 }
