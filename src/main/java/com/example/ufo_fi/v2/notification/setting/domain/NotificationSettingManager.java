@@ -8,6 +8,8 @@ import com.example.ufo_fi.v2.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class NotificationSettingManager {
@@ -25,5 +27,9 @@ public class NotificationSettingManager {
             case BENEFIT, SELL, INTERESTED_POST, REPORTED, FOLLOWER_POST -> settings.update(type, enable);
             default -> throw new GlobalException(NotificationErrorCode.INVALID_NOTIFICATION_TYPE);
         }
+    }
+
+    public List<Long> findUserIdsWithBenefitAgreed() {
+        return notificationSettingRepository.findUserIdsWithBenefitAgreed();
     }
 }

@@ -29,4 +29,8 @@ public class InterestedPostManager {
     public void updateInterestedPost(InterestedPost interestedPost, InterestedPostUpdateReq request, int carrierBit) {
         interestedPost.update(request, carrierBit);
     }
+
+    public List<Long> findMatchedUserIdsWithNotificationEnabled(int zet, int capacity, int carrier, Long sellerId) {
+        return interestedPostRepository.findMatchedUserIdsWithNotificationEnabled(zet, capacity, carrier, sellerId);
+    }
 }

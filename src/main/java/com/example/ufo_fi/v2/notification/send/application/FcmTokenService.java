@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class FcmService {
+public class FcmTokenService {
 
     private final FcmManager fcmManager;
-    private final FcmMapper fcmMapper;
+    private final FcmTokenMapper fcmMapper;
     private final EntityManager entityManager;
 
     /**

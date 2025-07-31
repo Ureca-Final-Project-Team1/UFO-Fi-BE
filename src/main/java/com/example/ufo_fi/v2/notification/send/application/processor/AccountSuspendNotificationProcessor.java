@@ -29,10 +29,8 @@ public class AccountSuspendNotificationProcessor {
     public void process(AccountSuspendEvent event) {
         Long userId = event.getUserId();
 
-        // 1. 알림 설정 확인
         if (!notificationSettingService.isEnabled(userId, NotificationType.REPORTED)) return;
 
-        // 2. 메시지 조립 (템플릿)
         NotificationTemplate template = NotificationTemplate.USER_BLOCK;
         String title = template.getTitle();
         String body = template.getBody();
@@ -40,7 +38,6 @@ public class AccountSuspendNotificationProcessor {
 
         NotificationMessage message = NotificationMessage.from(List.of(userId), title, body, NotificationType.REPORTED, url);
 
-        // 3. 전송
         List<String> tokens = fcmManager.readFcmTokens(List.of(userId));
         PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
         webPushClient.sendUnicast(pushMassageCommand);

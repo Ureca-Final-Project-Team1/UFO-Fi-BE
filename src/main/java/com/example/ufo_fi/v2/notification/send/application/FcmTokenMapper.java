@@ -5,7 +5,7 @@ import com.example.ufo_fi.v2.notification.send.presentation.dto.response.FcmToke
 import org.springframework.stereotype.Component;
 
 @Component
-public class FcmMapper {
+public class FcmTokenMapper {
 
     public FcmTokenCommonRes toFcmTokenCommonRes(final FcmToken fcmToken) {
         return FcmTokenCommonRes.builder()

@@ -8,7 +8,7 @@ import com.example.ufo_fi.v2.notification.send.domain.FcmManager;
 import com.example.ufo_fi.v2.notification.send.domain.event.BenefitEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
 import com.example.ufo_fi.v2.notification.send.infrastructure.firebase.dto.request.PushMassageCommand;
-import com.example.ufo_fi.v2.notification.setting.persistence.NotificationSettingRepository;
+import com.example.ufo_fi.v2.notification.setting.domain.NotificationSettingManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,18 +20,15 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class BenefitNotificationProcessor {
-    private final NotificationSettingRepository notificationSettingRepository;
     private final NotificationHistoryService notificationHistoryService;
-
     private final WebPushClient webPushClient;
     private final FcmManager fcmManager;
+    private final NotificationSettingManager notificationSettingManager;
 
     public void process(BenefitEvent event) {
 
-        // 1. 혜택 알림 수신 동의한 사용자 조회
-        List<Long> enabledUserIds = notificationSettingRepository.findUserIdsWithBenefitAgreed();
+        List<Long> enabledUserIds = notificationSettingManager.findUserIdsWithBenefitAgreed();
 
-        // 2. 메시지 조립 (템플릿)
         NotificationTemplate template = NotificationTemplate.EVENT_BENEFIT;
         String title = template.getTitle();
         String body = template.getBody();
@@ -39,7 +36,6 @@ public class BenefitNotificationProcessor {
 
         NotificationMessage message = NotificationMessage.from(enabledUserIds, title, body, NotificationType.BENEFIT, url);
 
-        // 4. 전송
         List<String> tokens = fcmManager.readFcmTokens(enabledUserIds);
         PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
         webPushClient.sendMulticast(pushMassageCommand);
