@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.follow.dto.response;
+package com.example.ufo_fi.v2.follow.presentation.dto.response;
 
 import com.example.ufo_fi.v2.user.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,9 +24,9 @@ public class FollowingReadRes {
 
     public static FollowingReadRes from(final User followerUser) {
         return FollowingReadRes.builder()
-                .id(followerUser.getId())
-                .nickname(followerUser.getNickname())
-                .profilePhotoUrl(followerUser.getProfilePhoto().getProfilePhotoUrl())
-                .build();
+            .id(followerUser.getId())
+            .nickname(followerUser.getNickname())
+            .profilePhotoUrl(followerUser.getProfilePhoto().getProfilePhotoUrl())
+            .build();
     }
 }
