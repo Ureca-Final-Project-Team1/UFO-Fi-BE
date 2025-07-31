@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.notification.send.presentation.api;
 
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.notification.send.presentation.dto.request.FcmTokenSaveReq;
 import com.example.ufo_fi.v2.notification.send.presentation.dto.response.FcmTokenCommonRes;
 import io.swagger.v3.oas.annotations.Operation;

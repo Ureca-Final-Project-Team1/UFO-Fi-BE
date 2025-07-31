@@ -5,7 +5,7 @@ import com.example.ufo_fi.v2.report.presentation.dto.request.ReportCreateReq;
 import com.example.ufo_fi.v2.report.presentation.dto.request.ReportRollBackReq;
 import com.example.ufo_fi.v2.report.presentation.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.report.presentation.api.ReportApiSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

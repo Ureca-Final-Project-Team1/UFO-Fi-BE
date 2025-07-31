@@ -64,4 +64,12 @@ public class UserManager {
 
         return userRepository.findAllByRole(role);
     }
+
+    public User findByKakaoId(String string) {
+        return userRepository.findByKakaoId(string);
+    }
+
+    public User save(User newUser) {
+        return userRepository.save(newUser);
+    }
 }
