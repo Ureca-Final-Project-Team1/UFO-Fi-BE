@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.user.dto.request;
+package com.example.ufo_fi.v2.userplan.presentation.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,6 @@
 package com.example.ufo_fi.v2.user.domain;
 
 import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserInfoReq;
-import com.example.ufo_fi.domain.user.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
 import jakarta.persistence.*;
@@ -99,9 +98,8 @@ public class User {
         this.refresh = null;
     }
 
-    public void updateNickname(UserNicknameUpdateReq userNicknameUpdateReq) {
-
-        this.nickname = userNicknameUpdateReq.getNickname() + String.format(" #%03d", id);
+    public void updateNickname(String targetNickname) {
+        this.nickname = targetNickname;
     }
 
     public void updateStatusReported() {

@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.user.dto.response;
+package com.example.ufo_fi.v2.user.presentation.dto.response;
 
 import com.example.ufo_fi.v2.user.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -14,6 +14,14 @@ public class FollowManager {
 
     private final FollowRepository followRepository;
 
+    public Long countByFollowingUserId(Long anotherUserId) {
+        return followRepository.countByFollowingUser_Id(anotherUserId);
+    }
+
+    public Long countByFollowerUserId(Long anotherUserId) {
+        return followRepository.countByFollowerUser_Id(anotherUserId);
+    }
+
     public Follow findFollowingIdAndFollowerId(Long followingId, Long userId) {
 
         return followRepository.findByFollowingUserIdAndFollowerUserId(followingId, userId)

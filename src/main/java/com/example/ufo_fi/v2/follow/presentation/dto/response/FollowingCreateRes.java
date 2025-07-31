@@ -1,6 +1,7 @@
 package com.example.ufo_fi.v2.follow.presentation.dto.response;
 
 
+import com.example.ufo_fi.v2.follow.domain.Follow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

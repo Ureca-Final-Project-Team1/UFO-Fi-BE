@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.user.dto.response;
+package com.example.ufo_fi.v2.user.presentation.dto.response;
 
 import com.example.ufo_fi.v2.plan.domain.Plan;
 import com.example.ufo_fi.v2.user.domain.User;

@@ -34,7 +34,7 @@ public class UserManager {
             .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
     }
 
-    public void updateUser(
+    public void updateUserNickname(
         User user, UserInfoReq userInfoReq, String randomNickname, ProfilePhoto randomProfilePhoto
     ) {
         user.signup(userInfoReq, randomNickname, randomProfilePhoto, true, Role.ROLE_USER);
@@ -42,5 +42,9 @@ public class UserManager {
 
     public String getPhoneNumber(User user) {
         return user.getPhoneNumber() != null ? user.getPhoneNumber() : "";
+    }
+
+    public void updateUserNickname(User user, String nickname, Long userId) {
+        user.updateNickname(nickname + String.format(" #%03d", userId));
     }
 }
