@@ -1,6 +1,5 @@
 package com.example.ufo_fi.domain.report.service;
 
-import com.example.ufo_fi.domain.notification.event.AccountSuspendEvent;
 import com.example.ufo_fi.domain.report.dto.request.GrantUserRoleReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportRollBackReq;
@@ -9,6 +8,8 @@ import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.exception.ReportErrorCode;
 import com.example.ufo_fi.domain.report.repository.ReportRepository;
+import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.notification.domain.event.AccountSuspendEvent;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
@@ -17,14 +18,14 @@ import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.exception.UserErrorCode;
 import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
-import com.example.ufo_fi.global.exception.GlobalException;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class ReportService {
     public void reportTradePost(Long userId, ReportCreateReq reportCreateReq, Long tradePostId) {
         User user = userRepository.getReferenceById(userId);
         User reportedUser = userRepository.findById(reportCreateReq.getReportedUserId())
-            .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
+                .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
         TradePost tradePost = tradePostRepository.getReferenceById(tradePostId);
         Report report = Report.of(user, reportedUser, tradePost, reportCreateReq);
 
@@ -71,7 +72,7 @@ public class ReportService {
     @Transactional
     public void approveRollBackRegistration(ReportRollBackReq reportRollBackReq) {
         TradePost tradePost = tradePostRepository.findById(reportRollBackReq.getTradePostId())
-            .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
+                .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
 
         List<Report> reports = reportRepository.findByTradePost(tradePost);
         reportRepository.deleteAll(reports);
@@ -93,14 +94,14 @@ public class ReportService {
      */
     public RollBackReportsReadRes readRollBackRegistration() {
         List<TradePost> reportedPosts = tradePostRepository.findTradePostByTradePostStatus(
-            TradePostStatus.REPORTED);
+                TradePostStatus.REPORTED);
         return RollBackReportsReadRes.from(reportedPosts);
     }
 
     @Transactional
     public void updateUserRoleUser(GrantUserRoleReq grantUserRoleReq) {
         User user = userRepository.findById(grantUserRoleReq.getUserId())
-            .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
+                .orElseThrow(() -> new GlobalException(ReportErrorCode.NO_REPORTED_USER));
 
         if (user.getIsActive()) {
             throw new GlobalException(UserErrorCode.NOT_DEACTIVE);

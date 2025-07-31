@@ -1,15 +1,15 @@
 package com.example.ufo_fi.global.security.oauth;
 
-import com.example.ufo_fi.domain.notification.entity.InterestedPost;
-import com.example.ufo_fi.domain.notification.entity.NotificationSetting;
-import com.example.ufo_fi.domain.notification.repository.InterestedPostRepository;
-import com.example.ufo_fi.domain.notification.repository.NotificationSettingRepository;
-import com.example.ufo_fi.v2.user.domain.Role;
-import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.security.oauth.provider.OAuth2Response;
 import com.example.ufo_fi.global.security.principal.CustomOAuth2User;
 import com.example.ufo_fi.global.security.refresh.repository.RefreshRepository;
+import com.example.ufo_fi.v2.interestedpost.domain.InterestedPost;
+import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
+import com.example.ufo_fi.v2.notification.domain.NotificationSetting;
+import com.example.ufo_fi.v2.notification.persistence.NotificationSettingRepository;
+import com.example.ufo_fi.v2.user.domain.Role;
+import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -40,7 +40,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest); //1
         OAuth2Response oAuth2Response = OAuth2Response.of(userRequest.getClientRegistration(), oAuth2User);  //2
         User existUser = userRepository.findByKakaoId(oAuth2Response.getProviderId().toString());  //3
-        if(existUser != null) return login(existUser);  //4-1
+        if (existUser != null) return login(existUser);  //4-1
         return createUser(oAuth2Response);  //4-2
     }
 

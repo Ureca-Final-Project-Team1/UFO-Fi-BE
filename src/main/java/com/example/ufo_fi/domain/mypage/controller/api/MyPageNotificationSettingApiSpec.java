@@ -1,9 +1,9 @@
 package com.example.ufo_fi.domain.mypage.controller.api;
 
-import com.example.ufo_fi.domain.notification.dto.response.NotificationSettingReadRes;
-import com.example.ufo_fi.domain.notification.entity.NotificationType;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.notification.domain.NotificationType;
+import com.example.ufo_fi.v2.notification.presentation.dto.response.NotificationSettingReadRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

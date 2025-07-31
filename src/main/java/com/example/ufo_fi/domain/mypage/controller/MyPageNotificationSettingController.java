@@ -1,14 +1,13 @@
 package com.example.ufo_fi.domain.mypage.controller;
 
 import com.example.ufo_fi.domain.mypage.controller.api.MyPageNotificationSettingApiSpec;
-import com.example.ufo_fi.domain.notification.dto.response.NotificationSettingReadRes;
-import com.example.ufo_fi.domain.notification.entity.NotificationType;
-import com.example.ufo_fi.domain.notification.service.NotificationSettingService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.notification.application.NotificationSettingService;
+import com.example.ufo_fi.v2.notification.domain.NotificationType;
+import com.example.ufo_fi.v2.notification.presentation.dto.response.NotificationSettingReadRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
