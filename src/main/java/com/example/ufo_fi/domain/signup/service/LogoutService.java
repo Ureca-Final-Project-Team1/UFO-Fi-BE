@@ -1,8 +1,7 @@
 package com.example.ufo_fi.domain.signup.service;
 
-import com.example.ufo_fi.global.security.jwt.JwtUtil;
-import com.example.ufo_fi.global.security.refresh.RefreshUtil;
-import com.example.ufo_fi.global.security.refresh.repository.RefreshRepository;
+import com.example.ufo_fi.v2.auth.application.jwt.JwtUtil;
+import com.example.ufo_fi.v2.auth.persistence.RefreshRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

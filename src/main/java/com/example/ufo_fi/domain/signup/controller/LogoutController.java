@@ -3,11 +3,10 @@ package com.example.ufo_fi.domain.signup.controller;
 import com.example.ufo_fi.domain.signup.controller.api.LogoutApiSpec;
 import com.example.ufo_fi.domain.signup.service.LogoutService;
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.follow.presentation;
 
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.follow.application.FollowService;
 import com.example.ufo_fi.v2.follow.presentation.api.FollowApiSpec;
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowerDeleteRes;

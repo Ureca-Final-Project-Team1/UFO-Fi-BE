@@ -8,7 +8,7 @@ import com.example.ufo_fi.v2.user.presentation.dto.response.UserNicknameUpdateRe
 import com.example.ufo_fi.v2.user.presentation.dto.response.AnotherUserInfoReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.user.application.UserService;
 import com.example.ufo_fi.v2.user.presentation.api.UserApiSpec;
 import lombok.RequiredArgsConstructor;

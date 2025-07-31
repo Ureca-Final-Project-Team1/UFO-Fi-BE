@@ -4,7 +4,7 @@ import com.example.ufo_fi.domain.notification.controller.api.NotificationApiSpec
 import com.example.ufo_fi.domain.notification.dto.response.NotificationListRes;
 import com.example.ufo_fi.domain.notification.service.NotificationService;
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
