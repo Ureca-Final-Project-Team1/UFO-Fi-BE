@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum interestedPostErrorCode implements ErrorCode {
+public enum InterestedPostErrorCode implements ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "요청 형식이 이상합니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),
 

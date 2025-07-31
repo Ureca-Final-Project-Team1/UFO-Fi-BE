@@ -1,28 +1,29 @@
 package com.example.ufo_fi.v2.interestedpost.application;
 
-import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.interestedpost.domain.InterestedPost;
+import com.example.ufo_fi.v2.interestedpost.domain.InterestedPostManager;
 import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
 import com.example.ufo_fi.v2.interestedpost.presentation.dto.request.InterestedPostUpdateReq;
-import com.example.ufo_fi.v2.notification.exception.NotificationErrorCode;
+import com.example.ufo_fi.v2.user.domain.User;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class InterestedPostService {
 
     private final InterestedPostRepository interestedPostRepository;
+    private final InterestedPostManager interestedPostManager;
+    private final EntityManager entityManager;
 
-    @Transactional
     public void updateInterestedPost(Long userId, InterestedPostUpdateReq request) {
 
-        InterestedPost interestedPost = interestedPostRepository.findByUserId(userId)
-                .orElseThrow(() -> new GlobalException(NotificationErrorCode.NO_INTERESTED_POST));
+        User userProxy = entityManager.getReference(User.class, userId);
+        InterestedPost interestedPost = interestedPostManager.findByUser(userProxy);
 
-        int carrierBitmask = InterestedCarriers.encode(request.getCarriers());
+        int carrierBit = interestedPostManager.encodeCarriers(request.getCarriers());
 
-        interestedPost.update(request, carrierBitmask);
+        interestedPostManager.updateInterestedPost(interestedPost, request, carrierBit);
     }
 }

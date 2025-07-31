@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.notification.application.processor;
 
-import com.example.ufo_fi.v2.interestedpost.application.InterestedCarriers;
+import com.example.ufo_fi.v2.interestedpost.domain.InterestedCarriers;
 import com.example.ufo_fi.v2.interestedpost.persistence.InterestedPostRepository;
 import com.example.ufo_fi.v2.notification.application.FcmService;
 import com.example.ufo_fi.v2.notification.application.NotificationService;

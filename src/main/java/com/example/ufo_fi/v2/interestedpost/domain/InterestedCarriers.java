@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.interestedpost.application;
+package com.example.ufo_fi.v2.interestedpost.domain;
 
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 
