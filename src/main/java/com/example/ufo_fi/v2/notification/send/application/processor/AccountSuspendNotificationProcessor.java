@@ -3,8 +3,8 @@ package com.example.ufo_fi.v2.notification.send.application.processor;
 import com.example.ufo_fi.v2.notification.common.NotificationMessage;
 import com.example.ufo_fi.v2.notification.common.NotificationType;
 import com.example.ufo_fi.v2.notification.history.applicaton.NotificationHistoryService;
-import com.example.ufo_fi.v2.notification.send.application.FcmService;
 import com.example.ufo_fi.v2.notification.send.application.WebPushClient;
+import com.example.ufo_fi.v2.notification.send.domain.FcmManager;
 import com.example.ufo_fi.v2.notification.send.domain.event.AccountSuspendEvent;
 import com.example.ufo_fi.v2.notification.send.domain.event.NotificationTemplate;
 import com.example.ufo_fi.v2.notification.setting.application.NotificationSettingService;
@@ -20,10 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountSuspendNotificationProcessor {
     private final NotificationSettingService notificationSettingService;
-    private final FcmService fcmService;
     private final NotificationHistoryService notificationService;
 
     private final WebPushClient webPushClient;
+    private final FcmManager fcmManager;
 
     public void process(AccountSuspendEvent event) {
         Long userId = event.getUserId();
@@ -40,6 +40,7 @@ public class AccountSuspendNotificationProcessor {
         NotificationMessage message = NotificationMessage.from(List.of(userId), title, body, NotificationType.REPORTED, url);
 
         // 3. 전송
+        fcmManager.readFcmTokens(List.of(userId));
         webPushClient.sendUnicast(message);
         notificationService.saveNotification(message);
     }

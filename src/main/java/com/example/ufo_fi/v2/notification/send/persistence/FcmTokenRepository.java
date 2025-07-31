@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface FcmRepository extends JpaRepository<FcmToken, Long> {
+public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
     @Query("SELECT f.fcm FROM FcmToken f WHERE f.user.id IN :userIds")
     List<String> findTokensByUserIds(@Param("userIds") List<Long> userIds);
 
