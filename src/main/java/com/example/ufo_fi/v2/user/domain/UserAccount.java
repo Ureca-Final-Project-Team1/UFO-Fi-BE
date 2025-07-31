@@ -1,6 +1,5 @@
 package com.example.ufo_fi.v2.user.domain;
 
-import com.example.ufo_fi.domain.user.dto.request.AccountCreateReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

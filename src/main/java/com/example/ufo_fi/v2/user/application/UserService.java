@@ -1,5 +1,7 @@
 package com.example.ufo_fi.v2.user.application;
 
+import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
+import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserInfoReadRes;
 import com.example.ufo_fi.v2.plan.domain.Plan;
@@ -18,6 +20,7 @@ import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +59,7 @@ public class UserService {
         return userMapper.toUserInfoRes(user, userPlan, plan);
     }
 
+    @Transactional
     public UserNicknameUpdateRes updateUserNicknames(
         Long userId, UserNicknameUpdateReq userNicknameUpdateReq
     ) {
@@ -63,5 +67,17 @@ public class UserService {
         userManager.updateUserNickname(user, userNicknameUpdateReq.getNickname(), userId);
 
         return userMapper.toUserNicknameUpdateRes(user);
+    }
+
+    @Transactional
+    public void updateUserRoleUser(GrantUserRoleReq grantUserRoleReq) {
+        User user = userManager.findById(grantUserRoleReq.getUserId());
+        userManager.validateUserIsActive(user);
+        userManager.updateUserRole(user, Role.ROLE_USER);
+    }
+
+    public ReportedUsersReadRes readReportedUser() {
+        List<User> reportedUser = userManager.findAllByRole(Role.ROLE_REPORTED);
+        return userMapper.toReportedUsersReadRes(reportedUser);
     }
 }

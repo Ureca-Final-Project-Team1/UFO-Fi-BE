@@ -1,5 +1,7 @@
 package com.example.ufo_fi.v2.user.presentation.api;
 
+import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
+import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserInfoReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserNicknameUpdateRes;
@@ -16,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "User API", description = "유저 도메인")
@@ -48,5 +51,17 @@ public interface UserApiSpec {
     ResponseEntity<ResponseBody<UserNicknameUpdateRes>> updateMyPageUserNicknames(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody @Valid UserNicknameUpdateReq userNicknameUpdateReq
+    );
+
+    @Operation(summary = "비활성 사용자 조회 API", description = "정지된 사용자 목록을 조회한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/v1/users/reported")
+    ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser();
+
+    @Operation(summary = "사용자 비활성화 풀기 API", description = "정지된 사용자의 비활성화를 푼다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @PutMapping("/v1/user/grant-user")
+    ResponseEntity<ResponseBody<Void>> updateUserRoleUser(
+        @RequestBody GrantUserRoleReq grantUserRoleReq
     );
 }

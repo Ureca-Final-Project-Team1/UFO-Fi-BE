@@ -1,5 +1,6 @@
 package com.example.ufo_fi.v2.user.application;
 
+import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserInfoReadRes;
 import com.example.ufo_fi.v2.plan.domain.Plan;
 import com.example.ufo_fi.v2.user.presentation.dto.response.AnotherUserInfoReadRes;
@@ -34,5 +35,9 @@ public class UserMapper {
 
     public UserNicknameUpdateRes toUserNicknameUpdateRes(User user) {
         return UserNicknameUpdateRes.from(user);
+    }
+
+    public ReportedUsersReadRes toReportedUsersReadRes(List<User> reportedUser) {
+        return ReportedUsersReadRes.from(reportedUser);
     }
 }

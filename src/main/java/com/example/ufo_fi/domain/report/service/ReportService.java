@@ -1,10 +1,10 @@
 package com.example.ufo_fi.domain.report.service;
 
 import com.example.ufo_fi.domain.notification.event.AccountSuspendEvent;
-import com.example.ufo_fi.domain.report.dto.request.GrantUserRoleReq;
+import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportCreateReq;
 import com.example.ufo_fi.domain.report.dto.request.ReportRollBackReq;
-import com.example.ufo_fi.domain.report.dto.response.ReportedUsersReadRes;
+import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.domain.report.dto.response.RollBackReportsReadRes;
 import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.domain.report.exception.ReportErrorCode;
