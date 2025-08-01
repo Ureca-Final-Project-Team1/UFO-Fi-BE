@@ -1,17 +1,15 @@
 package com.example.ufo_fi.v2.tradepost.presentation;
 
 
+import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.tradepost.application.TradePostService;
 import com.example.ufo_fi.v2.tradepost.presentation.api.TradePostApiSpec;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
-import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,15 +61,5 @@ public class TradePostController implements TradePostApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 tradePostService.deleteTradePost(postId, defaultUserPrincipal.getId())));
-    }
-
-    @Override
-    public ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
-        DefaultUserPrincipal defaultUserPrincipal,
-        TradePostPurchaseReq purchaseReq
-    ) {
-        return ResponseEntity.ok(
-            ResponseBody.success(
-                tradePostService.purchase(defaultUserPrincipal.getId(), purchaseReq)));
     }
 }
