@@ -1,9 +1,9 @@
 package com.example.ufo_fi.v2.userplan.domain;
 
-import com.example.ufo_fi.v2.plan.domain.Plan;
-import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.plan.domain.Plan;
+import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
+import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -90,7 +90,6 @@ public class UserPlan {
     }
 
     public void increasePurchaseAmount(int purchaseDataAmount) {
-
         this.purchaseDataAmount += purchaseDataAmount;
     }
 
