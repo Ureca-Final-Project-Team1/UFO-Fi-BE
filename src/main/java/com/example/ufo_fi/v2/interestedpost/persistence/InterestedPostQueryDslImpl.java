@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomInterestedPostRepositoryImpl implements CustomInterestedPostRepository {
+public class InterestedPostQueryDslImpl implements InterestedPostQueryDsl {
     private final JPAQueryFactory jpaQueryFactory;
 
     private final QInterestedPost ip = QInterestedPost.interestedPost;
