@@ -1,11 +1,13 @@
-package com.example.ufo_fi.v2.tradepost.application;
+package com.example.ufo_fi.v2.tradepost.domain;
 
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.bannedword.domain.filter.BannedWordFilter;
-import com.example.ufo_fi.v2.tradepost.domain.TradePost;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
+import com.example.ufo_fi.v2.plan.domain.MobileDataType;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
-import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TradePostManager {
+public class
+TradePostManager {
 
     private final TradePostRepository tradePostRepository;
     private final BannedWordFilter bannedWordFilter;
@@ -59,5 +62,11 @@ public class TradePostManager {
 
     public List<TradePost> findPostsByAnotherUser(User anotherUser) {
         return tradePostRepository.findAllByUser(anotherUser);
+    }
+
+    public List<TradePost> findCandidates(TradePostBulkPurchaseReq request, Carrier carrier,
+        MobileDataType mobileDataType, Long userId) {
+
+        return tradePostRepository.findCheapestCandidates(request, carrier, mobileDataType, userId);
     }
 }
