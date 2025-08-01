@@ -40,6 +40,7 @@ public class SecurityConfig {
     private final UserManager userManager;
     private final RefreshManager refreshManager;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,7 +55,7 @@ public class SecurityConfig {
         http    //OAuth2.0 로그인 흐름 설정
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(info -> info.userService(customOAuth2UserService))
-                        .successHandler(customOAuth2SuccessHandler()));
+                        .successHandler(customOAuth2AuthenticationSuccessHandler));
 
         http    //커스텀 필터들 추가
                 .addFilterBefore(jwtFilter(), OAuth2AuthorizationRequestRedirectFilter.class);
@@ -75,17 +76,6 @@ public class SecurityConfig {
     @Bean
     public JwtFilter jwtFilter(){
         return new JwtFilter(jwtUtil, cookieUtil);
-    }
-
-    @Bean
-    public CustomOAuth2AuthenticationSuccessHandler customOAuth2SuccessHandler() {
-        return new CustomOAuth2AuthenticationSuccessHandler(
-                jwtUtil,
-                cookieUtil,
-                refreshUtil,
-                userManager,
-                refreshManager
-        );
     }
 
     @Bean

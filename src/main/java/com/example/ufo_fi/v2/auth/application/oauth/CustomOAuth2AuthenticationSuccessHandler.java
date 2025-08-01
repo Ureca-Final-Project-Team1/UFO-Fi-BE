@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Value("${login.success-url}")
