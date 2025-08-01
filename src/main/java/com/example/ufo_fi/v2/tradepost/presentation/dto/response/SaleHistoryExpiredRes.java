@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
 
-import com.example.ufo_fi.v2.tradepost.domain.TradeHistory;
+import com.example.ufo_fi.v2.order.domain.TradeHistory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
