@@ -1,8 +1,9 @@
-package com.example.ufo_fi.v2.tradepost.infrastructure;
+package com.example.ufo_fi.v2.order.infrastructure;
 
-import com.example.ufo_fi.v2.tradepost.domain.TradeHistory;
-import com.example.ufo_fi.v2.tradepost.domain.TradeType;
+import com.example.ufo_fi.v2.order.domain.TradeHistory;
+import com.example.ufo_fi.v2.order.domain.TradeType;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +33,7 @@ public interface TradeHistoryRepository extends JpaRepository<TradeHistory, Long
         WHERE th.tradeType = :tradeType
         AND th.id = :purchaseHistoryId
         """)
-    TradeHistory findByPurchaseHistoryIdAndStatus(
+    Optional<TradeHistory> findByPurchaseHistoryIdAndStatus(
         @Param(value = "tradeType") TradeType tradeType,
         @Param(value = "purchaseHistoryId") Long purchaseHistoryId
     );
