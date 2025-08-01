@@ -1,8 +1,8 @@
 package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
 
+import com.example.ufo_fi.v2.order.domain.TradeHistory;
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;
-import com.example.ufo_fi.v2.tradepost.domain.TradeHistory;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
