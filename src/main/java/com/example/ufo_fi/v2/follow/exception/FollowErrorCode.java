@@ -12,7 +12,6 @@ public enum FollowErrorCode implements ErrorCode {
     ALREADY_FOLLOW(HttpStatus.INTERNAL_SERVER_ERROR, "이미 팔로우하셨습니다.")
     ;
 
-
     private final HttpStatus httpStatus;
     private final String message;
 
