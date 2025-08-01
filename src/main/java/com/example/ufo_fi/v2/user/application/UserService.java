@@ -72,7 +72,7 @@ public class UserService {
     @Transactional
     public void updateUserRoleUser(GrantUserRoleReq grantUserRoleReq) {
         User user = userManager.findById(grantUserRoleReq.getUserId());
-        userManager.validateUserIsActive(user);
+        userManager.validateUserRole(user, Role.ROLE_REPORTED);
         userManager.updateUserRole(user, Role.ROLE_USER);
     }
 

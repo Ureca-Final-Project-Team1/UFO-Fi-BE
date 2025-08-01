@@ -49,13 +49,6 @@ public class UserManager {
         user.updateNickname(nickname + String.format(" #%03d", userId));
     }
 
-    public void validateUserIsActive(User user) {
-
-        if(user.getIsActive()) {
-            throw new GlobalException(UserErrorCode.NOT_DEACTIVE);
-        }
-    }
-
     public void updateUserRole(User user, Role role) {
         user.updateRole(role);
     }
