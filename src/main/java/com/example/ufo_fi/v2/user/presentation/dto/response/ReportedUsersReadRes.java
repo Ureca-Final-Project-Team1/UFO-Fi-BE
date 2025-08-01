@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Builder
@@ -15,12 +16,12 @@ import lombok.NoArgsConstructor;
 public class ReportedUsersReadRes {
 
     @Schema(description = "신고된 유저 아이디입니다.")
-    private List<ReportedUserReadRes> reportedUsersReadRes;
+    private Page<ReportedUserReadRes> reportedUsersReadRes;
 
-    public static ReportedUsersReadRes from(List<User> reportedUsers) {
+    public static ReportedUsersReadRes from(Page<User> reportedUsers) {
         return ReportedUsersReadRes.builder()
-            .reportedUsersReadRes(reportedUsers.stream()
-                .map(ReportedUserReadRes::from).toList())
+            .reportedUsersReadRes(reportedUsers
+                .map(ReportedUserReadRes::from))
             .build();
     }
 }
