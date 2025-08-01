@@ -42,7 +42,7 @@ public class FollowController implements FollowApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
-        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+        DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
