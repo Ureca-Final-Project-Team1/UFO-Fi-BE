@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.interestedpost.persistence;
 
-import com.example.ufo_fi.domain.notification.entity.QInterestedPost;
-import com.example.ufo_fi.domain.notification.entity.QNotificationSetting;
+import com.example.ufo_fi.v2.interestedpost.domain.QInterestedPost;
+import com.example.ufo_fi.v2.notification.setting.domain.QNotificationSetting;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

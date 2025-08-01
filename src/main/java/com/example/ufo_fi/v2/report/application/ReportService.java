@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.report.application;
 
-import com.example.ufo_fi.domain.notification.event.AccountSuspendEvent;
+import com.example.ufo_fi.v2.notification.send.domain.event.AccountSuspendEvent;
 import com.example.ufo_fi.v2.report.domain.Report;
 import com.example.ufo_fi.v2.report.domain.ReportManager;
 import com.example.ufo_fi.v2.report.presentation.dto.request.ReportCreateReq;
@@ -13,12 +13,12 @@ import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
 import jakarta.persistence.EntityManager;
-import java.time.YearMonth;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +40,12 @@ public class ReportService {
         reportManager.save(reportMapper.toReport(user, reportedUser, tradePost, reportCreateReq));
 
         int tradePostReportCount = reportManager.countReportByTradePost(tradePost);
-        if(tradePostReportCount >= 3) {
+        if (tradePostReportCount >= 3) {
             tradePostManager.updateStatus(tradePost, TradePostStatus.REPORTED);
         }
 
         int userReportCount = reportManager.countByUser(user);
-        if(userReportCount >= 9) {
+        if (userReportCount >= 9) {
             userManager.updateUserRole(user, Role.ROLE_REPORTED);
             applicationEventPublisher.publishEvent(new AccountSuspendEvent(reportedUser.getId()));
         }
@@ -64,7 +64,7 @@ public class ReportService {
         List<Report> reports = reportManager.findByTradePost(tradePost);
         reportManager.deleteAll(reports);
 
-        if(reportManager.canSellingNow(tradePost)) {
+        if (reportManager.canSellingNow(tradePost)) {
             tradePostManager.updateStatus(tradePost, TradePostStatus.EXPIRED);
             return;
         }
