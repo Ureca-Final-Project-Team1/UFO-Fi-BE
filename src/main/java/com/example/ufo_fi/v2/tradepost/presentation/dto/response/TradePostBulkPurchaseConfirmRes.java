@@ -1,6 +1,5 @@
 package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
 
-import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,18 +17,4 @@ public class TradePostBulkPurchaseConfirmRes {
     private List<TradePostDetailRes> successPosts;
     private List<TradePostFailPurchaseRes> failPosts;
 
-    public static TradePostBulkPurchaseConfirmRes of(List<TradePost> successPosts,
-        List<TradePostFailPurchaseRes> failPosts) {
-
-        List<TradePostDetailRes> successPostDetails = successPosts.stream()
-            .map(TradePostDetailRes::from)
-            .toList();
-
-        return TradePostBulkPurchaseConfirmRes.builder()
-            .successCount(successPostDetails.size())
-            .failureCount(failPosts.size())
-            .successPosts(successPostDetails)
-            .failPosts(failPosts)
-            .build();
-    }
 }
