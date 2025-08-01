@@ -56,7 +56,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     private OAuth2User login(User existUser) {
         Refresh refresh = existUser.getRefresh();
-        refreshManager.delete(refresh);
+        if(refresh != null){
+            refreshManager.delete(refresh);
+        }
 
         return CustomOAuth2User.from(existUser);
     }
