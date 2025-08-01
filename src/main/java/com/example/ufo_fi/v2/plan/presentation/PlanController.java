@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PlanController implements PlanApiSpec {
 
-    private PlanService planService;
+    private final PlanService planService;
 
     @Override
     public ResponseEntity<ResponseBody<PlansReadRes>> readPlans(

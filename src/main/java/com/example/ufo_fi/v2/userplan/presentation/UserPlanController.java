@@ -3,7 +3,7 @@ package com.example.ufo_fi.v2.userplan.presentation;
 import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserPlanUpdateReq;
 import com.example.ufo_fi.v2.userplan.presentation.dto.response.UserPlanReadRes;
 import com.example.ufo_fi.v2.userplan.presentation.dto.response.UserPlanUpdateRes;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.userplan.application.UserPlanService;
 import com.example.ufo_fi.v2.userplan.presentation.api.UserPlanApiSpec;

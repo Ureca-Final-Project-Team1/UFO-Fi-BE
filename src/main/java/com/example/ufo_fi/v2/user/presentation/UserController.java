@@ -1,12 +1,14 @@
 package com.example.ufo_fi.v2.user.presentation;
 
+import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
+import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserInfoReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserNicknameUpdateRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.AnotherUserInfoReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.user.application.UserService;
 import com.example.ufo_fi.v2.user.presentation.api.UserApiSpec;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +56,20 @@ public class UserController implements UserApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 userService.updateUserNicknames(defaultUserPrincipal.getId(), userNicknameUpdateReq)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser() {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                userService.readReportedUser()));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<Void>> updateUserRoleUser(
+        GrantUserRoleReq grantUserRoleReq
+    ) {
+        userService.updateUserRoleUser(grantUserRoleReq);
+        return ResponseEntity.ok(ResponseBody.noContent());
     }
 }

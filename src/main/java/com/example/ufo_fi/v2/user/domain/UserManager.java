@@ -6,6 +6,7 @@ import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -46,5 +47,22 @@ public class UserManager {
 
     public void updateUserNickname(User user, String nickname, Long userId) {
         user.updateNickname(nickname + String.format(" #%03d", userId));
+    }
+
+    public void updateUserRole(User user, Role role) {
+        user.updateRole(role);
+    }
+
+    public List<User> findAllByRole(Role role) {
+
+        return userRepository.findAllByRole(role);
+    }
+
+    public User findByKakaoId(String string) {
+        return userRepository.findByKakaoId(string);
+    }
+
+    public User save(User newUser) {
+        return userRepository.save(newUser);
     }
 }

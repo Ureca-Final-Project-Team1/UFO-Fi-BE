@@ -1,25 +1,17 @@
 package com.example.ufo_fi.v2.tradepost.application;
 
 import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
-import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
-import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
-import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
-import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.user.domain.UserManager;
 import com.example.ufo_fi.v2.userplan.domain.UserPlan;
+import com.example.ufo_fi.v2.user.domain.UserManager;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +28,6 @@ public class TradePostService {
     private final UserPlanManager userPlanManager;
     private final TradePostManager tradePostManager;
     private final TradePostMapper tradePostMapper;
-    private final TradePostRepository tradePostRepository;
     private final ApplicationEventPublisher publisher;
 
 
@@ -136,40 +127,5 @@ public class TradePostService {
         userPlan.increaseSellableDataAmount(dataToRestore);
 
         return TradePostCommonRes.from(tradePost.getId());
-    }
-
-    /**
-     * 1. 일괄 구매 조회 로직
-     */
-    @Transactional(readOnly = true)
-    public TradePostBulkPurchaseRes readBulkPurchase(TradePostBulkPurchaseReq request,
-        Long userId) {
-
-        User user = userManager.validateUserExistence(userId);
-
-        UserPlan userPlan = userPlanManager.validateUserPlanExistence(user);
-
-        List<TradePost> candidates = tradePostManager.findCandidates(request,
-            userPlan.getPlan().getCarrier(), userPlan.getPlan().getMobileDataType(), userId);
-
-        List<TradePost> recommendationList = new ArrayList<>();
-
-        int cumulativeGb = 0;
-        final int desiredGb = request.getDesiredGb();
-        final int unitPrice = request.getUnitPerZet();
-
-        for (TradePost post : candidates) {
-            if (cumulativeGb + post.getSellMobileDataCapacityGb() <= desiredGb
-                && post.getZetPerUnit() <= unitPrice) {
-
-                recommendationList.add(post);
-                cumulativeGb += post.getSellMobileDataCapacityGb();
-            }
-        }
-        if (recommendationList.isEmpty()) {
-            throw new GlobalException(TradePostErrorCode.NO_RECOMMENDATION_FOUND);
-        }
-
-        return TradePostBulkPurchaseRes.from(recommendationList);
     }
 }

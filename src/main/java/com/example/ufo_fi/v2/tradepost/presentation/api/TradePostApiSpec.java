@@ -1,13 +1,13 @@
 package com.example.ufo_fi.v2.tradepost.presentation.api;
 
 
-import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
+import com.example.ufo_fi.global.response.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,8 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.presentation;
 
 
-import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.tradepost.application.TradePostService;
 import com.example.ufo_fi.v2.tradepost.presentation.api.TradePostApiSpec;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
@@ -10,6 +8,8 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryRe
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
+import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
