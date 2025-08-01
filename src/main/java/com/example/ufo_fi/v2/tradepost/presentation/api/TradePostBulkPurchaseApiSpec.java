@@ -2,9 +2,9 @@ package com.example.ufo_fi.v2.tradepost.presentation.api;
 
 
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseRes;
+import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostConfirmBulkReq;
+import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
+import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;

@@ -3,12 +3,12 @@ package com.example.ufo_fi.v2.order.presentation.api;
 
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostPurchaseReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoriesRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoryRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.SaleHistoriesRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
+import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostConfirmBulkReq;
+import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostPurchaseReq;
+import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoriesRes;
+import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoryRes;
+import com.example.ufo_fi.v2.order.presentation.dto.response.SaleHistoriesRes;
+import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

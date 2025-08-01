@@ -1,5 +1,7 @@
-package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
+package com.example.ufo_fi.v2.order.presentation.dto.response;
 
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostFailPurchaseRes;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

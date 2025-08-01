@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.tradepost.presentation.dto.request;
+package com.example.ufo_fi.v2.order.presentation.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -1,6 +1,7 @@
-package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
+package com.example.ufo_fi.v2.order.presentation.dto.response;
 
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.stream.Collectors;
