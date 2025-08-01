@@ -28,12 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
          String uri = request.getRequestURI();
          return uri.startsWith("/login")
-                 || uri.startsWith("/oauth2")
-                 || uri.startsWith("/auth")
-                 || uri.startsWith("/refresh")
-                 || uri.startsWith("/test")
-                 || uri.startsWith("/actuator")
-                 || uri.startsWith("/swagger");
+             || uri.startsWith("/oauth2")
+             || uri.startsWith("/auth")
+             || uri.startsWith("/refresh")
+             || uri.startsWith("/test")
+             || uri.startsWith("/actuator")
+             || uri.startsWith("/swagger")
+             || uri.startsWith("/v3")
+             || uri.startsWith("/webjars");
     }
 
     /**

@@ -67,6 +67,9 @@ public class SecurityConfig {
                         .requestMatchers("/refresh").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**,").permitAll()
+                        .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/v1/signup").hasAuthority(Role.ROLE_NO_INFO.toString())
                         .anyRequest().authenticated());
 
