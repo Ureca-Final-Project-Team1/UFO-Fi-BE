@@ -93,7 +93,7 @@ public class TradePostService {
 
         User user = userManager.validateUserExistence(userId);
 
-        TradePost tradePost = tradePostManager.validateAndFindByIdWithLock(postId);
+        TradePost tradePost = tradePostManager.findByIdWithLock(postId);
 
         tradePost.verifyOwner(user);
 
@@ -119,7 +119,7 @@ public class TradePostService {
 
         User user = userManager.validateUserExistence(userId);
 
-        TradePost tradePost = tradePostManager.validateAndFindById(postId);
+        TradePost tradePost = tradePostManager.findById(postId);
         tradePost.verifyOwner(user);
 
         int dataToRestore = tradePost.delete();

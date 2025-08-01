@@ -2,6 +2,7 @@ package com.example.ufo_fi.v2.tradepost.application;
 
 import com.example.ufo_fi.v2.bannedword.domain.filter.BannedWordFilter;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
@@ -20,13 +21,13 @@ public class TradePostManager {
     private final TradePostRepository tradePostRepository;
     private final BannedWordFilter bannedWordFilter;
 
-    public TradePost validateAndFindByIdWithLock(Long postId) {
+    public TradePost findByIdWithLock(Long postId) {
 
         return tradePostRepository.findByIdWithLock(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
     }
 
-    public TradePost validateAndFindById(Long postId) {
+    public TradePost findById(Long postId) {
 
         return tradePostRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
@@ -59,5 +60,13 @@ public class TradePostManager {
 
     public List<TradePost> findPostsByAnotherUser(User anotherUser) {
         return tradePostRepository.findAllByUser(anotherUser);
+    }
+
+    public void updateStatus(TradePost tradePost, TradePostStatus tradePostStatus) {
+        tradePost.updateStatus(tradePostStatus);
+    }
+
+    public List<TradePost> findByTradePostStatus(TradePostStatus tradePostStatus) {
+        return tradePostRepository.findTradePostByTradePostStatus(tradePostStatus);
     }
 }

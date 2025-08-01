@@ -59,12 +59,12 @@ public class ReportService {
 
     @Transactional
     public void approveRollBackRegistration(ReportRollBackReq reportRollBackReq) {
-        TradePost tradePost = tradePostManager.validateAndFindById(reportRollBackReq.getTradePostId());
+        TradePost tradePost = tradePostManager.findById(reportRollBackReq.getTradePostId());
 
         List<Report> reports = reportManager.findByTradePost(tradePost);
         reportManager.deleteAll(reports);
 
-        if (reportManager.canSellingNow(tradePost)) {
+        if (tradePost.canSellingNow()) {
             tradePostManager.updateStatus(tradePost, TradePostStatus.EXPIRED);
             return;
         }
