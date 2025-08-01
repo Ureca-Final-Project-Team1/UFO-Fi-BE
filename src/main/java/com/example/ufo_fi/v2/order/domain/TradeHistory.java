@@ -1,5 +1,6 @@
-package com.example.ufo_fi.v2.tradepost.domain;
+package com.example.ufo_fi.v2.order.domain;
 
+import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,20 +52,4 @@ public class TradeHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    public static TradeHistory toPurchase(TradePost tradePost, User buyer) {
-        return TradeHistory.builder()
-            .tradeType(TradeType.PURCHASE)
-            .tradePost(tradePost)
-            .user(buyer)
-            .build();
-    }
-
-    public static TradeHistory toSale(TradePost tradePost, User seller) {
-        return TradeHistory.builder()
-            .tradeType(TradeType.SALE)
-            .tradePost(tradePost)
-            .user(seller)
-            .build();
-    }
 }
