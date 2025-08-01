@@ -2,7 +2,7 @@ package com.example.ufo_fi.v2.order.presentation.api;
 
 
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.PurchaseHistoriesRes;

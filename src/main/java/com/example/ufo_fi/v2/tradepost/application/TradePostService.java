@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.application;
 
-import com.example.ufo_fi.domain.notification.event.CreatedPostEvent;
+import com.example.ufo_fi.v2.notification.send.domain.event.CreatedPostEvent;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;

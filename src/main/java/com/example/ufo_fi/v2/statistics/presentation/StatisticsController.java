@@ -1,8 +1,9 @@
-package com.example.ufo_fi.domain.statistics;
+package com.example.ufo_fi.v2.statistics.presentation;
 
-import com.example.ufo_fi.domain.statistics.api.StatisticsApiSpec;
-import com.example.ufo_fi.domain.statistics.dto.response.StatisticsReportsRes;
-import com.example.ufo_fi.domain.statistics.dto.response.StatisticsRes;
+import com.example.ufo_fi.v2.statistics.application.StatisticsService;
+import com.example.ufo_fi.v2.statistics.presentation.api.StatisticsApiSpec;
+import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsReportsRes;
+import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

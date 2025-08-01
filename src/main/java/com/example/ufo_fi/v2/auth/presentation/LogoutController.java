@@ -1,7 +1,7 @@
-package com.example.ufo_fi.domain.signup.controller;
+package com.example.ufo_fi.v2.auth.presentation;
 
-import com.example.ufo_fi.domain.signup.controller.api.LogoutApiSpec;
-import com.example.ufo_fi.domain.signup.service.LogoutService;
+import com.example.ufo_fi.v2.auth.presentation.api.LogoutApiSpec;
+import com.example.ufo_fi.v2.auth.application.LogoutService;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,8 +1,8 @@
-package com.example.ufo_fi.domain.statistics;
+package com.example.ufo_fi.v2.statistics.application;
 
 import com.example.ufo_fi.v2.report.persistence.ReportRepository;
-import com.example.ufo_fi.domain.statistics.dto.response.StatisticsReportsRes;
-import com.example.ufo_fi.domain.statistics.dto.response.StatisticsRes;
+import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsReportsRes;
+import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsRes;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
 import com.example.ufo_fi.v2.user.domain.Role;

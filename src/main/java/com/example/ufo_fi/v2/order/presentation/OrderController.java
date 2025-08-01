@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.order.presentation;
 
 import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.order.application.OrderService;
 import com.example.ufo_fi.v2.order.presentation.api.OrderApiSpec;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;

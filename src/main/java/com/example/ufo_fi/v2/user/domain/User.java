@@ -1,10 +1,12 @@
 package com.example.ufo_fi.v2.user.domain;
 
 import com.example.ufo_fi.v2.auth.domain.Refresh;
+import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserInfoReq;
 import com.example.ufo_fi.v2.auth.application.oauth.provider.OAuth2Response;
 import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

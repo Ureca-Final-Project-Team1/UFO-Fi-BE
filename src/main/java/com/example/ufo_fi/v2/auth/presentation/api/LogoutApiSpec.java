@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.signup.controller.api;
+package com.example.ufo_fi.v2.auth.presentation.api;
 
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;

@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.statistics.dto.response;
+package com.example.ufo_fi.v2.statistics.presentation.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

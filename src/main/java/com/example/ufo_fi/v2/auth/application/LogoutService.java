@@ -1,4 +1,4 @@
-package com.example.ufo_fi.domain.signup.service;
+package com.example.ufo_fi.v2.auth.application;
 
 import com.example.ufo_fi.v2.auth.application.jwt.JwtUtil;
 import com.example.ufo_fi.v2.auth.persistence.RefreshRepository;

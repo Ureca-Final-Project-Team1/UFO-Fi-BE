@@ -1,11 +1,11 @@
 package com.example.ufo_fi.v2.order.application;
 
-import com.example.ufo_fi.domain.notification.event.TradeCompletedEvent;
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.notification.send.domain.event.TradeCompletedEvent;
 import com.example.ufo_fi.v2.order.domain.TradeHistory;
 import com.example.ufo_fi.v2.order.domain.TradeHistoryManager;
+import com.example.ufo_fi.v2.tradepost.application.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
-import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostConfirmBulkReq;
@@ -106,8 +106,9 @@ public class OrderService {
      * 일괄 구매 구매 요청
      */
     @Transactional
-    public TradePostBulkPurchaseConfirmRes bulkPurchase(TradePostConfirmBulkReq request,
-        Long userId) {
+    public TradePostBulkPurchaseConfirmRes bulkPurchase(
+        TradePostConfirmBulkReq request, Long userId
+    ) {
 
         List<Long> postIds = request.getPostIds();
 
