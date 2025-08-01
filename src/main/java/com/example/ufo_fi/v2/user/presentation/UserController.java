@@ -59,10 +59,12 @@ public class UserController implements UserApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser() {
+    public ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser(
+        int page
+    ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                userService.readReportedUser()));
+                userService.readReportedUser(page)));
     }
 
     @Override

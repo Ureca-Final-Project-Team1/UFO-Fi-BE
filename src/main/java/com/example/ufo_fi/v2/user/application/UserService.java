@@ -19,6 +19,8 @@ import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,8 +78,9 @@ public class UserService {
         userManager.updateUserRole(user, Role.ROLE_USER);
     }
 
-    public ReportedUsersReadRes readReportedUser() {
-        List<User> reportedUser = userManager.findAllByRole(Role.ROLE_REPORTED);
+    public ReportedUsersReadRes readReportedUser(int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<User> reportedUser = userManager.findAllByRole(Role.ROLE_REPORTED, pageRequest);
         return userMapper.toReportedUsersReadRes(reportedUser);
     }
 }

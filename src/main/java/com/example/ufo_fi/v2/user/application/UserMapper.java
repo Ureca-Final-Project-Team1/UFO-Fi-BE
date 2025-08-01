@@ -11,6 +11,7 @@ import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
 import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -37,7 +38,7 @@ public class UserMapper {
         return UserNicknameUpdateRes.from(user);
     }
 
-    public ReportedUsersReadRes toReportedUsersReadRes(List<User> reportedUser) {
+    public ReportedUsersReadRes toReportedUsersReadRes(Page<User> reportedUser) {
         return ReportedUsersReadRes.from(reportedUser);
     }
 }

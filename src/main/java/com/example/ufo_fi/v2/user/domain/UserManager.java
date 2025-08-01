@@ -8,6 +8,8 @@ import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -53,9 +55,9 @@ public class UserManager {
         user.updateRole(role);
     }
 
-    public List<User> findAllByRole(Role role) {
+    public Page<User> findAllByRole(Role role, PageRequest pageRequest) {
 
-        return userRepository.findAllByRole(role);
+        return userRepository.findAllByRole(role, pageRequest);
     }
 
     public User findByKakaoId(String string) {

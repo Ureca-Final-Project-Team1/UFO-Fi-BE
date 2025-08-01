@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "User API", description = "유저 도메인")
 public interface UserApiSpec {
@@ -56,7 +57,9 @@ public interface UserApiSpec {
     @Operation(summary = "비활성 사용자 조회 API", description = "정지된 사용자 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/users/reported")
-    ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser();
+    ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser(
+        @RequestParam int page
+    );
 
     @Operation(summary = "사용자 비활성화 풀기 API", description = "정지된 사용자의 비활성화를 푼다.")
     @ApiResponse(useReturnTypeSchema = true)
