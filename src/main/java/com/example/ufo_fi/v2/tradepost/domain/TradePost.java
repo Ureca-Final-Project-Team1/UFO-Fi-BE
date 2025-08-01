@@ -1,12 +1,12 @@
 package com.example.ufo_fi.v2.tradepost.domain;
 
+import com.example.ufo_fi.domain.report.entity.Report;
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;
-import com.example.ufo_fi.domain.report.entity.Report;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.global.exception.GlobalException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -129,6 +129,31 @@ public class TradePost {
 
             throw new GlobalException(TradePostErrorCode.NO_AUTHORITY);
         }
+    }
+
+    public void validatePurchase(User buyer) {
+
+        if (this.tradePostStatus.equals(TradePostStatus.SOLD_OUT)) {
+            throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
+        }
+
+        if (this.tradePostStatus.equals(TradePostStatus.DELETED)) {
+            throw new GlobalException(TradePostErrorCode.ALREADY_DELETE);
+        }
+
+        if (this.tradePostStatus.equals(TradePostStatus.REPORTED)) {
+            throw new GlobalException(TradePostErrorCode.ALREADY_REPORTED);
+        }
+
+        if (this.user.getId().equals(buyer.getId())) {
+            throw new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF);
+        }
+
+        User seller = this.user;
+        buyer.decreaseZetAsset(this.totalZet);
+        seller.increaseZetAsset(this.totalZet);
+
+        this.updateStatusSoldOut();
     }
 
     public void updateStatusSoldOut() {
