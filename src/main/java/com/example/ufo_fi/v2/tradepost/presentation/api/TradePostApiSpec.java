@@ -1,15 +1,13 @@
 package com.example.ufo_fi.v2.tradepost.presentation.api;
 
 
+import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
-import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
-import com.example.ufo_fi.global.response.ResponseBody;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,13 +56,5 @@ public interface TradePostApiSpec {
     ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId
-    );
-
-    @Operation(summary = "구매(Zet <-> Data) API", description = "구매한다.")
-    @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/posts/purchase")
-    ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
-        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
-        @RequestBody TradePostPurchaseReq purchaseReq
     );
 }
