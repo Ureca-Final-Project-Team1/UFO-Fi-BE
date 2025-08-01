@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum PlanErrorCode implements ErrorCode {
     INVALID_CARRIER(HttpStatus.BAD_REQUEST, "잘못된 통신사 값입니다."),
-    INVALID_PLAN(HttpStatus.BAD_REQUEST, "잘못된 요금제입니다."),
     NOT_FOUND_PLAN(HttpStatus.NOT_FOUND, "해당 요금제가 없습니다."),
     ;
 

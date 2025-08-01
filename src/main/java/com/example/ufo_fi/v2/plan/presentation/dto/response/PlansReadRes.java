@@ -13,4 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlansReadRes {
     private List<PlanReadRes> plansReadRes;
+
+    public static PlansReadRes from(final List<Plan> plans) {
+        return PlansReadRes.builder()
+                .plansReadRes(plans.stream().map(PlanReadRes::from).toList())
+                .build();
+    }
 }

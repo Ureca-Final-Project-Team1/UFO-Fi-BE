@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlanMapper {
 
-    public PlansReadRes toPlansReadRes(List<Plan> plans) {
+    public PlansReadRes toPlansReadRes(final List<Plan> plans) {
         return PlansReadRes.builder()
             .plansReadRes(plans.stream().map(PlanReadRes::from).toList())
             .build();

@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.plan.domain;
 
 import com.example.ufo_fi.v2.plan.exception.PlanErrorCode;
-import com.example.ufo_fi.v2.plan.infrastructure.PlanRepository;
+import com.example.ufo_fi.v2.plan.persistence.PlanRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
