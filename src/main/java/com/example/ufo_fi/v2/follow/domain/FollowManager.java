@@ -3,9 +3,12 @@ package com.example.ufo_fi.v2.follow.domain;
 
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.follow.exception.FollowErrorCode;
-import com.example.ufo_fi.v2.follow.infrastructure.FollowRepository;
+import com.example.ufo_fi.v2.follow.persistence.FollowRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,13 +28,15 @@ public class FollowManager {
     public Follow findFollowingIdAndFollowerId(Long followingId, Long userId) {
 
         return followRepository.findByFollowingUserIdAndFollowerUserId(followingId, userId)
-            .orElseThrow(() -> new GlobalException(
-                FollowErrorCode.FOLLOW_NOT_FOUND));
+            .orElseThrow(() -> new GlobalException(FollowErrorCode.FOLLOW_NOT_FOUND));
     }
 
     public Follow saveFollow(Follow follow) {
-
-        return followRepository.save(follow);
+        try{
+            return followRepository.save(follow);
+        } catch (DataIntegrityViolationException e) {
+            throw new GlobalException(FollowErrorCode.ALREADY_FOLLOW);
+        }
     }
 
     public void deleteFollow(Follow follow) {
@@ -39,14 +44,14 @@ public class FollowManager {
         followRepository.delete(follow);
     }
 
-    public List<Follow> findAllFollowerId(Long userId) {
+    public Page<Follow> findAllFollowerId(Long userId, PageRequest pageRequest) {
 
-        return followRepository.findAllByFollowerUserId(userId);
+        return followRepository.findAllByFollowerUserId(userId, pageRequest);
     }
 
-    public List<Follow> findAllFollowingId(Long userId) {
+    public Page<Follow> findAllFollowingId(Long userId, PageRequest pageRequest) {
 
-        return followRepository.findAllByFollowingUserId(userId);
+        return followRepository.findAllByFollowingUserId(userId, pageRequest);
     }
 
 

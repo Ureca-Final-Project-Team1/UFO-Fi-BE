@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Follow API", description = "팔로워 팔로잉 API")
 public interface FollowApiSpec {
@@ -41,14 +42,16 @@ public interface FollowApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/followers")
     ResponseEntity<ResponseBody<FollowersReadRes>> readFollowers(
-        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @RequestParam int page
     );
 
     @Operation(summary = "내 팔로잉 목록 조회 API", description = "내가 팔로우 하는 유저 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/mypage/followings")
     ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
-        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @RequestParam int page
     );
 
 }

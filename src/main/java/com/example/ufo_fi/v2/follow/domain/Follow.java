@@ -42,13 +42,7 @@ public class Follow {
     @JoinColumn(name = "following_user_id", nullable = false)
     private User followingUser;
 
-
-    public static Follow createFollow(User follower, User following) {
-
-        if (follower.getId().equals(following.getId())) {
-            throw new GlobalException(FollowErrorCode.INVALID_REQUEST);
-        }
-
+    public static Follow of(User follower, User following) {
         return Follow.builder()
             .followerUser(follower)
             .followingUser(following)

@@ -9,8 +9,12 @@ import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingCreateRes
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingsReadRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,62 +27,62 @@ public class FollowService {
     private final FollowMapper followMapper;
 
     /**
-     * FollowController
+     * @param followingId : 내가 팔로우할 유저
+     * @param followerId : 나
      *
-     * @param followingId toId 팔로우할 대상의 ID
-     * @param followerId  팔로우를 신청하는 주체(나)의 ID
-     *                    1. 나를 조회한다.
-     *                    2. 상대(내가 팔로우할 사람)을 조회한다.
-     *                    3. 내가 나를 조회한다면, 예외를 발생시킨다.
+     *                   1. 내가 팔로우할 유저를 조회한다.
+     *                   2. 나를 찾는다.
+     *                   3. dto 반환
      */
     @Transactional
     public FollowingCreateRes createFollow(Long followingId, Long followerId) {
+        User follower = userManager.findById(followerId);
+        User following = userManager.findById(followingId);
 
-        User follower = userManager.findById(followerId); // 신청한 사람(내가 팔로워가 된다.)
-        User following = userManager.findById(followingId); // 신청 받은 사람
-
-        Follow newFollow = Follow.createFollow(follower, following);
-
+        Follow newFollow = Follow.of(follower, following);
         Follow savedFollow = followManager.saveFollow(newFollow);
 
         return followMapper.toFollowingCreateRes(savedFollow);
     }
 
     /**
-     * FollowController
-     *
      * @param followingId : 삭제할 팔로워 (나를 팔로우했던 사람)
      * @param userId      : 나 (팔로우를 당한 사람)
+     *
      *                    1. 팔로우를 조회한다.
      *                    2. 팔로우를 삭제한다.
      *                    3. dto 반환
      */
     @Transactional
     public FollowerDeleteRes deleteFollower(Long followingId, Long userId) {
-
         Follow follow = followManager.findFollowingIdAndFollowerId(followingId, userId);
-
         followManager.deleteFollow(follow);
 
         return followMapper.toFollowerDeleteRes(follow);
     }
 
     /**
-     * MyPageFollowController 내가 팔로워 일 시 상대방은 팔로잉(당하는 사람)이다.
+     * @param userId : 나
+     * @param page : 페이지네이션
+     *
+     *             1. 페이지네이션을 적용한 팔로우 조회
+     *             2. dto 반환
      */
-    public FollowingsReadRes readFollowings(Long userId) {
-
-        List<Follow> follows = followManager.findAllFollowerId(userId);
+    public FollowingsReadRes readFollowings(Long userId, int page) {
+        Page<Follow> follows = followManager.findAllFollowerId(userId, PageRequest.of(page, 10));
 
         return followMapper.toFollowingsReadRes(follows);
     }
 
     /**
-     * MyPageFollowController 내가 팔로잉(당하는 사람) 일 시 상대방은 팔로워(가해자)이다.
+     * @param userId : 나
+     * @param page : 페이지네이션
+     *
+     *             1. 페이지네이션을 적용한 팔로우 조회
+     *             2. dto 반환
      */
-    public FollowersReadRes readFollowers(Long userId) {
-
-        List<Follow> follows = followManager.findAllFollowingId(userId);
+    public FollowersReadRes readFollowers(Long userId, int page) {
+        Page<Follow> follows = followManager.findAllFollowingId(userId, PageRequest.of(page, 10));
 
         return followMapper.toFollowerReadRes(follows);
     }

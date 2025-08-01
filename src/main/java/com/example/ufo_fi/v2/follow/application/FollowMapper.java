@@ -8,6 +8,7 @@ import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingCreateRes
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingReadRes;
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingsReadRes;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,16 +26,16 @@ public class FollowMapper {
             .build();
     }
 
-    public FollowingsReadRes toFollowingsReadRes(final List<Follow> follows) {
+    public FollowingsReadRes toFollowingsReadRes(final Page<Follow> follows) {
         return FollowingsReadRes.builder()
-            .followingsReadRes(follows.stream()
+            .followingsReadRes(follows
                 .map(follow -> FollowingReadRes.from(follow.getFollowingUser())).toList())
             .build();
     }
 
-    public FollowersReadRes toFollowerReadRes(final List<Follow> follows) {
+    public FollowersReadRes toFollowerReadRes(final Page<Follow> follows) {
         return FollowersReadRes.builder()
-            .followersReadRes(follows.stream()
+            .followersReadRes(follows
                 .map(follow -> FollowerReadRes.from(follow.getFollowerUser())).toList())
             .build();
     }

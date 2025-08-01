@@ -8,9 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum FollowErrorCode implements ErrorCode {
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "자기 자신을 팔로우할 수 없습니다."),
     FOLLOW_NOT_FOUND(HttpStatus.NOT_FOUND, "팔로우를 찾을 수 없습니다."),
+    ALREADY_FOLLOW(HttpStatus.INTERNAL_SERVER_ERROR, "이미 팔로우하셨습니다.")
     ;
 
 

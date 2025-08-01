@@ -42,19 +42,21 @@ public class FollowController implements FollowApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
-        DefaultUserPrincipal defaultUserPrincipal
+        DefaultUserPrincipal defaultUserPrincipal,
+        int page
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                followService.readFollowings(defaultUserPrincipal.getId())));
+                followService.readFollowings(defaultUserPrincipal.getId(), page)));
     }
 
     @Override
     public ResponseEntity<ResponseBody<FollowersReadRes>> readFollowers(
-        DefaultUserPrincipal defaultUserPrincipal
+        DefaultUserPrincipal defaultUserPrincipal,
+        int page
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                followService.readFollowers(defaultUserPrincipal.getId())));
+                followService.readFollowers(defaultUserPrincipal.getId(), page)));
     }
 }
