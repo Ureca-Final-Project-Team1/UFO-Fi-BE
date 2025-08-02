@@ -3,12 +3,14 @@ package com.example.ufo_fi.domain.tradepost.presentation;
 
 import com.example.ufo_fi.domain.tradepost.application.TradePostService;
 import com.example.ufo_fi.domain.tradepost.presentation.api.TradePostApiSpec;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostPurchaseReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -73,5 +75,15 @@ public class TradePostController implements TradePostApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 tradePostService.purchase(defaultUserPrincipal.getId(), purchaseReq)));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<TradePostPurchaseDetailRes>> readTradePost(
+        DefaultUserPrincipal defaultUserPrincipal,
+        Long postId
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                tradePostService.readTradePost(postId)));
     }
 }
