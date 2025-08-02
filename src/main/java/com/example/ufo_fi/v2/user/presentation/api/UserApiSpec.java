@@ -12,6 +12,8 @@ import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +31,8 @@ public interface UserApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/signup/user-info")
     ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
-            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        HttpServletResponse response
     );
 
     @Operation(summary = "상대방 유저 조회 API", description = "유저의 정보를 받아온다.")

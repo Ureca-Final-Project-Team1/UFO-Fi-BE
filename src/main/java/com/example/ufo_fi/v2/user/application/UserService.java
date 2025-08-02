@@ -1,5 +1,7 @@
 package com.example.ufo_fi.v2.user.application;
 
+import com.example.ufo_fi.v2.auth.application.jwt.JwtUtil;
+import com.example.ufo_fi.v2.auth.application.oauth.CookieUtil;
 import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
 import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
@@ -17,16 +19,22 @@ import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
 import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private static final String JWT_KEY = "Authorization";
 
     private final UserManager userManager;
     private final UserPlanManager userPlanManager;
@@ -34,11 +42,23 @@ public class UserService {
     private final TradePostManager tradePostManager;
     private final FollowManager followManager;
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
 
-    public UserRoleReadRes readUserInfo(Long userId, Role role) {
+    @Value("${jwt.access-token-validity-ms}")
+    private long jwtTokenValidityMs;
+
+    public UserRoleReadRes readUserInfo(
+        Long userId, HttpServletResponse response
+    ) {
         User user = userManager.findById(userId);
         String userPhoneNumber = userManager.getPhoneNumber(user);
-        return userMapper.toUserRoleReadRes(role, userPhoneNumber);
+
+        String jwt = jwtUtil.generateJwt(user.getId(), user.getRole());
+        log.info(jwt);
+        cookieUtil.setResponseBasicCookie(JWT_KEY, jwt, jwtTokenValidityMs, response);
+
+        return userMapper.toUserRoleReadRes(user.getRole(), userPhoneNumber);
     }
 
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId) {

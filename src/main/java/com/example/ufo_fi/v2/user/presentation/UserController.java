@@ -11,6 +11,8 @@ import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.user.application.UserService;
 import com.example.ufo_fi.v2.user.presentation.api.UserApiSpec;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +25,13 @@ public class UserController implements UserApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
-        DefaultUserPrincipal defaultUserPrincipal
+        DefaultUserPrincipal defaultUserPrincipal,
+        HttpServletResponse response
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                userService.readUserInfo(defaultUserPrincipal.getId(), defaultUserPrincipal.getRole())));
+                userService.readUserInfo(
+                    defaultUserPrincipal.getId(), response)));
     }
 
     @Override
