@@ -1,5 +1,7 @@
 package com.example.ufo_fi.v2.auth.config;
 
+import com.example.ufo_fi.v2.auth.application.exception.CustomAccessDeniedHandler;
+import com.example.ufo_fi.v2.auth.application.exception.CustomAuthenticationEntryPoint;
 import com.example.ufo_fi.v2.auth.domain.RefreshManager;
 import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.user.domain.UserManager;
@@ -34,10 +36,9 @@ public class SecurityConfig {
     private String corsOrigin;
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
-    private final RefreshUtil refreshUtil;
-    private final UserManager userManager;
-    private final RefreshManager refreshManager;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
 
     @Bean
@@ -48,7 +49,10 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                    .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler));
 
         http    //OAuth2.0 로그인 흐름 설정
                 .oauth2Login(oauth -> oauth
