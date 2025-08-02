@@ -9,6 +9,7 @@ import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostPur
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
@@ -78,7 +79,7 @@ public class TradePostController implements TradePostApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<TradePostPurchaseDetailRes>> readTradePost(
+    public ResponseEntity<ResponseBody<TradePostDetailRes>> readTradePost(
         DefaultUserPrincipal defaultUserPrincipal,
         Long postId
     ) {
