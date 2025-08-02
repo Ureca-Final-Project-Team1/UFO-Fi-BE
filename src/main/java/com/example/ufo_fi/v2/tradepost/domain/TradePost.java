@@ -133,7 +133,6 @@ public class TradePost {
     }
 
     public void validatePurchase(User buyer) {
-
         if (this.tradePostStatus.equals(TradePostStatus.SOLD_OUT)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
         }
@@ -149,12 +148,6 @@ public class TradePost {
         if (this.user.getId().equals(buyer.getId())) {
             throw new GlobalException(TradePostErrorCode.CANT_PURCHASE_MYSELF);
         }
-
-        User seller = this.user;
-        buyer.decreaseZetAsset(this.totalZet);
-        seller.increaseZetAsset(this.totalZet);
-
-        this.updateStatusSoldOut();
     }
 
     public void updateStatusSoldOut() {

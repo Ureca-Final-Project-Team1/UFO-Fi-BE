@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.tradepost.presentation.dto.response;
+package com.example.ufo_fi.v2.order.presentation.dto.response;
 
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;
@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TradePostFailPurchaseRes {
+public class BulkPurchaseSuccessRes {
 
     @Schema(description = "게시글 식별 번호")
     private Long postId;
@@ -54,41 +54,21 @@ public class TradePostFailPurchaseRes {
     private Long sellerId;
 
     @Schema(description = "판매자 프로필 url id")
-    private Long sellerProfileId;
+    private String sellerProfileUrl;
 
-    @Schema(description = "실패 이유")
-    private String reason;
-
-    public static TradePostFailPurchaseRes of(final TradePost tradePost, final String reason) {
-
-        User seller = tradePost.getUser();
-
-        return TradePostFailPurchaseRes.builder()
+    public static BulkPurchaseSuccessRes of(TradePost tradePost, User seller) {
+        return BulkPurchaseSuccessRes.builder()
             .postId(tradePost.getId())
             .title(tradePost.getTitle())
+            .totalPrice(tradePost.getTotalZet())
             .sellMobileDataCapacityGb(tradePost.getSellMobileDataCapacityGb())
             .carrier(tradePost.getCarrier())
-            .createdAt(tradePost.getCreatedAt())
-            .totalPrice(tradePost.getTotalZet())
             .status(tradePost.getTradePostStatus())
             .pricePerUnit(tradePost.getZetPerUnit())
             .mobileDataType(tradePost.getMobileDataType())
             .sellerNickname(seller.getNickname())
             .sellerId(seller.getId())
-            .sellerProfileId(seller.getProfilePhoto().getId())
-            .reason(reason)
-            .build();
-    }
-
-    public static TradePostFailPurchaseRes ofNotFound(Long postId, String reason) {
-
-        return TradePostFailPurchaseRes.builder()
-            .postId(postId)
-            .reason(reason)
-            .title("존재하지 않는 게시물")
-            .totalPrice(0)
-            .sellMobileDataCapacityGb(0)
-            .pricePerUnit(0)
+            .sellerProfileUrl(seller.getProfilePhoto().getProfilePhotoUrl())
             .build();
     }
 }

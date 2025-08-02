@@ -1,10 +1,11 @@
-package com.example.ufo_fi.v2.tradepost.application;
+package com.example.ufo_fi.v2.tradepost.domain;
 
 import com.example.ufo_fi.v2.bannedword.domain.filter.BannedWordFilter;
-import com.example.ufo_fi.v2.tradepost.domain.TradePost;
-import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
+import com.example.ufo_fi.v2.plan.domain.Carrier;
+import com.example.ufo_fi.v2.plan.domain.MobileDataType;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
@@ -35,10 +36,7 @@ public class TradePostManager {
 
     public Slice<TradePost> findPostsByCondition(TradePostQueryReq request, Pageable pageable) {
 
-        return tradePostRepository.findPostsByConditions(
-            request,
-            pageable
-        );
+        return tradePostRepository.findPostsByConditions(request, pageable);
     }
 
     public TradePost saveTradePost(TradePost tradePost) {
@@ -68,5 +66,18 @@ public class TradePostManager {
 
     public List<TradePost> findByTradePostStatus(TradePostStatus tradePostStatus) {
         return tradePostRepository.findTradePostByTradePostStatus(tradePostStatus);
+    }
+
+    public void validatePurchase(TradePost tradePost, User buyer) {
+        tradePost.validatePurchase(buyer);
+    }
+
+    public List<TradePost> findCheapestCandidates(
+        TradePostBulkPurchaseReq request,
+        Carrier carrier,
+        MobileDataType mobileDataType,
+        Long userId
+    ) {
+        return tradePostRepository.findCheapestCandidates(request, carrier, mobileDataType, userId);
     }
 }

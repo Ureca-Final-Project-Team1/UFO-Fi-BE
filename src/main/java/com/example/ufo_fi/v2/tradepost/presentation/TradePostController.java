@@ -1,8 +1,10 @@
 package com.example.ufo_fi.v2.tradepost.presentation;
 
 
+import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseRes;
 import com.example.ufo_fi.v2.tradepost.application.TradePostService;
 import com.example.ufo_fi.v2.tradepost.presentation.api.TradePostApiSpec;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
@@ -61,5 +63,15 @@ public class TradePostController implements TradePostApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 tradePostService.deleteTradePost(postId, defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readBulkPurchase(
+        TradePostBulkPurchaseReq bulkRequest,
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                tradePostService.readBulkPurchase(bulkRequest, defaultUserPrincipal.getId())));
     }
 }

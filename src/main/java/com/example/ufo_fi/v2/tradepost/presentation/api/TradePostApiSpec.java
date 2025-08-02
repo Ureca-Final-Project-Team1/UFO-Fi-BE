@@ -2,6 +2,8 @@ package com.example.ufo_fi.v2.tradepost.presentation.api;
 
 
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
@@ -56,5 +58,13 @@ public interface TradePostApiSpec {
     ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId
+    );
+
+    @Operation(summary = "일괄 구매 조회 API", description = "일괄 구매를 위한 조회를 한다.(미완)")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/v1/posts/bulk-purchase")
+    ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readBulkPurchase(
+        @ParameterObject @Valid TradePostBulkPurchaseReq request,
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 }

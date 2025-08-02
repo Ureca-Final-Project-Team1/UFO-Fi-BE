@@ -6,10 +6,10 @@ import com.example.ufo_fi.v2.order.application.OrderService;
 import com.example.ufo_fi.v2.order.presentation.api.OrderApiSpec;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostConfirmBulkReq;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostPurchaseReq;
+import com.example.ufo_fi.v2.order.presentation.dto.response.BulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoriesRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoryRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.SaleHistoriesRes;
-import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +49,10 @@ public class OrderController implements OrderApiSpec {
     }
 
     @Override
-    public ResponseEntity<ResponseBody<TradePostBulkPurchaseConfirmRes>> buyBulkPurchase(
+    public ResponseEntity<ResponseBody<BulkPurchaseConfirmRes>> buyBulkPurchase(
         TradePostConfirmBulkReq request,
-        DefaultUserPrincipal defaultUserPrincipal) {
+        DefaultUserPrincipal defaultUserPrincipal
+    ) {
 
         return ResponseEntity.ok(
             ResponseBody.success(

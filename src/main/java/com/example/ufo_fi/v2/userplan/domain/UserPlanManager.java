@@ -42,4 +42,8 @@ public class UserPlanManager {
     public void updateByPlan(UserPlan userPlan, Plan targetPlan) {
         userPlan.update(targetPlan);
     }
+
+    public void increasePurchaseDataAmount(UserPlan buyerPlan, Integer sellMobileDataCapacityGb) {
+        buyerPlan.increasePurchaseAmount(sellMobileDataCapacityGb);
+    }
 }

@@ -5,10 +5,10 @@ import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostConfirmBulkReq;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostPurchaseReq;
+import com.example.ufo_fi.v2.order.presentation.dto.response.BulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoriesRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoryRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.SaleHistoriesRes;
-import com.example.ufo_fi.v2.order.presentation.dto.response.TradePostBulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,7 +56,7 @@ public interface OrderApiSpec {
     @Operation(summary = "일괄 구매 요청 API", description = "일괄 구매를 요청한다.(미완)")
     @ApiResponse(useReturnTypeSchema = true)
     @PostMapping("/v1/posts/bulk-purchase")
-    ResponseEntity<ResponseBody<TradePostBulkPurchaseConfirmRes>> buyBulkPurchase(
+    ResponseEntity<ResponseBody<BulkPurchaseConfirmRes>> buyBulkPurchase(
         @RequestBody @Valid TradePostConfirmBulkReq request,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );

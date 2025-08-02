@@ -13,14 +13,14 @@ public class TradeHistoryManager {
 
     private final TradeHistoryRepository tradeHistoryRepository;
 
-    public List<TradeHistory> findByIdAndStatus(Long userId) {
+    public List<TradeHistory> findByIdAndStatus(Long userId, Status status) {
 
-        return tradeHistoryRepository.findByUserIdAndStatus(TradeType.SALE, userId);
+        return tradeHistoryRepository.findByUserIdAndStatus(userId, status);
     }
 
     public TradeHistory findValidatePurchaseHistoryById(Long purchaseHistoryId) {
-        return tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(
-                TradeType.PURCHASE, purchaseHistoryId)
+
+        return tradeHistoryRepository.findByPurchaseHistoryIdAndStatus(Status.PURCHASE, purchaseHistoryId)
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.NO_TRADE_POST_FOUND));
     }
 

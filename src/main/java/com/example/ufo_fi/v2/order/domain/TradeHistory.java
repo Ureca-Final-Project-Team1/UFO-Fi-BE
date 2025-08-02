@@ -38,7 +38,7 @@ public class TradeHistory {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private TradeType tradeType;
+    private Status status;
 
     @CreatedDate
     @Column(name = "created_at")

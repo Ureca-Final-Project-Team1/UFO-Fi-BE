@@ -6,7 +6,7 @@ import com.example.ufo_fi.v2.report.domain.ReportManager;
 import com.example.ufo_fi.v2.report.presentation.dto.request.ReportCreateReq;
 import com.example.ufo_fi.v2.report.presentation.dto.request.ReportRollBackReq;
 import com.example.ufo_fi.v2.report.presentation.dto.response.RollBackReportsReadRes;
-import com.example.ufo_fi.v2.tradepost.application.TradePostManager;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.user.domain.Role;

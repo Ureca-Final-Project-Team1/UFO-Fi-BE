@@ -67,4 +67,12 @@ public class UserManager {
     public User save(User newUser) {
         return userRepository.save(newUser);
     }
+
+    public void decreaseZetAsset(User buyer, Integer totalZet) {
+        buyer.decreaseZetAsset(totalZet);
+    }
+
+    public void increaseZetAsset(User seller, Integer totalZet) {
+        seller.increaseZetAsset(totalZet);
+    }
 }

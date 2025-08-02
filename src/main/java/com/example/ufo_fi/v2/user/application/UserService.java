@@ -8,7 +8,7 @@ import com.example.ufo_fi.v2.plan.domain.Plan;
 import com.example.ufo_fi.v2.plan.domain.PlanManager;
 import com.example.ufo_fi.v2.user.presentation.dto.response.AnotherUserInfoReadRes;
 import com.example.ufo_fi.v2.follow.domain.FollowManager;
-import com.example.ufo_fi.v2.tradepost.application.TradePostManager;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserNicknameUpdateRes;
 import com.example.ufo_fi.v2.user.presentation.dto.response.UserRoleReadRes;
