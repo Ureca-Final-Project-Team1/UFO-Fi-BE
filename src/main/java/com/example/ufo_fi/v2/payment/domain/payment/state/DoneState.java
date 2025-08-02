@@ -1,10 +1,10 @@
-package com.example.ufo_fi.v2.payment.domain.state;
+package com.example.ufo_fi.v2.payment.domain.payment.state;
 
-import com.example.ufo_fi.v2.payment.domain.MetaDataKey;
-import com.example.ufo_fi.v2.payment.domain.Payment;
-import com.example.ufo_fi.v2.payment.domain.PaymentManager;
-import com.example.ufo_fi.v2.payment.domain.PaymentStatus;
-import com.example.ufo_fi.v2.payment.domain.StateMetaData;
+import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
+import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,6 @@ public class DoneState implements State {
         ConfirmReq confirmReq = stateMetaData.get(MetaDataKey.CONFIRM_REQUEST, ConfirmReq.class);
 
         paymentManager.updateUserZetAmount(payment, confirmReq.getAmount());
-
-        stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
     }
 
     @Override

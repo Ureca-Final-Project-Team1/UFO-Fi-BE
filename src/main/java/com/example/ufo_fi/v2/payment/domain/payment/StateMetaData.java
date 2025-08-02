@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.payment.domain;
+package com.example.ufo_fi.v2.payment.domain.payment;
 
 import java.util.HashMap;
 import java.util.Map;

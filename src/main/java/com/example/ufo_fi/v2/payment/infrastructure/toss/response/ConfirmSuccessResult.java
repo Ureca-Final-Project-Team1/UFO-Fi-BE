@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.payment.infrastructure.toss.response;
 
-import com.example.ufo_fi.v2.payment.domain.PaymentStatus;
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;

@@ -1,6 +1,7 @@
-package com.example.ufo_fi.v2.payment.domain;
+package com.example.ufo_fi.v2.payment.domain.payment;
 
-import com.example.ufo_fi.v2.payment.domain.state.State;
+import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.v2.payment.domain.payment.state.State;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,18 +33,5 @@ public class PaymentStateContext {
             Boolean isContinue = stateMetaData.get(MetaDataKey.PAYMENT_DONE, Boolean.class);
             if(isContinue != null && isContinue) break;
         }
-    }
-
-    private boolean isTerminal(Payment payment) {
-        return isFail(payment) || isDone(payment);
-    }
-
-
-    private boolean isFail(Payment payment){
-        return payment.getStatus().equals(PaymentStatus.FAIL);
-    }
-
-    private boolean isDone(Payment payment){
-        return payment.getStatus().equals(PaymentStatus.DONE);
     }
 }

@@ -1,19 +1,20 @@
 package com.example.ufo_fi.v2.payment.application;
 
-import com.example.ufo_fi.v2.payment.domain.MetaDataKey;
-import com.example.ufo_fi.v2.payment.domain.PaymentStateContext;
-import com.example.ufo_fi.v2.payment.domain.PaymentStatus;
-import com.example.ufo_fi.v2.payment.domain.StateMetaData;
+import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentStateContext;
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
+import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
+import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
-import com.example.ufo_fi.v2.payment.domain.Payment;
-import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.v2.payment.infrastructure.mysql.PaymentRepository;
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
-import com.example.ufo_fi.global.exception.GlobalException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentService {
 
+    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final PaymentStateContext paymentStateContext;
@@ -35,7 +37,7 @@ public class PaymentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(PaymentErrorCode.NO_USER));
 
-        Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY);
+        Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY, 0);
         paymentRepository.save(payment);
 
         return PaymentRes.of(user, payment);

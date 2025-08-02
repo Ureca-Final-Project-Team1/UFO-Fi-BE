@@ -1,6 +1,7 @@
-package com.example.ufo_fi.v2.payment.domain;
+package com.example.ufo_fi.v2.payment.domain.payment.entity;
 
 
+import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
 import com.example.ufo_fi.v2.user.domain.User;
@@ -41,8 +42,6 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    //위 내용들 Ready 상태때 초기화=============================================================
-
     @Column(name = "payment_key")
     private String paymentKey;
 
@@ -56,6 +55,9 @@ public class Payment {
     @Column(name = "status", nullable = false)
     private PaymentStatus status;
 
+    @Column(name = "retry_count")
+    private Integer retryCount;
+
     public void update(ConfirmSuccessResult confirmSuccessResult) {
         this.paymentKey = confirmSuccessResult.getPaymentKey();
         this.method = confirmSuccessResult.getMethod();
@@ -66,7 +68,11 @@ public class Payment {
         this.status = nextStatus;
     }
 
-    public static Payment of(User user, PaymentReq paymentReq, PaymentStatus paymentStatus) {
+    public void increaseRetryCount(){
+        this.retryCount++;
+    }
+
+    public static Payment of(User user, PaymentReq paymentReq, PaymentStatus paymentStatus, Integer retryCount) {
         return Payment.builder()
                 .user(user)
                 .orderId(paymentReq.getOrderId())
@@ -75,6 +81,7 @@ public class Payment {
                 .price(paymentReq.getPrice())
                 .status(paymentStatus)
                 .requestedAt(LocalDateTime.now())
+                .retryCount(0)
                 .build();
     }
 }

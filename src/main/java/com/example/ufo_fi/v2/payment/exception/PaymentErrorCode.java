@@ -14,10 +14,7 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_ORDER_ID_NOT_EQUAL(HttpStatus.BAD_REQUEST, "주문번호가 다른 요청입니다."),
     PAYMENT_AMOUNT_CONFLICT(HttpStatus.CONFLICT, "주문번호의 zet량과 요청량이 다릅니다."),
     PAYMENT_DUPLICATE_ORDER(HttpStatus.BAD_REQUEST, "중복된 승인 요청입니다."),
-    PAYMENT_VERIFY_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 검증 요청에 실패했습니다."),
-    CONFIRM_REQUEST_NULL(HttpStatus.INTERNAL_SERVER_ERROR, "승인 요청을 분실했습니다."),
     CONFIRM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "토스 통신과의 문제가 있습니다."),
-    PAYMENT_SERIALIZE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "직렬화/역직렬화 실패했습니다."),
     PAYMENT_STATUS_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "결제 상태가 일치하지 않습니다. 관리자에게 문의하세요."),
     PAYMENT_PRICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "주문 번호의 가격과 요청한 가격이 다릅니다."),
     ;
