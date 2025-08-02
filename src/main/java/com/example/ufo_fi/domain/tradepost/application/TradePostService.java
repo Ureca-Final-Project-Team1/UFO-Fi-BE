@@ -23,6 +23,7 @@ import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostBu
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostFailPurchaseRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.domain.user.entity.User;
 import com.example.ufo_fi.domain.user.entity.UserPlan;
@@ -393,4 +394,8 @@ public class TradePostService {
     }
 
 
+    public TradePostPurchaseDetailRes readTradePost(Long postId) {
+        TradePost tradePost = tradePostManager.validateAndFindById(postId);
+        return TradePostPurchaseDetailRes.of(tradePost);
+    }
 }

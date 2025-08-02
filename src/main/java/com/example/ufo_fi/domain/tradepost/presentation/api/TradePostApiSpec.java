@@ -7,6 +7,7 @@ import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostQue
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostCommonRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostListRes;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "TradePost API", description = "거래 게시물 API")
 public interface TradePostApiSpec {
@@ -66,5 +68,13 @@ public interface TradePostApiSpec {
     ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody TradePostPurchaseReq purchaseReq
+    );
+
+    @Operation(summary = "판매 게시물 상세 조회 API", description = "상세 조회한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/v1/posts/{postId}")
+    ResponseEntity<ResponseBody<TradePostPurchaseDetailRes>> readTradePost(
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @RequestParam(name = "postId") Long postId
     );
 }
