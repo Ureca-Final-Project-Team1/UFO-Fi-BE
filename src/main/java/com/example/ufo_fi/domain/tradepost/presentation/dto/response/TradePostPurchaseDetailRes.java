@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TradePostPurchaseDetailRes {
 
-    @Schema(name = "거래 게시물 PK입니다.")
+    @Schema(description = "거래 게시물 PK입니다.")
     private Long postId;
 
-    @Schema(name = "거래 게시물 GB입니다.")
+    @Schema(description = "거래 게시물 GB입니다.")
     private Integer sellMobileDataCapacityGb;
 
-    @Schema(name = "거래 게시물 ZET 가격입니다.")
+    @Schema(description = "거래 게시물 ZET 가격입니다.")
     private Integer totalZet;
 
     public static TradePostPurchaseDetailRes of(final TradePost tradePost){
