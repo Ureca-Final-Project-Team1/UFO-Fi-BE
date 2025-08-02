@@ -32,7 +32,7 @@ public class BulkPurchaseSuccessHandler {
 
         tradePostManager.updateStatus(tradePost, TradePostStatus.SOLD_OUT);
         userManager.increaseZetAsset(seller, tradePost.getTotalZet());
-        userManager.increaseZetAsset(buyer, tradePost.getTotalZet());
+        userManager.decreaseZetAsset(buyer, tradePost.getTotalZet());
         userPlanManager.increasePurchaseDataAmount(buyerPlan, tradePost.getSellMobileDataCapacityGb());
 
         tradeHistoryManager.saveBothHistory(
