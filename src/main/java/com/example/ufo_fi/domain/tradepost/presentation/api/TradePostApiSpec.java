@@ -6,6 +6,7 @@ import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostPur
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseDetailRes;
 import com.example.ufo_fi.domain.tradepost.presentation.dto.response.TradePostPurchaseRes;
@@ -72,7 +73,7 @@ public interface TradePostApiSpec {
     @Operation(summary = "판매 게시물 상세 조회 API", description = "상세 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/v1/posts/{postId}")
-    ResponseEntity<ResponseBody<TradePostPurchaseDetailRes>> readTradePost(
+    ResponseEntity<ResponseBody<TradePostDetailRes>> readTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId
     );
