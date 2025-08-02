@@ -16,13 +16,13 @@ public class FollowMapper {
 
     public FollowingCreateRes toFollowingCreateRes(final Follow follow) {
         return FollowingCreateRes.builder()
-            .id(follow.getId())
+            .id(follow.getFollowerUser().getId())
             .build();
     }
 
-    public FollowerDeleteRes toFollowerDeleteRes(final Follow follow) {
+    public FollowerDeleteRes toFollowerDeleteRes(Long followingId) {
         return FollowerDeleteRes.builder()
-            .id(follow.getId())
+            .id(followingId)
             .build();
     }
 

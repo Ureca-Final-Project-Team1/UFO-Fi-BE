@@ -36,6 +36,7 @@ public class FollowService {
      */
     @Transactional
     public FollowingCreateRes createFollow(Long followingId, Long followerId) {
+        followManager.validateFollow(followingId, followerId);
         User follower = userManager.findById(followerId);
         User following = userManager.findById(followingId);
 
@@ -58,7 +59,7 @@ public class FollowService {
         Follow follow = followManager.findFollowingIdAndFollowerId(followingId, userId);
         followManager.deleteFollow(follow);
 
-        return followMapper.toFollowerDeleteRes(follow);
+        return followMapper.toFollowerDeleteRes(followingId);
     }
 
     /**
@@ -86,6 +87,4 @@ public class FollowService {
 
         return followMapper.toFollowerReadRes(follows);
     }
-    
-
 }

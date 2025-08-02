@@ -4,10 +4,10 @@ package com.example.ufo_fi.v2.follow.domain;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.follow.exception.FollowErrorCode;
 import com.example.ufo_fi.v2.follow.persistence.FollowRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -46,13 +46,28 @@ public class FollowManager {
 
     public Page<Follow> findAllFollowerId(Long userId, PageRequest pageRequest) {
 
-        return followRepository.findAllByFollowerUserId(userId, pageRequest);
+        Page<Long> followIds = followRepository.findAllIdByFollowingUserId(userId, pageRequest);
+        return new PageImpl<>(
+            followRepository.findFollowerWithUserAndPhotoByIn(followIds.getContent()),
+            pageRequest,
+            followIds.getTotalElements()
+        );
     }
 
     public Page<Follow> findAllFollowingId(Long userId, PageRequest pageRequest) {
 
-        return followRepository.findAllByFollowingUserId(userId, pageRequest);
+        Page<Long> followIds = followRepository.findAllIdByFollowerUserId(userId, pageRequest);
+        return new PageImpl<>(
+            followRepository.findFollowingWithUserAndPhotoByIn(followIds.getContent()),
+            pageRequest,
+            followIds.getTotalElements()
+        );
     }
 
 
+    public void validateFollow(Long followingId, Long followerId) {
+        if(followerId == followingId){
+            throw new GlobalException(FollowErrorCode.CANT_FOLLOW_MYSELF);
+        }
+    }
 }
