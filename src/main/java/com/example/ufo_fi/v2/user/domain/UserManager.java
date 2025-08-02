@@ -75,4 +75,16 @@ public class UserManager {
     public void increaseZetAsset(User seller, Integer totalZet) {
         seller.increaseZetAsset(totalZet);
     }
+
+    public void validateUserPlanZetRemain(User buyer, Integer totalZet) {
+        if(buyer.getZetAsset() < totalZet){
+            throw new GlobalException(UserErrorCode.LACK_ZET);
+        }
+    }
+
+    public void validateMyselfPurchase(Long userId, Long sellerId) {
+        if(userId.equals(sellerId)){
+            throw new GlobalException(UserErrorCode.CANT_PURCHASE_MYSELF);
+        }
+    }
 }

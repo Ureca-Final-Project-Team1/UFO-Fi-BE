@@ -132,7 +132,7 @@ public class TradePost {
         }
     }
 
-    public void validatePurchase(User buyer) {
+    public void validatePurchaseStatus(User buyer) {
         if (this.tradePostStatus.equals(TradePostStatus.SOLD_OUT)) {
             throw new GlobalException(TradePostErrorCode.ALREADY_SOLDOUT);
         }

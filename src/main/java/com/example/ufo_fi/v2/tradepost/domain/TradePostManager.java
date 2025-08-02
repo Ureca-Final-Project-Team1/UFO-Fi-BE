@@ -68,8 +68,8 @@ public class TradePostManager {
         return tradePostRepository.findTradePostByTradePostStatus(tradePostStatus);
     }
 
-    public void validatePurchase(TradePost tradePost, User buyer) {
-        tradePost.validatePurchase(buyer);
+    public void validatePurchaseStatus(TradePost tradePost, User buyer) {
+        tradePost.validatePurchaseStatus(buyer);
     }
 
     public List<TradePost> findCheapestCandidates(

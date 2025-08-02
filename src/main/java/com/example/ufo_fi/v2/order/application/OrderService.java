@@ -94,10 +94,12 @@ public class OrderService {
         User buyer = userManager.validateUserExistence(userId);                     //사는 사람
         UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
 
-        TradePost tradePost = tradePostManager.findById(purchaseReq.getPostId());   //파는 사람
+        TradePost tradePost = tradePostManager.findByIdWithLock(purchaseReq.getPostId());   //파는 사람
         User seller = userManager.findById(tradePost.getUser().getId());
 
-        tradePostManager.validatePurchase(tradePost, buyer);
+        tradePostManager.validatePurchaseStatus(tradePost, buyer);
+        userManager.validateUserPlanZetRemain(buyer, tradePost.getTotalZet());
+        userManager.validateMyselfPurchase(userId, tradePost.getUser().getId());
         tradePostManager.updateStatus(tradePost, TradePostStatus.SOLD_OUT);
 
         userPlanManager.increasePurchaseDataAmount(buyerPlan, tradePost.getSellMobileDataCapacityGb());
