@@ -34,6 +34,9 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
     @Value("${login.success-url}")
     private String successUrl;
 
+    @Value("${jwt.access-token-validity-ms}")
+    private long jwtTokenValidityMs;
+
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
     private final RefreshUtil refreshUtil;
@@ -82,7 +85,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
 
     //쿠키에 jwt 토큰 세팅
     private void setCookieJwt(String jwt, HttpServletResponse response) {
-        cookieUtil.setResponseBasicCookie("Authorization", jwt, 50010000, response);
+        cookieUtil.setResponseBasicCookie("Authorization", jwt, jwtTokenValidityMs, response);
     }
 
     //쿠키에 리프레시 토큰 세팅
