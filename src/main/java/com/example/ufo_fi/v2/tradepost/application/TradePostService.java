@@ -12,6 +12,7 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateR
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.userplan.domain.UserPlan;
@@ -168,5 +169,10 @@ public class TradePostService {
         }
 
         return TradePostBulkPurchaseRes.from(recommendationList);
+    }
+
+    public TradePostDetailRes readTradePost(Long postId) {
+        TradePost tradePost = tradePostManager.findById(postId);
+        return TradePostDetailRes.from(tradePost);
     }
 }

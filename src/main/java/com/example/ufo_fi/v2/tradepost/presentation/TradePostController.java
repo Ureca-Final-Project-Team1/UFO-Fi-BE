@@ -9,6 +9,7 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateR
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
@@ -73,5 +74,15 @@ public class TradePostController implements TradePostApiSpec {
         return ResponseEntity.ok(
             ResponseBody.success(
                 tradePostService.readBulkPurchase(bulkRequest, defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<TradePostDetailRes>> readTradePost(
+        DefaultUserPrincipal defaultUserPrincipal,
+        Long postId
+    ) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                tradePostService.readTradePost(postId)));
     }
 }

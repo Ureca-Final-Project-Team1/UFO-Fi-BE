@@ -8,6 +8,7 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostCreateR
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostUpdateReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommonRes;
+import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.global.response.ResponseBody;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,5 +67,13 @@ public interface TradePostApiSpec {
     ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readBulkPurchase(
         @ParameterObject @Valid TradePostBulkPurchaseReq request,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+    );
+
+    @Operation(summary = "판매 게시물 상세 조회 API", description = "상세 조회한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/v1/posts/{postId}")
+    ResponseEntity<ResponseBody<TradePostDetailRes>> readTradePost(
+        @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @PathVariable Long postId
     );
 }
