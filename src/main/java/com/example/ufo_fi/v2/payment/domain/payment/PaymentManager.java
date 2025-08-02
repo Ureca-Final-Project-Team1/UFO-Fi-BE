@@ -1,10 +1,10 @@
 package com.example.ufo_fi.v2.payment.domain.payment;
 
 import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
-import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmSuccessResult;
 import com.example.ufo_fi.v2.report.persistence.ReportRepository;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
+import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

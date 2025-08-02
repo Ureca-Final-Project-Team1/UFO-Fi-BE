@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.user.domain.nickname;
 
 import com.example.ufo_fi.v2.user.exception.UserErrorCode;
-import com.example.ufo_fi.v2.user.infrastructure.NicknameRepository;
+import com.example.ufo_fi.v2.user.persistence.NicknameRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

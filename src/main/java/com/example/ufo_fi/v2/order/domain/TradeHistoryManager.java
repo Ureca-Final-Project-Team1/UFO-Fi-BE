@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.order.domain;
 
 import com.example.ufo_fi.global.exception.GlobalException;
-import com.example.ufo_fi.v2.order.infrastructure.TradeHistoryRepository;
+import com.example.ufo_fi.v2.order.persistence.TradeHistoryRepository;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

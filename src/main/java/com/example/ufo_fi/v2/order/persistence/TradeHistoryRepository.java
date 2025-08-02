@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.order.infrastructure;
+package com.example.ufo_fi.v2.order.persistence;
 
 import com.example.ufo_fi.v2.order.domain.Status;
 import com.example.ufo_fi.v2.order.domain.TradeHistory;

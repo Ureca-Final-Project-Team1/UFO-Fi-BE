@@ -2,7 +2,7 @@ package com.example.ufo_fi.v2.bannedword.domain;
 
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.bannedword.exception.BannedWordErrorCode;
-import com.example.ufo_fi.v2.bannedword.infrastructure.BannedWordRepository;
+import com.example.ufo_fi.v2.bannedword.persistence.BannedWordRepository;
 import com.example.ufo_fi.v2.bannedword.presentation.dto.response.BannedWordReadRes;
 import java.util.List;
 import java.util.Set;

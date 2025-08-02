@@ -3,7 +3,7 @@ package com.example.ufo_fi.v2.bannedword.domain.filter;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.bannedword.domain.BannedWord;
 import com.example.ufo_fi.v2.bannedword.exception.BannedWordErrorCode;
-import com.example.ufo_fi.v2.bannedword.infrastructure.BannedWordRepository;
+import com.example.ufo_fi.v2.bannedword.persistence.BannedWordRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;

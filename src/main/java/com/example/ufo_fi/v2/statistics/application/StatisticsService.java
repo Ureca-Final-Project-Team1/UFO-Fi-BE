@@ -4,9 +4,9 @@ import com.example.ufo_fi.v2.report.persistence.ReportRepository;
 import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsReportsRes;
 import com.example.ufo_fi.v2.statistics.presentation.dto.response.StatisticsRes;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
-import com.example.ufo_fi.v2.tradepost.infrastructure.TradePostRepository;
+import com.example.ufo_fi.v2.tradepost.persistence.TradePostRepository;
 import com.example.ufo_fi.v2.user.domain.Role;
-import com.example.ufo_fi.v2.user.infrastructure.UserRepository;
+import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

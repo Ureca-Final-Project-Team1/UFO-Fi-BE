@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.tradepost.infrastructure;
+package com.example.ufo_fi.v2.tradepost.persistence;
 
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;

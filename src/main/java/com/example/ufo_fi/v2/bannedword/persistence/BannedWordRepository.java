@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.bannedword.infrastructure;
+package com.example.ufo_fi.v2.bannedword.persistence;
 
 
 import com.example.ufo_fi.v2.bannedword.domain.BannedWord;

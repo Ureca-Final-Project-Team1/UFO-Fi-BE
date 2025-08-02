@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.payment.domain.slack;
 
-import com.example.ufo_fi.v2.payment.infrastructure.slack.SlackNotifier;
+import com.example.ufo_fi.v2.payment.persistence.slack.SlackNotifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

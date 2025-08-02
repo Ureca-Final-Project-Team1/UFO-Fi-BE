@@ -1,8 +1,7 @@
-package com.example.ufo_fi.v2.user.infrastructure;
+package com.example.ufo_fi.v2.user.persistence;
 
 import com.example.ufo_fi.v2.user.domain.Role;
 import com.example.ufo_fi.v2.user.domain.User;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

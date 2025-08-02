@@ -7,7 +7,7 @@ import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.domain.slack.SlackEvent;
-import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmFailResult;
+import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmFailResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

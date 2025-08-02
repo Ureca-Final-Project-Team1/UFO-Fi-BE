@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.user.infrastructure;
+package com.example.ufo_fi.v2.user.persistence;
 
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserAccount;

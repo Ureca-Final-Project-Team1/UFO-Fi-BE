@@ -6,7 +6,7 @@ import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserPlanReq;
 import com.example.ufo_fi.v2.plan.domain.Plan;
 import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.userplan.infrastructure.UserPlanRepository;
+import com.example.ufo_fi.v2.userplan.persistence.UserPlanRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

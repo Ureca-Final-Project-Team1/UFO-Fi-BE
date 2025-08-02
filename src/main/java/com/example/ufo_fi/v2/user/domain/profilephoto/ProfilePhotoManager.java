@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.user.domain.profilephoto;
 
 import com.example.ufo_fi.v2.user.exception.UserErrorCode;
-import com.example.ufo_fi.v2.user.infrastructure.ProfilePhotoRepository;
+import com.example.ufo_fi.v2.user.persistence.ProfilePhotoRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.nickname.AutoIncrementRandomIdSelector;
 import lombok.RequiredArgsConstructor;
