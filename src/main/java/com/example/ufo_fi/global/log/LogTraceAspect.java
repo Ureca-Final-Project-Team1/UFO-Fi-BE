@@ -1,12 +1,9 @@
 package com.example.ufo_fi.global.log;
 
 import com.example.ufo_fi.global.json.JsonUtil;
-import com.example.ufo_fi.global.security.principal.DefaultUserPrincipal;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
