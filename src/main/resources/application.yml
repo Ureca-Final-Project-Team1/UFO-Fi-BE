@@ -78,6 +78,21 @@ payment:
 slack:
   token: ${SLACK_TOKEN}
 #<============================================================================
+
+#prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  endpoint:
+    prometheus:
+      access: unrestricted
+  metrics:
+    enable:
+      tomcat: true
+      jvm: true
+      http: true
 ---
 spring:
   config:
