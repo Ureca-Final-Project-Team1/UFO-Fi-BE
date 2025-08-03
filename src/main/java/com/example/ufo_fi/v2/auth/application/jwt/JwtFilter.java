@@ -35,7 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
              || uri.startsWith("/actuator")
              || uri.startsWith("/swagger")
              || uri.startsWith("/v3")
-             || uri.startsWith("/webjars");
+             || uri.startsWith("/webjars")
+             || uri.startsWith("/monitor")
+             || uri.startsWith("/metrics")
+             || uri.startsWith("/prometheus");
     }
 
     /**
