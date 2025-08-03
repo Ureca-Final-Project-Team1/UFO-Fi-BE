@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@Tag(name = "Charge API", description = "충전하기 API")
+@Tag(name = "Payment API", description = "충전하기 API")
 public interface PaymentApiSpec {
 
     @Operation(summary = "충전하기 API", description = "ZET 충전을 시도합니다.")

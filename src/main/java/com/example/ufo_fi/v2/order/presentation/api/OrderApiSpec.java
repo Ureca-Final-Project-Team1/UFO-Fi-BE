@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Mypage API", description = "마이페이지 내역 API")
+@Tag(name = "Order API", description = "주문/판매내역 API")
 public interface OrderApiSpec {
 
     @Operation(summary = "판매 내역 조회 API", description = "내 판매 내역 목록을 조회한다.")
