@@ -24,3 +24,6 @@ firebase:
 
 slack:
   token: slackslackslack
+
+login:
+  success-url: localhost:3000
