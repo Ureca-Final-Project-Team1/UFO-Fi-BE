@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.payment.persistence.toss.request;
+package com.example.ufo_fi.v2.payment.infrastructure.toss.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

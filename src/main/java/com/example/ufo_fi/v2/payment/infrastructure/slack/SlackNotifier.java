@@ -1,4 +1,4 @@
-package com.example.ufo_fi.v2.payment.persistence.slack;
+package com.example.ufo_fi.v2.payment.infrastructure.slack;
 
 import com.example.ufo_fi.global.log.LogTrace;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;

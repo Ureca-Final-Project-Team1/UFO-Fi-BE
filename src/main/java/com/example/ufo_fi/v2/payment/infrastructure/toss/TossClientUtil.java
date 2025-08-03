@@ -1,13 +1,13 @@
-package com.example.ufo_fi.v2.payment.persistence.toss;
+package com.example.ufo_fi.v2.payment.infrastructure.toss;
 
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.payment.config.PaymentConfig;
 import com.example.ufo_fi.v2.payment.exception.TossPaymentErrorCode;
-import com.example.ufo_fi.v2.payment.persistence.toss.request.ConfirmCommand;
-import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmFailResult;
-import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmResult;
-import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmSuccessResult;
-import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmTimeoutResult;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.request.ConfirmCommand;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmFailResult;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmResult;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmTimeoutResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

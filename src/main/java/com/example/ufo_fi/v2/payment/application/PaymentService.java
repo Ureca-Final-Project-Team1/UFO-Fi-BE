@@ -10,7 +10,7 @@ import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
-import com.example.ufo_fi.v2.payment.persistence.mysql.PaymentRepository;
+import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;

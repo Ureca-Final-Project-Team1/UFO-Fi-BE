@@ -2,7 +2,7 @@ package com.example.ufo_fi.v2.payment.domain.slack;
 
 import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
-import com.example.ufo_fi.v2.payment.persistence.toss.response.ConfirmResult;
+import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.global.json.JsonUtil;
 import com.example.ufo_fi.global.log.LogTrace;
 import lombok.RequiredArgsConstructor;

@@ -21,3 +21,6 @@ payment:
 
 firebase:
   base-url: ${BASE_URL}
+
+slack:
+  token: slackslackslack
