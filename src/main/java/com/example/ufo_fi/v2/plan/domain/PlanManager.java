@@ -29,4 +29,16 @@ public class PlanManager {
         return planRepository.findById(planId)
             .orElseThrow(() -> new GlobalException(PlanErrorCode.NOT_FOUND_PLAN));
     }
+
+    public Plan findById(Long planId) {
+        return planRepository.findById(planId)
+            .orElseThrow(() -> new GlobalException(PlanErrorCode.NOT_FOUND_PLAN));
+    }
+
+    public void validateSameCarrier(Plan plan, Carrier carrier) {
+        if(!plan.getCarrier().equals(carrier)) {
+            throw new GlobalException(PlanErrorCode.NOT_SAME_CARRIER);
+        }
+
+    }
 }

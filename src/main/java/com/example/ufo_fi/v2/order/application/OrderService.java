@@ -7,6 +7,8 @@ import com.example.ufo_fi.v2.order.domain.Status;
 import com.example.ufo_fi.v2.order.domain.TradeHistory;
 import com.example.ufo_fi.v2.order.domain.TradeHistoryManager;
 import com.example.ufo_fi.v2.order.presentation.dto.response.BulkPurchaseConfirmRes;
+import com.example.ufo_fi.v2.plan.domain.Plan;
+import com.example.ufo_fi.v2.plan.domain.PlanManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
@@ -34,6 +36,7 @@ public class OrderService {
     private final UserPlanManager userPlanManager;
     private final TradeHistoryManager tradeHistoryManager;
     private final TradePostManager tradePostManager;
+    private final PlanManager planManager;
     private final OrderMapper orderMapper;
     private final BulkPurchaseContext bulkPurchaseContext;
     private final ApplicationEventPublisher publisher;
@@ -93,6 +96,7 @@ public class OrderService {
 
         User buyer = userManager.validateUserExistence(userId);                     //사는 사람
         UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
+        Plan plan = planManager.findById(buyerPlan.getPlan().getId());
 
         TradePost tradePost = tradePostManager.findByIdWithLock(purchaseReq.getPostId());   //파는 사람
         User seller = userManager.findById(tradePost.getUser().getId());
@@ -100,6 +104,7 @@ public class OrderService {
         tradePostManager.validatePurchaseStatus(tradePost, buyer);
         userManager.validateUserPlanZetRemain(buyer, tradePost.getTotalZet());
         userManager.validateMyselfPurchase(userId, tradePost.getUser().getId());
+        planManager.validateSameCarrier(plan, tradePost.getCarrier());
         tradePostManager.updateStatus(tradePost, TradePostStatus.SOLD_OUT);
 
         userPlanManager.increasePurchaseDataAmount(buyerPlan, tradePost.getSellMobileDataCapacityGb());
