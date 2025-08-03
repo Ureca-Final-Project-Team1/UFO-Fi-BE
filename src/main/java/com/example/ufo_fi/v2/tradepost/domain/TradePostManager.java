@@ -60,6 +60,12 @@ public class TradePostManager {
         return tradePostRepository.findAllByUser(anotherUser);
     }
 
+    public List<TradePost> findSellingPostsByAnotherUser(
+        User anotherUser, TradePostStatus tradePostStatus
+    ){
+        return tradePostRepository.findAllByUserAndTradePostStatus(anotherUser, tradePostStatus);
+    }
+
     public void updateStatus(TradePost tradePost, TradePostStatus tradePostStatus) {
         tradePost.updateStatus(tradePostStatus);
     }

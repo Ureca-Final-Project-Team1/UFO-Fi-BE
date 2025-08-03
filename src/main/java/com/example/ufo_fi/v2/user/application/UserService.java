@@ -2,6 +2,7 @@ package com.example.ufo_fi.v2.user.application;
 
 import com.example.ufo_fi.v2.auth.application.jwt.JwtUtil;
 import com.example.ufo_fi.v2.auth.application.oauth.CookieUtil;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.user.presentation.dto.request.GrantUserRoleReq;
 import com.example.ufo_fi.v2.user.presentation.dto.response.ReportedUsersReadRes;
 import com.example.ufo_fi.v2.user.presentation.dto.request.UserNicknameUpdateReq;
@@ -19,7 +20,6 @@ import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
 import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,9 @@ public class UserService {
 
     public AnotherUserInfoReadRes readAnotherUser(Long anotherUserId) {
         User anotherUser = userManager.findById(anotherUserId);
-        List<TradePost> tradePosts = tradePostManager.findPostsByAnotherUser(anotherUser);
+        List<TradePost> tradePosts = tradePostManager.findSellingPostsByAnotherUser(
+            anotherUser, TradePostStatus.SELLING
+        );
 
         Long followerCount = followManager.countByFollowerUserId(anotherUserId);
         Long followingCount = followManager.countByFollowingUserId(anotherUserId);
