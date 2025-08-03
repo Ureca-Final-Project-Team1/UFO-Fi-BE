@@ -7,6 +7,7 @@ import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

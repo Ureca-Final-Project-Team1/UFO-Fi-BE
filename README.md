@@ -63,20 +63,19 @@
 ### `백엔드 개발 핵심 목표`
 
 - **충전 시스템의 안전성** : 충전 시스템의 `안전성`
-- **확장 가능한 코드 구조** : 프론트 팀의 기획을 위한 `확장에 용이한 구조` 설계 고민
-- **거래 게시물-ZET(재화 단위) 간 정합성 보장** : `트랜잭션과 ERD 구조/도메인 분리`로 정합성을 위한 더 나은 구조 고민
+- **확장 가능한 코드 구조** : `확장에 용이한 구조` 설계 고민
+- **거래 게시물-ZET(재화 단위) 간 정합성 보장** : `거래하기 기능`에 대한 정합성을 위한 더 나은 구조 고민
 - **동시 클릭과 같은 경쟁 상태 고려** : `DB락`과 `MySQL 격리수준`을 고려
 
 --- 
 
 ## 4. ERD
 
-<img width="2942" height="1200" alt="image" src="https://github.com/user-attachments/assets/3607d425-ace1-411e-838f-e4e44e294f53" />
+<img width="1617" height="885" alt="image" src="https://github.com/user-attachments/assets/03956fea-8326-42e7-9831-085b48e50fac" />
 
-- 초기 빠른 기능 구현(1차 MVP)를 위한 테이블 구조
-- 추후 기능 추가에 따른 ERD 수정 예정
-- Table 추가 가능
-- 기능 확장으로 인한 FK 연관 관계 주인 변경 가능
+### 도메인
+
+user, userplan, plan, tradepost, order, bannedword, follow, notification, payment, report, statisttics, auth
 
 ---
 
@@ -99,104 +98,60 @@
 
 --- 
 
-## 6. 기술 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-| **Backend**                        | ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat&logo=openjdk&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white) ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat&logo=springsecurity&logoColor=white) ![OAuth2](https://img.shields.io/badge/OAuth2-4285F4?style=flat&logo=oauth&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20web%20tokens&logoColor=white) ![JPA](https://img.shields.io/badge/JPA-59666C?style=flat&logo=hibernate&logoColor=white) ![QueryDSL](https://img.shields.io/badge/QueryDSL-0078D4?style=flat&logo=java&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) ![FCM](https://img.shields.io/badge/FCM-FFCA28?style=flat&logo=firebase&logoColor=black)                                                                                                                                              
-| **Backend Testing & Code Quality** | ![JUnit5](https://img.shields.io/badge/JUnit5-25A162?style=flat&logo=junit5&logoColor=white) ![Mockito](https://img.shields.io/badge/Mockito-25A162?style=flat&logo=mockito&logoColor=white) ![H2](https://img.shields.io/badge/H2-0078D4?style=flat&logo=h2&logoColor=white) ![Jacoco](https://img.shields.io/badge/Jacoco-DC382D?style=flat&logo=jacoco&logoColor=white)                                                                                                       
+## 6. 기술 스택                                                                                                                                                                                                                                                                                                   
+| **Backend**                        | <br>
+| ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=flat&logo=openjdk&logoColor=white) | <br>
+! ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white) | 생산성과 구조화된 개발을 위한 선택. 내장 서버와 자동 구성 지원 |<br>
+| ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat&logo=springsecurity&logoColor=white) | 인증/인가 처리, 세션/쿠키 기반 보안 관리에 사용. 필터 기반 세분화된 보안 설정 가능 |<br>
+| ![OAuth2](https://img.shields.io/badge/OAuth2-4285F4?style=flat&logo=oauth&logoColor=white) |	카카오 등 소셜 로그인 연동을 위해 OAuth 2.0 프로토콜 기반 인증 플로우 구현 | <br>
+| ![JWT](https://img.shields.io/badge/JWT-000000?style=flat&logo=JSON%20web%20tokens&logoColor=white) | 무상태(stateless) 인증을 위해 Access/Refresh Token 기반 구조 구성 | <br>
+| ![JPA](https://img.shields.io/badge/JPA-59666C?style=flat&logo=hibernate&logoColor=white) | 도메인 중심 설계를 위한 ORM 사용. 트랜잭션 처리와 연관관계 매핑 지원 | <br>
+| ![QueryDSL](https://img.shields.io/badge/QueryDSL-0078D4?style=flat&logo=java&logoColor=white) | 복잡한 조건의 동적 쿼리 작성을 위해 도입. 컴파일 타임 안정성과 가독성 확보 | <br>
+| ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white) | 안정성과 성능이 검증된 관계형 데이터베이스. 다양한 인덱싱과 트랜잭션 지원 | <br>
+| ![FCM](https://img.shields.io/badge/FCM-FFCA28?style=flat&logo=firebase&logoColor=black) | 사용자 이벤트 기반 알림 전송 (예: 결제 상태, 신고 처리 결과 등) |     
+| ![slack](https://img.shields.io/badge/slack-purple)| 결제 실패, 이상 요청, 외부 API 응답 지연 등 주요 이벤트에 대한 운영 알림 시스템 구축. 실시간 모니터링과 장애 인지 시간 최소화  | <br>
+| ![Prometheus](https://img.shields.io/badge/Prometheus-red)| 메트릭 수집 | <br>
+| ![Grafana](https://img.shields.io/badge/grafana-orange)| 대시보드 시각화 |
 
 ---
 
-## 7. ETC
+## 7. Domain Function (주 기능)
 
-### 7-1. 코드 스타일 가이드
+### 7-1. 결제 프로세스
+
+<img width="750" height="630" alt="image" src="https://github.com/user-attachments/assets/b67767fc-9e8f-4a1b-a8bd-ebfaef9f0b12" />
+
+<img width="750" height="650" alt="image" src="https://github.com/user-attachments/assets/e23493e7-4afd-4ae2-b85c-74da110cb6ad" />
+
+- **1. 토스 API를 통한 PG 결제**
+- **2. 토스의 PaymentKey를 통한 멱등성 보장, 안전한 재시도 가능**
+- **3. FailState는 토스 응답이 Exception일 경우를 처리하는 상태**
+- **4. TimeoutState는 토스 응답이 오지 않을 시 처리하는 상태**
+- **5. Slack 모니터링 및 command를 통한 TimeoutState에 대해 복구 가능**
+
+## 7-2. 관리자 대시보드(백오피스)
+- **1. 전체 거래 게시물 조회 및 관리**
+- **2. 사용자 계정 정지 및 신고 게시물 관리**
+- **3. 금칙어 관리 시스템 - 아호코라식 알고리즘을 활용한 금칙어 전/후 처리**
+
+## 7-3. 데이터 거래
+- **1. 중복 거래 방지를 위한 락 기반 업데이트**
+
+## 7-4. 소셜 로그인
+- **1. Kakao OAuth2.0을 이용한 소셜 로그인**
+- **2. Jwt를 이용한 Stateless 상태 유지**
+- **3. 스프링 시큐리티를 통한 인증, 인가 관리**
+
+---
+
+## 8. ETC
+
+### 8-1. 코드 스타일 가이드
 
 [CODE-STYLE.md](./CODE-STYLE.md)
 
-### 7-2. 지라-깃허브 연동 가이드
+### 8-2. 지라-깃허브 연동 가이드
 
 [지라 깃허브 사용법.pdf](https://github.com/user-attachments/files/21259209/default.pdf)
 
 ---
-
-## 8. To Do(추후 계획)
-
-### 8-1. 리팩토링
-
-현재까지 완성된 `주먹 구구식의 그저 돌아가는 프로그램`의 설계의 단점을 분석하며, 리팩토링해본다.
-
-1. 기능 별 각 도메인의 상호작용 이해 하기
-
-2. 도메인 별 ERD의 수정 사항 정리 ERD 수정 및 엔티티 수정(연관관계 주인, 쓸모 없는 외래키)
-
-3. 각 도메인의 루트 엔티티에서 JOIN을 통해 JPA의 여러 번의 쿼리 방지
-
-4. 각 도메인 별 기능 정리 후 락을 통한 이상 현상 해결
-
-5. Controller <-> Service <-> Manager <-> Repository의 4개의 레이어를 통한 관심사의 분리
-
-<details>
-
-Controller: 뷰(API Spec/end Point)
-Service: 트랜잭션과 로직 흐름(UseCase)
-Manager: 순수 자바코드, 엔티티를 다루는 코드(Domain)
-Repository: DB 영속 관리
-
-```java
-
-   /**
-     * MyPageUserPlanController 유저의 요금제 정보를 업데이트하는 메서드
-     * 1. fetch join을 통해 userPlan까지 다 받아온다.
-     * 2. 유저가 게시물을 올린 상태(sellableMobileDate)와 조금이라도 사용한 상태일 시 예외를 던진다.
-     * 3. 요금제 테이블에서 요금제 정보를 받아온다.
-     * 4. 영속화된 userPlan을 업데이트하고 return
-*/
-    @Transactional
-    public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
-        User user = userRepository.findUserWithUserPlan(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
-        UserPlan userPlan = user.getUserPlan();
-
-        if (tradePostRepository.existsByUser(user)) {
-            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
-        }
-
-        Plan plan = planRepository.findById(userPlanUpdateReq.getPlanId())
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_UPDATE_PLAN));
-
-        if (!Objects.equals(userPlan.getSellableDataAmount(), plan.getSellMobileDataCapacityGb())) {
-            throw new GlobalException(UserErrorCode.CANT_UPDATE_USER_PLAN);
-        }
-
-        userPlan.update(plan);
-
-        return UserPlanUpdateRes.from(userPlan);
-    }
-```
-
-여러 곳에서 사용될 수 있는 아래의 코드
-
-```java
-        User user = userRepository.findUserWithUserPlan(userId)
-            .orElseThrow(() -> new GlobalException(UserErrorCode.NO_USER));
-        UserPlan userPlan = user.getUserPlan();
-```
-
-이러한 로직들을 묶어, UserManager의 findUserPlan()이라는 메서드로 묶기
-
-
-</details>
-
-6. HttpStatus의 상태 코드를 확인 후 적절한 상태 코드 사용
-
-7. 거래 게시물, ZET 등 민감한 데이터를 가진 도메인 서비스 레이어 트랜잭션 테스트 코드로 체크
-   
-
-### 8-2. 결제 프로세스
-
-<img width="1600" height="1000" alt="image" src="https://github.com/user-attachments/assets/0691a4c9-4f82-4583-885b-48f5efbbf46b" />
-
-1. 클라이언트 UFO_FI 서버로 요청 -> 클라이언트에게 sendRedirect()
-2. 클라이언트 결제 수행
-3. 외부 결제 서비스 결제
-4. 결제 성공, 결제 서버에서 우리 서비스로 요청(웹 훅)
-5. 결제 성공 로직(ZET 충전) 실행
-

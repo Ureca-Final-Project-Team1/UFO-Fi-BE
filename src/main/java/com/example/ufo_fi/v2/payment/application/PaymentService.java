@@ -14,7 +14,6 @@ import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentService {
 
-    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final PaymentStateContext paymentStateContext;
