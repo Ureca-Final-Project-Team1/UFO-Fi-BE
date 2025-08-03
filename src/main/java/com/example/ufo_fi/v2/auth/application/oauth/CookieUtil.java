@@ -11,13 +11,13 @@ public class CookieUtil {
 
     //추후 보안 공부 해볼것.
     // TODO: 배포->로컬, 로컬->배포 시 쿠키 설정 바꾸기
-    public void setResponseBasicCookie(String key, String value, int expiredMs, HttpServletResponse response) {
+    public void setResponseBasicCookie(String key, String value, long expiredMs, HttpServletResponse response) {
         String cookieValue = String.format(
-            "%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None;",
+            "%s=%s; Path=/; Max-Age=%d; HttpOnly; Domain=.ufo-fi.store; SameSite=None; Secure",
                 key, value, expiredMs);
 
         //"%s=%s; Path=/; Max-Age=%d; HttpOnly; Domain=.ufo-fi.store; SameSite=None; Secure"
-
+        //"%s=%s; Path=/; Max-Age=%d; HttpOnly; "
         response.addHeader("Set-Cookie", cookieValue);
     }
 
