@@ -87,7 +87,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: prometheus, health, info
   endpoint:
     prometheus:
       access: unrestricted
