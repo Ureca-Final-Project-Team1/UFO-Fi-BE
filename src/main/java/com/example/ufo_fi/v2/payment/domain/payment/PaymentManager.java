@@ -1,13 +1,15 @@
 package com.example.ufo_fi.v2.payment.domain.payment;
 
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
+import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
 import com.example.ufo_fi.v2.report.persistence.ReportRepository;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,35 +17,36 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentManager {
     private final EntityManager entityManager;
+    private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
 
     @Transactional
-    public void updateReady(Payment payment){
+    public void updateReady(Payment payment) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.changeState(PaymentStatus.READY);
     }
 
     @Transactional
-    public void updateInProgress(Payment payment){
+    public void updateInProgress(Payment payment) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.changeState(PaymentStatus.IN_PROGRESS);
     }
 
     @Transactional
-    public void updateFail(Payment payment){
+    public void updateFail(Payment payment) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.changeState(PaymentStatus.FAIL);
     }
 
     @Transactional
-    public void updateDone(Payment payment){
+    public void updateDone(Payment payment) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.changeState(PaymentStatus.DONE);
     }
 
     @Transactional
-    public void updateTimeout(Payment payment){
+    public void updateTimeout(Payment payment) {
         Payment mergedPayment = entityManager.merge(payment);
         mergedPayment.changeState(PaymentStatus.TIMEOUT);
     }
@@ -55,7 +58,7 @@ public class PaymentManager {
     }
 
     @Transactional
-    public void updateUserZetAmount(Payment payment, Integer zetAmount){
+    public void updateUserZetAmount(Payment payment, Integer zetAmount) {
         Payment mergedPayment = entityManager.merge(payment);
         User user = mergedPayment.getUser();
         user.increaseZetAsset(zetAmount);
@@ -71,11 +74,26 @@ public class PaymentManager {
     @Transactional
     public boolean retry(Payment payment, Integer maxRetryCount) {
         Payment mergedPayment = entityManager.merge(payment);
-        if(mergedPayment.getRetryCount() >= maxRetryCount){
+        if (mergedPayment.getRetryCount() >= maxRetryCount) {
             return false;
         }
         mergedPayment.increaseRetryCount();
         mergedPayment.changeState(PaymentStatus.IN_PROGRESS);
         return true;
+    }
+
+    public Payment saveCharge(Payment payment) {
+        return paymentRepository.save(payment);
+    }
+
+    public Payment findByOrderId(String orderId) {
+        return paymentRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+    }
+
+    public void validateRecoveryAmount(Payment payment, int recoveryZet) {
+        if (!((payment.getPrice() / 10) == recoveryZet)) {
+            throw new GlobalException(PaymentErrorCode.PAYMENT_AMOUNT_CONFLICT);
+        }
     }
 }
