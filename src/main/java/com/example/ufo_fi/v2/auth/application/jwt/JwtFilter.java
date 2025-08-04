@@ -14,33 +14,36 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * JWT토큰을 검사한다.
- * JWT토큰을 통해 인증을 한다.
+ * JWT토큰을 검사한다. JWT토큰을 통해 인증을 한다.
  */
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
     private final CookieUtil cookieUtil;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-         String uri = request.getRequestURI();
+        String uri = request.getRequestURI();
 
         log.info(uri);
-         return uri.startsWith("/login")
-             || uri.startsWith("/oauth2")
-             || uri.startsWith("/auth")
-             || uri.startsWith("/refresh")
-             || uri.startsWith("/test")
-             || uri.startsWith("/actuator")
-             || uri.startsWith("/swagger")
-             || uri.startsWith("/v3")
-             || uri.startsWith("/webjars")
-             || uri.startsWith("/monitor")
-             || uri.startsWith("/metrics")
-             || uri.startsWith("/prometheus");
+        return uri.startsWith("/login")
+            || uri.startsWith("/oauth2")
+            || uri.startsWith("/auth")
+            || uri.startsWith("/refresh")
+            || uri.startsWith("/test")
+            || uri.startsWith("/actuator")
+            || uri.startsWith("/swagger")
+            || uri.startsWith("/v3")
+            || uri.startsWith("/webjars")
+            || uri.startsWith("/monitor")
+            || uri.startsWith("/metrics")
+            || uri.startsWith("/prometheus")
+            || uri.startsWith("/v1/posts/purchase")
+            || uri.startsWith("v1/posts/bulk-purchase")
+            ;
     }
 
     /**
@@ -51,8 +54,9 @@ public class JwtFilter extends OncePerRequestFilter {
      * 4. 다음 필터로 넘긴다.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws AuthenticationException, ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain)
+        throws AuthenticationException, ServletException, IOException {
         jwtUtil.validate(cookieUtil.getCookie("Authorization", request), response);
         String jwt = resolveToken(request);
         setSecurityContextHolder(jwt);
