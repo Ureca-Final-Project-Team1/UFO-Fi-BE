@@ -1,18 +1,19 @@
 package com.example.ufo_fi.global.log;
 
+import com.example.ufo_fi.global.log.meta.PaymentLogTrace;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class LogTraceContext {
-    private static final ThreadLocal<LogTrace> LOG_TRACE_THREAD_LOCAL = new ThreadLocal<>();
+public class PaymentLogTraceContext {
+    private static final ThreadLocal<PaymentLogTrace> LOG_TRACE_THREAD_LOCAL = new ThreadLocal<>();
 
     //LogTrace 가져오기
-    public static LogTrace get() {
+    public static PaymentLogTrace get() {
         return LOG_TRACE_THREAD_LOCAL.get();
     }
 
     //LogTrace 추가하기
-    public static void set(LogTrace trace) {
+    public static void set(PaymentLogTrace trace) {
         LOG_TRACE_THREAD_LOCAL.set(trace);
     }
 

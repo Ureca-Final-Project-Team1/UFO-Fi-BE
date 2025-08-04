@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.payment.domain.payment.state;
 
-import com.example.ufo_fi.global.log.LogTraceContext;
+import com.example.ufo_fi.global.log.PaymentLogTraceContext;
 import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
 import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
@@ -36,7 +36,7 @@ public class TimeoutState implements State {
         }
 
         stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
-        applicationEventPublisher.publishEvent(LogTraceContext.get());
+        applicationEventPublisher.publishEvent(PaymentLogTraceContext.get());
     }
 
     @Override
