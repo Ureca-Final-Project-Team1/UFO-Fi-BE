@@ -68,13 +68,13 @@ public class InProgressState implements State {
     //DONE,FAIL,TIME_OUT 으로 분기 가능
     private void updateStatus(Payment payment, ConfirmResult confirmResult) {
         if(confirmResult.resultStatus().equals(PaymentStatus.DONE)) {
-            paymentManager.updateDone(payment);
+            paymentManager.updateStatus(payment, PaymentStatus.DONE);
             return;
         }
         if(confirmResult.resultStatus().equals(PaymentStatus.FAIL)) {
-            paymentManager.updateFail(payment);
+            paymentManager.updateStatus(payment, PaymentStatus.FAIL);
             return;
         }
-        paymentManager.updateTimeout(payment);
+        paymentManager.updateStatus(payment, PaymentStatus.TIMEOUT);
     }
 }

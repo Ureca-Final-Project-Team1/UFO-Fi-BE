@@ -6,6 +6,7 @@ import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
+import com.example.ufo_fi.v2.payment.domain.payment.state.failstrategy.TossErrorCode;
 import com.example.ufo_fi.v2.payment.domain.slack.SlackEvent;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmFailResult;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,10 @@ public class FailState implements State {
     @Override
     public PaymentStatus status() {
         return PaymentStatus.FAIL;
+    }
+
+    private void updateByErrorCode(Payment payment, String tossConfirmErrorCode, StateMetaData stateMeataData) {
+
     }
 
     //토스가 반환한 에러코드에 따라 처리로직 분기를 한다.
