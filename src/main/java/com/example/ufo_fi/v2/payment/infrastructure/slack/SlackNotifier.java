@@ -1,6 +1,6 @@
 package com.example.ufo_fi.v2.payment.infrastructure.slack;
 
-import com.example.ufo_fi.global.log.LogTrace;
+import com.example.ufo_fi.global.log.meta.PaymentLogTrace;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.domain.slack.SlackMessageBuilder;
 import com.slack.api.Slack;
@@ -22,7 +22,7 @@ public class SlackNotifier {
     @Value(value = "${slack.token}")
     private String slackToken;
 
-    public void sendSlackMessage(LogTrace logTrace, StateMetaData stateMetaData){
+    public void sendSlackMessage(PaymentLogTrace logTrace, StateMetaData stateMetaData){
         try{
             MethodsClient methods = Slack.getInstance().methods(slackToken);
 

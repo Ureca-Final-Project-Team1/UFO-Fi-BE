@@ -1,7 +1,7 @@
 package com.example.ufo_fi.v2.payment.domain.slack;
 
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
-import com.example.ufo_fi.global.log.LogTrace;
+import com.example.ufo_fi.global.log.meta.PaymentLogTrace;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +10,6 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class SlackEvent {
-    private LogTrace logTrace;
+    private PaymentLogTrace logTrace;
     private StateMetaData stateMetaData;
 }

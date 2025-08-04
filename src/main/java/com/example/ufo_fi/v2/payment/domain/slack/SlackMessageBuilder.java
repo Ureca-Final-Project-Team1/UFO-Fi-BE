@@ -4,7 +4,7 @@ import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.global.json.JsonUtil;
-import com.example.ufo_fi.global.log.LogTrace;
+import com.example.ufo_fi.global.log.meta.PaymentLogTrace;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,28 +19,19 @@ public class SlackMessageBuilder {
             ----------------------------------------- ;-)
             *사용자 ID*: %s
             *발생 시각*: %s
-            *요청*
-            ```json
-            %s
-            ```
             - 토스 응답
             ```json
             %s
             ```
-            - 상태 전이(메서드 흐름)
-            ```json
-            %s
-            ```
-            (^오^)~
+            <https://www.ufo-fi.store//admin/zet-recovery|관리자 페이지 바로가기>
             """;
 
-    public String buildMessage(LogTrace logTrace, StateMetaData stateMetaData){
+    public String buildMessage(PaymentLogTrace logTrace, StateMetaData stateMetaData){
             return MESSAGE_TEMPLATE.formatted(
-                    logTrace.getUserId(),
-                    logTrace.getRequestStartAt(),
-                    logTrace.getRequestBody(),
-                    JsonUtil.toJson(stateMetaData.get(MetaDataKey.CONFIRM_RESULT, ConfirmResult.class)),
-                    logTrace.getLogMethodTrace().getTracedMethods()
+                    logTrace.getBasicLogInfo().getUserId(),
+                    logTrace.getBasicLogInfo().getRequestAt(),
+                    JsonUtil.toJson(stateMetaData.get(MetaDataKey.CONFIRM_RESULT, ConfirmResult.class))
+
             );
     }
 }

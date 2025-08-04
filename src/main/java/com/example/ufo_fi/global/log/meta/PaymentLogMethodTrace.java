@@ -1,4 +1,4 @@
-package com.example.ufo_fi.global.log;
+package com.example.ufo_fi.global.log.meta;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  *
  *  이런 형식으로 나올 듯 싶슴다.
  */
-public class LogMethodTrace {
+public class PaymentLogMethodTrace {
     private static final DateTimeFormatter TIME_TEMPLATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String METHOD_TEMPLATE =
     """
