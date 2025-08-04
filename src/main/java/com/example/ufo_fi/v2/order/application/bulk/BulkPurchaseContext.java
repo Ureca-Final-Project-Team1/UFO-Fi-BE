@@ -2,7 +2,6 @@ package com.example.ufo_fi.v2.order.application.bulk;
 
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,10 +18,10 @@ public class BulkPurchaseContext {
         PurchaseResult purchaseResult = new PurchaseResult();
 
         postIds.forEach(postId -> {
-            TradePost tradePost = tradePostManager.findByIdWithLock(postId);
-            if(tradePost.canSellingNow()){
+            TradePost tradePost = tradePostManager.findById(postId); // lock 풀었음
+            if (tradePost.canSellingNow()) {
                 bulkPurchaseSuccessHandler.handleSuccess(tradePost, buyerId, purchaseResult);
-            }else{
+            } else {
                 bulkPurchaseFailureHandler.handleFailure(tradePost, buyerId, purchaseResult);
             }
         });
