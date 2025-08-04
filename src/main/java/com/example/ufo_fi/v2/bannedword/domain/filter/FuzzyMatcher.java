@@ -52,9 +52,16 @@ public class FuzzyMatcher {
     private boolean isFuzzyMatch(String token, String banWord) {
         int distance = levenshteinDistance(token, banWord.toLowerCase());
         int maxLength = Math.max(token.length(), banWord.length());
-        int allowedDistance = maxLength <= 4 ? 1 : FUZZY_THRESHOLD;
 
-        return distance <= allowedDistance;
+        if (maxLength <= 2) {
+            return distance == 0;
+        }
+
+        if (maxLength <= 4) {
+            return distance <= 1;
+        }
+
+        return distance <= FUZZY_THRESHOLD;
     }
 
     private int levenshteinDistance(String a, String b) {
