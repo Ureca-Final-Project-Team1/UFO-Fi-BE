@@ -39,9 +39,8 @@ public class PaymentService {
 
         Payment payment = Payment.of(userProxy, paymentReq, PaymentStatus.READY, 0);
         Payment savedPayment = paymentManager.saveCharge(payment);
-        paymentRepository.save(savedPayment);
 
-        return PaymentRes.of(userProxy, payment);
+        return PaymentRes.of(userProxy, savedPayment);
     }
 
     /**
@@ -80,7 +79,7 @@ public class PaymentService {
 
         // 1. TIMEOUT 상태 체크
         Payment payment = paymentManager.findByOrderId(zetRecoveryReq.getOrderId());
-        
+
         if (!payment.isTimeOut()) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_STATUS_ERROR);
         }
