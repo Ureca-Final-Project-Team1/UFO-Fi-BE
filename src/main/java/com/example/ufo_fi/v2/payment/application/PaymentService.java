@@ -1,19 +1,19 @@
 package com.example.ufo_fi.v2.payment.application;
 
-import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
-import com.example.ufo_fi.v2.payment.domain.payment.PaymentStateContext;
-import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
-import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
+import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.payment.domain.payment.*;
 import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
+import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
-import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
-import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.ZetRecoveryRes;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.user.persistence.UserRepository;
+import com.example.ufo_fi.v2.user.domain.UserManager;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentService {
 
-    private final UserRepository userRepository;
+    private final UserManager userManager;
     private final PaymentRepository paymentRepository;
     private final PaymentStateContext paymentStateContext;
+    private final EntityManager entityManager;
+    private final PaymentManager paymentManager;
+    private final PaymentMapper paymentMapper;
 
     /**
      * 결제 임시 정보 DB 저장
@@ -32,13 +35,13 @@ public class PaymentService {
      */
     @Transactional
     public PaymentRes charge(Long userId, PaymentReq paymentReq) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new GlobalException(PaymentErrorCode.NO_USER));
+        User userProxy = entityManager.getReference(User.class, userId);
 
-        Payment payment = Payment.of(user, paymentReq, PaymentStatus.READY, 0);
-        paymentRepository.save(payment);
+        Payment payment = Payment.of(userProxy, paymentReq, PaymentStatus.READY, 0);
+        Payment savedPayment = paymentManager.saveCharge(payment);
+        paymentRepository.save(savedPayment);
 
-        return PaymentRes.of(user, payment);
+        return PaymentRes.of(userProxy, payment);
     }
 
     /**
@@ -66,5 +69,32 @@ public class PaymentService {
     private Payment findPayment(String orderId) {
         return paymentRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+    }
+
+    /**
+     * 1. DONE 상태로 update
+     * 2. zet 검증 및 복구
+     */
+    @Transactional
+    public ZetRecoveryRes zetRecovery(ZetRecoveryReq zetRecoveryReq) {
+
+        // 1. TIMEOUT 상태 체크
+        Payment payment = paymentManager.findByOrderId(zetRecoveryReq.getOrderId());
+        
+        if (!payment.isTimeOut()) {
+            throw new GlobalException(PaymentErrorCode.PAYMENT_STATUS_ERROR);
+        }
+
+        // 2. 충전 zet 검증
+        paymentManager.validateRecoveryAmount(payment, zetRecoveryReq.getRecoveryZet());
+
+        // 3. 복구
+        User userProxy = entityManager.getReference(User.class, zetRecoveryReq.getUserId());
+        userManager.zetRecovery(userProxy, zetRecoveryReq.getRecoveryZet());
+
+        // 4. 상태 변경
+        payment.changeState(PaymentStatus.DONE);
+
+        return paymentMapper.toZetRecoveryRes(userProxy, payment.getStatus());
     }
 }
