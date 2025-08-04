@@ -31,6 +31,9 @@ public class TradePostRes {
     @Schema(description = "판매 게시글 제목입니다.")
     private String title;
 
+    @Schema(description = "판매 게시글 가격")
+    private Integer totalZet;
+
     @Schema(description = "판매 게시글 생성일")
     private LocalDateTime createdAt;
 
@@ -41,6 +44,7 @@ public class TradePostRes {
             .carrier(tradePost.getCarrier())
             .sellMobileDataAmountGB(tradePost.getSellMobileDataCapacityGb())
             .title(tradePost.getTitle())
+            .totalZet(tradePost.getTotalZet())
             .createdAt(tradePost.getCreatedAt())
             .build();
     }

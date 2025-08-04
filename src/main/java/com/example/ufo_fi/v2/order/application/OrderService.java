@@ -6,17 +6,17 @@ import com.example.ufo_fi.v2.order.application.bulk.PurchaseResult;
 import com.example.ufo_fi.v2.order.domain.Status;
 import com.example.ufo_fi.v2.order.domain.TradeHistory;
 import com.example.ufo_fi.v2.order.domain.TradeHistoryManager;
-import com.example.ufo_fi.v2.order.presentation.dto.response.BulkPurchaseConfirmRes;
-import com.example.ufo_fi.v2.plan.domain.Plan;
-import com.example.ufo_fi.v2.plan.domain.PlanManager;
-import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
-import com.example.ufo_fi.v2.tradepost.domain.TradePost;
-import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostConfirmBulkReq;
 import com.example.ufo_fi.v2.order.presentation.dto.request.TradePostPurchaseReq;
+import com.example.ufo_fi.v2.order.presentation.dto.response.BulkPurchaseConfirmRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoriesRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.PurchaseHistoryRes;
 import com.example.ufo_fi.v2.order.presentation.dto.response.SaleHistoriesRes;
+import com.example.ufo_fi.v2.plan.domain.Plan;
+import com.example.ufo_fi.v2.plan.domain.PlanManager;
+import com.example.ufo_fi.v2.tradepost.domain.TradePost;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostManager;
+import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostPurchaseRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
@@ -48,7 +48,8 @@ public class OrderService {
      */
     public SaleHistoriesRes readSaleHistories(Long userId) {
 
-        List<TradeHistory> tradeHistories = tradeHistoryManager.findByIdAndStatus(userId, Status.SALE);
+        List<TradeHistory> tradeHistories = tradeHistoryManager.findByIdAndStatus(userId,
+            Status.SALE);
 
         return orderMapper.toSaleHistoriesRes(tradeHistories);
     }
@@ -60,7 +61,8 @@ public class OrderService {
      */
     public PurchaseHistoriesRes readPurchaseHistories(Long userId) {
 
-        List<TradeHistory> tradeHistories = tradeHistoryManager.findByIdAndStatus(userId, Status.PURCHASE);
+        List<TradeHistory> tradeHistories = tradeHistoryManager.findByIdAndStatus(userId,
+            Status.PURCHASE);
 
         return orderMapper.toPurchaseHistoriesRes(tradeHistories);
     }
@@ -80,7 +82,7 @@ public class OrderService {
     }
 
     /**
-     * @param userId : 나
+     * @param userId      : 나
      * @param purchaseReq : 거래 요청
      *                    1. 사는 사람(요청자)를 찾아옵니다.
      *                    2. 해당 게시물의 정보 + 유저 정보를 찾아옵니다.
@@ -98,7 +100,8 @@ public class OrderService {
         UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
         Plan plan = planManager.findById(buyerPlan.getPlan().getId());
 
-        TradePost tradePost = tradePostManager.findByIdWithLock(purchaseReq.getPostId());   //파는 사람
+        TradePost tradePost = tradePostManager.findById(
+            purchaseReq.getPostId());   //파는 사람 // lock 풀었음
         User seller = userManager.findById(tradePost.getUser().getId());
 
         tradePostManager.validatePurchaseStatus(tradePost, buyer);
@@ -107,7 +110,8 @@ public class OrderService {
         planManager.validateSameCarrier(plan, tradePost.getCarrier());
         tradePostManager.updateStatus(tradePost, TradePostStatus.SOLD_OUT);
 
-        userPlanManager.increasePurchaseDataAmount(buyerPlan, tradePost.getSellMobileDataCapacityGb());
+        userPlanManager.increasePurchaseDataAmount(buyerPlan,
+            tradePost.getSellMobileDataCapacityGb());
         userManager.decreaseZetAsset(buyer, tradePost.getTotalZet());
 
         userManager.increaseZetAsset(seller, tradePost.getTotalZet());
