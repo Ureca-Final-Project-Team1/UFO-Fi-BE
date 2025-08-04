@@ -1,11 +1,13 @@
 package com.example.ufo_fi.v2.payment.presentation.api;
 
+import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
-import com.example.ufo_fi.global.response.ResponseBody;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.ZetRecoveryRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,14 @@ public interface PaymentApiSpec {
     @PostMapping("/v1/payment/confirm")
     ResponseEntity<ResponseBody<ConfirmRes>> confirm(
             @RequestBody ConfirmReq request,
+            @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+    );
+
+    @Operation(summary = "관리자 zet 복구 API", description = "관리자 권한으로 zet를 복구한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @PostMapping("/v1/admin/zet-recovery")
+    ResponseEntity<ResponseBody<ZetRecoveryRes>> zetRecovery(
+            @RequestBody ZetRecoveryReq zetRecoveryReq,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 }
