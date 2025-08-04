@@ -2,8 +2,8 @@ package com.example.ufo_fi.v2.payment.domain.payment.entity;
 
 
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
-import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccessResult;
+import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -68,9 +68,14 @@ public class Payment {
         this.status = nextStatus;
     }
 
-    public void increaseRetryCount(){
+    public void increaseRetryCount() {
         this.retryCount++;
     }
+
+    public boolean isTimeOut() {
+        return this.status == PaymentStatus.TIMEOUT;
+    }
+
 
     public static Payment of(User user, PaymentReq paymentReq, PaymentStatus paymentStatus, Integer retryCount) {
         return Payment.builder()
