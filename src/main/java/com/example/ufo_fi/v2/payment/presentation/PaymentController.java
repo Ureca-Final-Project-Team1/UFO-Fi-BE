@@ -6,8 +6,10 @@ import com.example.ufo_fi.v2.payment.application.PaymentService;
 import com.example.ufo_fi.v2.payment.presentation.api.PaymentApiSpec;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
+import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.ZetRecoveryRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +45,14 @@ public class PaymentController implements PaymentApiSpec {
         return ResponseEntity
                 .ok(ResponseBody
                         .success(chargeService.confirm(request)));
+    }
+
+    public ResponseEntity<ResponseBody<ZetRecoveryRes>> zetRecovery(
+            ZetRecoveryReq zetRecoveryReq,
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        chargeService.zetRecovery(zetRecoveryReq)));
     }
 }
