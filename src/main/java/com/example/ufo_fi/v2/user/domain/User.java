@@ -61,9 +61,6 @@ public class User {
     @JoinColumn(name = "profile_photo_id")
     private ProfilePhoto profilePhoto;
 
-    @Version
-    private Long version;
-
     public static User of(OAuth2Response oAuth2Response, Role role, Integer zetAsset) {
         return User.builder()
                 .kakaoId(oAuth2Response.getProviderId().toString())
