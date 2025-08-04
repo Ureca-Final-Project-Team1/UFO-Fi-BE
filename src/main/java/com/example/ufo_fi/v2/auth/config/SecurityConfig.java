@@ -70,8 +70,6 @@ public class SecurityConfig {
                 .requestMatchers("/v3/api-docs/**,").permitAll()
                 .requestMatchers("/swagger-resources/**").permitAll()
                 .requestMatchers("/webjars/**").permitAll()
-                .requestMatchers("/v1/posts/purchase").permitAll()
-                .requestMatchers("/v1/posts/bulk-purchase").permitAll()
                 .requestMatchers("/v1/signup").hasAuthority(Role.ROLE_NO_INFO.toString())
                 .anyRequest().authenticated());
 

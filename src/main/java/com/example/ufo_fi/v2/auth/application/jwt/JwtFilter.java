@@ -41,8 +41,6 @@ public class JwtFilter extends OncePerRequestFilter {
             || uri.startsWith("/monitor")
             || uri.startsWith("/metrics")
             || uri.startsWith("/prometheus")
-            || uri.startsWith("/v1/posts/purchase")
-            || uri.startsWith("v1/posts/bulk-purchase")
             ;
     }
 
