@@ -87,7 +87,7 @@ public class UserManager {
         }
     }
 
-    public void zetRecovery(User user, int zet) {
+    public void zetRecovery(User user, Integer zet) {
         user.increaseZetAsset(zet);
     }
 }
