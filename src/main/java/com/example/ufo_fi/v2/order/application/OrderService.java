@@ -100,8 +100,8 @@ public class OrderService {
         UserPlan buyerPlan = userPlanManager.validateUserPlanExistence(buyer);
         Plan plan = planManager.findById(buyerPlan.getPlan().getId());
 
-        TradePost tradePost = tradePostManager.findById(
-            purchaseReq.getPostId());   //파는 사람 // lock 풀었음
+        TradePost tradePost = tradePostManager.findByIdWithLock(
+            purchaseReq.getPostId());   //파는 사람
         User seller = userManager.findById(tradePost.getUser().getId());
 
         tradePostManager.validatePurchaseStatus(tradePost, buyer);

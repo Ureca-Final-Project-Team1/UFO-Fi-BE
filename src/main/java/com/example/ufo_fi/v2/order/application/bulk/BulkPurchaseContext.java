@@ -18,7 +18,7 @@ public class BulkPurchaseContext {
         PurchaseResult purchaseResult = new PurchaseResult();
 
         postIds.forEach(postId -> {
-            TradePost tradePost = tradePostManager.findById(postId); // lock 풀었음
+            TradePost tradePost = tradePostManager.findByIdWithLock(postId);
             if (tradePost.canSellingNow()) {
                 bulkPurchaseSuccessHandler.handleSuccess(tradePost, buyerId, purchaseResult);
             } else {
