@@ -7,6 +7,7 @@ import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmSuccess
 import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
 import com.example.ufo_fi.v2.report.persistence.ReportRepository;
 import com.example.ufo_fi.v2.user.domain.User;
+import com.example.ufo_fi.v2.user.exception.UserErrorCode;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -22,33 +23,9 @@ public class PaymentManager {
     private final ReportRepository reportRepository;
 
     @Transactional
-    public void updateReady(Payment payment) {
+    public void updateStatus(Payment payment, PaymentStatus paymentStatus){
         Payment mergedPayment = entityManager.merge(payment);
-        mergedPayment.changeState(PaymentStatus.READY);
-    }
-
-    @Transactional
-    public void updateInProgress(Payment payment) {
-        Payment mergedPayment = entityManager.merge(payment);
-        mergedPayment.changeState(PaymentStatus.IN_PROGRESS);
-    }
-
-    @Transactional
-    public void updateFail(Payment payment) {
-        Payment mergedPayment = entityManager.merge(payment);
-        mergedPayment.changeState(PaymentStatus.FAIL);
-    }
-
-    @Transactional
-    public void updateDone(Payment payment) {
-        Payment mergedPayment = entityManager.merge(payment);
-        mergedPayment.changeState(PaymentStatus.DONE);
-    }
-
-    @Transactional
-    public void updateTimeout(Payment payment) {
-        Payment mergedPayment = entityManager.merge(payment);
-        mergedPayment.changeState(PaymentStatus.TIMEOUT);
+        mergedPayment.changeState(paymentStatus);
     }
 
     @Transactional
@@ -60,15 +37,9 @@ public class PaymentManager {
     @Transactional
     public void updateUserZetAmount(Payment payment, Integer zetAmount) {
         Payment mergedPayment = entityManager.merge(payment);
-        User user = mergedPayment.getUser();
+        User user = userRepository.findByIdWithLock(mergedPayment.getUser().getId())
+                .orElseThrow(() -> new GlobalException(UserErrorCode.NOT_FOUND_USER));
         user.increaseZetAsset(zetAmount);
-    }
-
-    //유저의 아이디 삭제 + 유저 신고 사유 생성
-    @Transactional
-    public void updateUserReported(Payment payment) {
-        User user = entityManager.merge(payment.getUser());
-        user.updateStatusReported();
     }
 
     @Transactional

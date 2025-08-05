@@ -6,7 +6,7 @@ import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
-import com.example.ufo_fi.v2.payment.exception.TossPaymentErrorCode;
+import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -32,11 +32,13 @@ public class TimeoutState implements State {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new GlobalException(TossPaymentErrorCode.TOSS_PAYMENT_CONFIRM_FAIL);
+            throw new GlobalException(PaymentErrorCode.TOSS_PAYMENT_CONFIRM_FAIL);
         }
 
         stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
         applicationEventPublisher.publishEvent(PaymentLogTraceContext.get());
+
+        throw new GlobalException(PaymentErrorCode.TOSS_PAYMENT_CONFIRM_TIME_OUT);
     }
 
     @Override

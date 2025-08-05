@@ -2,7 +2,7 @@ package com.example.ufo_fi.v2.payment.infrastructure.toss;
 
 import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.payment.config.PaymentConfig;
-import com.example.ufo_fi.v2.payment.exception.TossPaymentErrorCode;
+import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.request.ConfirmCommand;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmFailResult;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmResult;
@@ -39,7 +39,7 @@ public class TossClientUtil {
             String rawConfirmCommand = objectMapper.writeValueAsString(confirmCommand);
             return createTossConfirmRequest(rawConfirmCommand);
         } catch (JsonProcessingException e) {
-            throw new GlobalException(TossPaymentErrorCode.TOSS_PAYMENT_CONFIRM_PARSE_FAIL);
+            throw new GlobalException(PaymentErrorCode.TOSS_PAYMENT_CONFIRM_PARSE_FAIL);
         }
     }
 
@@ -54,7 +54,7 @@ public class TossClientUtil {
             }
             return ConfirmFailResult.from(json);
         } catch (JsonProcessingException e){
-            throw new GlobalException(TossPaymentErrorCode.TOSS_PAYMENT_CONFIRM_PARSE_FAIL);
+            throw new GlobalException(PaymentErrorCode.TOSS_PAYMENT_CONFIRM_PARSE_FAIL);
         }
     }
 

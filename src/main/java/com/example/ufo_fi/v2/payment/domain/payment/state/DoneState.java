@@ -19,8 +19,8 @@ public class DoneState implements State {
         verifyStatus(payment, PaymentStatus.DONE);
 
         ConfirmReq confirmReq = stateMetaData.get(MetaDataKey.CONFIRM_REQUEST, ConfirmReq.class);
-
         paymentManager.updateUserZetAmount(payment, confirmReq.getAmount());
+
         stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
     }
 

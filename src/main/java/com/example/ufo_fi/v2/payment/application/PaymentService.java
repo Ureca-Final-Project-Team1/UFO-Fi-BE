@@ -51,10 +51,9 @@ public class PaymentService {
      */
     public ConfirmRes confirm(ConfirmReq confirmReq) {
         Payment payment = findPayment(confirmReq.getOrderId());
-
         StateMetaData stateMetaData = createStateMetaData();
-        stateMetaData.put(MetaDataKey.CONFIRM_REQUEST, confirmReq);
 
+        stateMetaData.put(MetaDataKey.CONFIRM_REQUEST, confirmReq);
         paymentStateContext.proceedAll(payment, stateMetaData);
 
         User user = payment.getUser();

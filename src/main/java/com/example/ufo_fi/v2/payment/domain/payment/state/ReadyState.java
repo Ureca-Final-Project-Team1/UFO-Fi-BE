@@ -37,6 +37,6 @@ public class ReadyState implements State {
     }
 
     private void updateStatus(Payment payment) {
-        paymentManager.updateInProgress(payment);
+        paymentManager.updateStatus(payment, PaymentStatus.IN_PROGRESS);
     }
 }
