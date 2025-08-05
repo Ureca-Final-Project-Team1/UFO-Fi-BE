@@ -29,7 +29,7 @@ public interface UserApiSpec {
 
     @Operation(summary = "회원가입 API", description = "유저의 ROLE과 핸드폰 번호를 가져온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/user/me/user-info")
+    @GetMapping("/users/me/user-info")
     ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         HttpServletResponse response

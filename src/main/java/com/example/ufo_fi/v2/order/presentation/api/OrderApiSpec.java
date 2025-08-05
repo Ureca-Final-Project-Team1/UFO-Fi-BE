@@ -42,7 +42,7 @@ public interface OrderApiSpec {
     @ApiResponse(useReturnTypeSchema = true)
     @GetMapping("/trade-histories/{tradeHistoryId}")
     ResponseEntity<ResponseBody<PurchaseHistoryRes>> readPurchaseHistory(
-        @PathVariable(name = "purchaseHistoryId") Long purchaseHistoryId
+        @PathVariable(name = "tradeHistoryId") Long purchaseHistoryId
     );
 
     @Operation(summary = "구매(Zet <-> Data) API", description = "구매한다.")
