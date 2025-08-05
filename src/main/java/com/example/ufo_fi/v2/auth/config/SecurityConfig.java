@@ -71,7 +71,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-resources/**").permitAll()
                 .requestMatchers("/webjars/**").permitAll()
                 .requestMatchers("/v1/signup").hasAuthority(Role.ROLE_NO_INFO.toString())
-                .anyRequest().authenticated());
+                .anyRequest().permitAll());
 
         return http.build();
     }
