@@ -29,21 +29,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         log.info(uri);
-//        return uri.startsWith("/login")
-//            || uri.startsWith("/oauth2")
-//            || uri.startsWith("/auth")
-//            || uri.startsWith("/refresh")
-//            || uri.startsWith("/test")
-//            || uri.startsWith("/actuator")
-//            || uri.startsWith("/swagger")
-//            || uri.startsWith("/v3")
-//            || uri.startsWith("/webjars")
-//            || uri.startsWith("/monitor")
-//            || uri.startsWith("/metrics")
-//            || uri.startsWith("/prometheus")
-//            ;
+        return uri.startsWith("/");
 
-        return true;
+
     }
 
     /**
