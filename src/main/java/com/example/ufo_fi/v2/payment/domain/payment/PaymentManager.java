@@ -42,13 +42,6 @@ public class PaymentManager {
         user.increaseZetAsset(zetAmount);
     }
 
-    //유저의 아이디 삭제 + 유저 신고 사유 생성
-    @Transactional
-    public void updateUserReported(Payment payment) {
-        User user = entityManager.merge(payment.getUser());
-        user.updateStatusReported();
-    }
-
     @Transactional
     public boolean retry(Payment payment, Integer maxRetryCount) {
         Payment mergedPayment = entityManager.merge(payment);

@@ -7,6 +7,7 @@ import com.example.ufo_fi.v2.payment.domain.payment.PaymentManager;
 import com.example.ufo_fi.v2.payment.domain.payment.PaymentStatus;
 import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.domain.payment.state.failstrategy.TossErrorCode;
+import com.example.ufo_fi.v2.payment.domain.payment.state.failstrategy.TossErrorHandleStrategyContext;
 import com.example.ufo_fi.v2.payment.domain.slack.SlackEvent;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmFailResult;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class FailState implements State {
 
     private final PaymentManager paymentManager;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final TossErrorHandleStrategyContext tossErrorHandleStrategyContext;
 
     @Override
     public void proceed(Payment payment, StateMetaData stateMetaData) {
@@ -51,40 +53,7 @@ public class FailState implements State {
         return PaymentStatus.FAIL;
     }
 
-    private void updateByErrorCode(Payment payment, String tossConfirmErrorCode, StateMetaData stateMeataData) {
-
-    }
-
-    //토스가 반환한 에러코드에 따라 처리로직 분기를 한다.
     private void updateByErrorCode(Payment payment, String tossConfirmErrorCode, StateMetaData stateMetaData) {
-        switch (tossConfirmErrorCode) {
-            case "PROVIDER_ERROR",
-                 "CARD_PROCESSING_ERROR",
-                 "FAILED_PAYMENT_INTERNAL_SYSTEM_PROCESSING",
-                 "UNKNOWN_PAYMENT_ERROR" -> {
-                boolean canRetry = paymentManager.retry(payment, MAX_RETRY_COUNT);
-                if(!canRetry){
-                    stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
-                    applicationEventPublisher.publishEvent(createSlackEvent(stateMetaData));
-                }
-            }
-
-            case "FDS_ERROR" -> {
-                paymentManager.updateUserReported(payment);
-                stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
-                applicationEventPublisher.publishEvent(createSlackEvent(stateMetaData));
-            }
-
-            default -> {
-                stateMetaData.put(MetaDataKey.PAYMENT_DONE, true);
-            }
-        }
-    }
-
-    private SlackEvent createSlackEvent(StateMetaData stateMetaData){
-        return SlackEvent.builder()
-                .logTrace(PaymentLogTraceContext.get())
-                .stateMetaData(stateMetaData)
-                .build();
+        tossErrorHandleStrategyContext.process(payment, tossConfirmErrorCode, stateMetaData);
     }
 }
