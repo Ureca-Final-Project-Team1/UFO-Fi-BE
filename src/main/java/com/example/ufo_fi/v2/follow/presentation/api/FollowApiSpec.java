@@ -23,7 +23,7 @@ public interface FollowApiSpec {
 
     @Operation(summary = "팔로워 팔로잉 맺기 API", description = "다른 유저에게 팔로우를 신청한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("v1/follow/{followingId}")
+    @PostMapping("/follows/{followingId}")
     @SecurityRequirement(name = "BearerAuth")
     ResponseEntity<ResponseBody<FollowingCreateRes>> createFollow(
         @PathVariable("followingId") Long followingId,
@@ -32,7 +32,7 @@ public interface FollowApiSpec {
 
     @Operation(summary = "팔로워 팔로잉 끊기 API", description = "다른 유저에게 팔로우를 취소한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("v1/unfollow/{followingId}")
+    @DeleteMapping("/follows/{followingId}")
     ResponseEntity<ResponseBody<FollowerDeleteRes>> deleteFollow(
         @PathVariable("followingId") Long followerId,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
@@ -40,7 +40,7 @@ public interface FollowApiSpec {
 
     @Operation(summary = "내 팔로워 목록 조회 API", description = "내 계정을 팔로우 하는 유저를 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/followers")
+    @GetMapping("/follows/followers")
     ResponseEntity<ResponseBody<FollowersReadRes>> readFollowers(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestParam int page
@@ -48,7 +48,7 @@ public interface FollowApiSpec {
 
     @Operation(summary = "내 팔로잉 목록 조회 API", description = "내가 팔로우 하는 유저 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/followings")
+    @GetMapping("/follows/followings")
     ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestParam int page

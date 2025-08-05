@@ -15,7 +15,7 @@ public interface PlanApiSpec {
 
     @Operation(summary = "요금제 조회 API", description = "요금제 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/plans")
+    @GetMapping("/plans")
     ResponseEntity<ResponseBody<PlansReadRes>> readPlans(
         @RequestParam(value = "carrier") String rawCarrier
     );
