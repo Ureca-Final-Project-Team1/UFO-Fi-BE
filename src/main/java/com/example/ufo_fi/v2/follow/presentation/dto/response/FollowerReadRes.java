@@ -19,6 +19,9 @@ public class FollowerReadRes {
     @Schema(description = "팔로워(나를 팔로우)의 닉네임")
     private String nickname;
 
+    @Schema(description = "나와 상대가 맞팔중인가?")
+    private boolean isFollowing;
+
     @Schema(description = "팔로워(나를 팔로우)의 프로필 사진")
     private String profilePhotoUrl;
 

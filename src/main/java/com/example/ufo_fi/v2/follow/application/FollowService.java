@@ -9,6 +9,8 @@ import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingCreateRes
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingsReadRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,9 +68,13 @@ public class FollowService {
      *               2. dto 반환
      */
     public FollowersReadRes readFollowers(Long userId) {
-        List<Follow> follows = followManager.findAllFollowers(userId);
+        List<Follow> followers = followManager.findAllFollowers(userId);
 
-        return followMapper.toFollowerReadRes(follows);
+        Set<Long> myFollowings = followManager.findAllFollowings(userId).stream()
+            .map(f -> f.getFollowingUser().getId())
+            .collect(Collectors.toSet());
+
+        return followMapper.toFollowerReadRes(followers, myFollowings);
     }
 
     /**
