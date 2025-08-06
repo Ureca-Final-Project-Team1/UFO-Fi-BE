@@ -35,6 +35,9 @@ public class InterestedPostManager {
     }
 
     public List<InterestedCarriers> decodeCarrierBit(int carrierBit) {
+        if (carrierBit == 0) {
+            return List.of();
+        }
         return InterestedCarriers.decode(carrierBit);
     }
 }
