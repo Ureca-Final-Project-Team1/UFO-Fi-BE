@@ -15,8 +15,8 @@ import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostCommon
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostDetailRes;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.response.TradePostListRes;
 import com.example.ufo_fi.v2.user.domain.User;
-import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.user.domain.UserManager;
+import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.domain.UserPlanManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +84,6 @@ public class TradePostService {
 
         Slice<TradePost> posts = tradePostManager.findPostsByCondition(request, pageable
         );
-
-        tradePostManager.validatePostsExistence(posts);
 
         return TradePostListRes.of(posts);
     }
