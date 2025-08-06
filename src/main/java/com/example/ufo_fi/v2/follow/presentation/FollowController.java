@@ -10,7 +10,6 @@ import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingCreateRes
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingsReadRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -22,41 +21,39 @@ public class FollowController implements FollowApiSpec {
 
     @Override
     public ResponseEntity<ResponseBody<FollowingCreateRes>> createFollow(
-        Long followingId,
-        DefaultUserPrincipal defaultUserPrincipal
+            Long followingId,
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
-            ResponseBody.success(
-                followService.createFollow(followingId, defaultUserPrincipal.getId())));
+                ResponseBody.success(
+                        followService.createFollow(followingId, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<FollowerDeleteRes>> deleteFollow(
-        Long followingId,
-        DefaultUserPrincipal defaultUserPrincipal
+            Long followingId,
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
-            ResponseBody.success(
-                followService.deleteFollower(followingId, defaultUserPrincipal.getId())));
-    }
-
-    @Override
-    public ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
-        DefaultUserPrincipal defaultUserPrincipal,
-        int page
-    ) {
-        return ResponseEntity.ok(
-            ResponseBody.success(
-                followService.readFollowings(defaultUserPrincipal.getId(), page)));
+                ResponseBody.success(
+                        followService.deleteFollower(followingId, defaultUserPrincipal.getId())));
     }
 
     @Override
     public ResponseEntity<ResponseBody<FollowersReadRes>> readFollowers(
-        DefaultUserPrincipal defaultUserPrincipal,
-        int page
+            DefaultUserPrincipal defaultUserPrincipal
     ) {
         return ResponseEntity.ok(
-            ResponseBody.success(
-                followService.readFollowers(defaultUserPrincipal.getId(), page)));
+                ResponseBody.success(
+                        followService.readFollowers(defaultUserPrincipal.getId())));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<FollowingsReadRes>> readFollowings(
+            DefaultUserPrincipal defaultUserPrincipal
+    ) {
+        return ResponseEntity.ok(
+                ResponseBody.success(
+                        followService.readFollowings(defaultUserPrincipal.getId())));
     }
 }

@@ -6,10 +6,9 @@ import com.example.ufo_fi.v2.follow.exception.FollowErrorCode;
 import com.example.ufo_fi.v2.follow.persistence.FollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -28,11 +27,11 @@ public class FollowManager {
     public Follow findFollowingIdAndFollowerId(Long followingId, Long userId) {
 
         return followRepository.findByFollowingUserIdAndFollowerUserId(followingId, userId)
-            .orElseThrow(() -> new GlobalException(FollowErrorCode.FOLLOW_NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(FollowErrorCode.FOLLOW_NOT_FOUND));
     }
 
     public Follow saveFollow(Follow follow) {
-        try{
+        try {
             return followRepository.save(follow);
         } catch (DataIntegrityViolationException e) {
             throw new GlobalException(FollowErrorCode.ALREADY_FOLLOW);
@@ -44,29 +43,17 @@ public class FollowManager {
         followRepository.delete(follow);
     }
 
-    public Page<Follow> findAllFollowerId(Long userId, PageRequest pageRequest) {
-
-        Page<Long> followIds = followRepository.findAllIdByFollowingUserId(userId, pageRequest);
-        return new PageImpl<>(
-            followRepository.findFollowerWithUserAndPhotoByIn(followIds.getContent()),
-            pageRequest,
-            followIds.getTotalElements()
-        );
+    public List<Follow> findAllFollowers(Long userId) {
+        return followRepository.findAllFollowersWithUser(userId);
     }
 
-    public Page<Follow> findAllFollowingId(Long userId, PageRequest pageRequest) {
 
-        Page<Long> followIds = followRepository.findAllIdByFollowerUserId(userId, pageRequest);
-        return new PageImpl<>(
-            followRepository.findFollowingWithUserAndPhotoByIn(followIds.getContent()),
-            pageRequest,
-            followIds.getTotalElements()
-        );
+    public List<Follow> findAllFollowings(Long userId) {
+        return followRepository.findAllFollowingsWithUser(userId);
     }
-
 
     public void validateFollow(Long followingId, Long followerId) {
-        if(followerId == followingId){
+        if (followerId == followingId) {
             throw new GlobalException(FollowErrorCode.CANT_FOLLOW_MYSELF);
         }
     }
