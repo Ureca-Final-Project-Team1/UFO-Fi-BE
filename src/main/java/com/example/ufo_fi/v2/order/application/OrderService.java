@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final BulkPurchaseContext bulkPurchaseContext;
     private final ApplicationEventPublisher publisher;
+    private final TransactionTemplate transactionTemplate;
 
     /**
      * @param userId : 나
@@ -128,10 +130,12 @@ public class OrderService {
     /**
      * 일괄 구매 구매 요청
      */
-    @Transactional
     public BulkPurchaseConfirmRes bulkPurchase(TradePostConfirmBulkReq bulkRequest, Long buyerId) {
-        PurchaseResult purchaseResult = bulkPurchaseContext.bulkPurchase(
-            bulkRequest.getPostIds(), buyerId
+
+        PurchaseResult purchaseResult = transactionTemplate.execute(status ->
+            bulkPurchaseContext.bulkPurchase(
+                bulkRequest.getPostIds(), buyerId
+            )
         );
 
         return orderMapper.toTradePostBulkPurchaseConfirmRes(purchaseResult);
