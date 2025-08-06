@@ -18,6 +18,6 @@ public class LogoutService {
         jwtUtil.deleteJwtCookie(response);
 
         // 2. Refresh Token 제거
-        refreshRepository.deleteById(userId);
+        refreshRepository.deleteByUserId(userId);
     }
 }
