@@ -23,6 +23,10 @@ public class PaymentLogTrace {
         this.basicLogInfo = basicLogInfo;
     }
 
+    public void appendOrderId(ConfirmReq confirmReq) {
+        this.orderId = confirmReq.getOrderId();
+    }
+
     public void appendConfirmRequest(ConfirmReq confirmReq){
         this.confirmReq = confirmReq;
         this.orderId = confirmReq.getOrderId();
