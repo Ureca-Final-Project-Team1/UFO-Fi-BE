@@ -82,12 +82,7 @@ public class RefreshUtil {
     }
 
     public void deleteRefreshCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("refresh", "");
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        cookie.setSecure(true);
-        cookie.setDomain(".ufo-fi.store");
-        response.addCookie(cookie);
+        String cookieValue = "Refresh=; Path=/; Max-Age=0; HttpOnly; Domain=.ufo-fi.store; SameSite=None; Secure";
+        response.addHeader("Set-Cookie", cookieValue);
     }
 }
