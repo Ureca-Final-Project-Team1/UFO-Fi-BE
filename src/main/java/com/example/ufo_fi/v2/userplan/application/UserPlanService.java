@@ -56,11 +56,11 @@ public class UserPlanService {
     }
 
     @Transactional
-    public UserPlanUpdateRes updateUserPlan(Long userId, UserPlanUpdateReq userPlanUpdateReq) {
+    public UserPlanUpdateRes updateUserPlan(Long userId, Long planId) {
         User userProxy = entityManager.getReference(User.class, userId);
         UserPlan userPlan = userPlanManager.findByUser(userProxy);
 
-        Plan targetPlan = planManager.findPlanById(userPlanUpdateReq.getPlanId());
+        Plan targetPlan = planManager.findPlanById(planId);
         Plan myPlan = planManager.findPlanById(userPlan.getPlan().getId());
 
         userPlanManager.validateUserPlanUpdatable(userPlan, myPlan);
