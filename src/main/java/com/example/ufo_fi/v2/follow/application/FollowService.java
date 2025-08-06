@@ -9,14 +9,11 @@ import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingCreateRes
 import com.example.ufo_fi.v2.follow.presentation.dto.response.FollowingsReadRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
-import jakarta.persistence.EntityManager;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +25,11 @@ public class FollowService {
 
     /**
      * @param followingId : 내가 팔로우할 유저
-     * @param followerId : 나
-     *
-     *                   1. 내가 팔로우할 유저를 조회한다.
-     *                   2. 나를 찾는다.
-     *                   3. dto 반환
+     * @param followerId  : 나
+     *                    <p>
+     *                    1. 내가 팔로우할 유저를 조회한다.
+     *                    2. 나를 찾는다.
+     *                    3. dto 반환
      */
     @Transactional
     public FollowingCreateRes createFollow(Long followingId, Long followerId) {
@@ -49,7 +46,7 @@ public class FollowService {
     /**
      * @param followingId : 삭제할 팔로워 (나를 팔로우했던 사람)
      * @param userId      : 나 (팔로우를 당한 사람)
-     *
+     *                    <p>
      *                    1. 팔로우를 조회한다.
      *                    2. 팔로우를 삭제한다.
      *                    3. dto 반환
@@ -64,27 +61,25 @@ public class FollowService {
 
     /**
      * @param userId : 나
-     * @param page : 페이지네이션
-     *
-     *             1. 페이지네이션을 적용한 팔로우 조회
-     *             2. dto 반환
+     *               <p>
+     *               1. 팔로워(즉, 나를 팔로잉 한 사람들) 조회
+     *               2. dto 반환
      */
-    public FollowingsReadRes readFollowings(Long userId, int page) {
-        Page<Follow> follows = followManager.findAllFollowerId(userId, PageRequest.of(page, 10));
+    public FollowersReadRes readFollowers(Long userId) {
+        List<Follow> follows = followManager.findAllFollowers(userId);
 
-        return followMapper.toFollowingsReadRes(follows);
+        return followMapper.toFollowerReadRes(follows);
     }
 
     /**
      * @param userId : 나
-     * @param page : 페이지네이션
-     *
-     *             1. 페이지네이션을 적용한 팔로우 조회
-     *             2. dto 반환
+     *               <p>
+     *               1. 팔로잉(즉, 내가 팔로잉 신청한 사람들) 조회
+     *               2. dto 반환
      */
-    public FollowersReadRes readFollowers(Long userId, int page) {
-        Page<Follow> follows = followManager.findAllFollowingId(userId, PageRequest.of(page, 10));
+    public FollowingsReadRes readFollowings(Long userId) {
+        List<Follow> follows = followManager.findAllFollowings(userId);
 
-        return followMapper.toFollowerReadRes(follows);
+        return followMapper.toFollowingsReadRes(follows);
     }
 }
