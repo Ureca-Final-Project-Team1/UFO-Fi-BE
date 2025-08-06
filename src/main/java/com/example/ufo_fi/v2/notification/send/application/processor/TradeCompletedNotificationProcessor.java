@@ -44,7 +44,8 @@ public class TradeCompletedNotificationProcessor {
         // 3. 전송
         List<String> tokens = fcmManager.readFcmTokens(List.of(userId));
         PushMassageCommand pushMassageCommand = PushMassageCommand.from(tokens, message);
-        webPushClient.sendUnicast(pushMassageCommand);
+        //webPushClient.sendUnicast(pushMassageCommand);
+        webPushClient.sendMulticast(pushMassageCommand);
         notificationService.saveNotification(message);
     }
 }

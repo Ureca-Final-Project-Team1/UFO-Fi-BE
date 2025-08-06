@@ -17,7 +17,7 @@ public interface FcmTokenApiSpec {
 
     @Operation(summary = "FCM 토큰 저장 API", description = "사용자의 FCM 토큰을 저장한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/fcm/token")
+    @PostMapping("/fcm/token")
     ResponseEntity<ResponseBody<FcmTokenCommonRes>> saveToken(
             @RequestBody FcmTokenSaveReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
