@@ -74,6 +74,17 @@ dependencies {
 
     // ahocorasick
     implementation 'org.ahocorasick:ahocorasick:0.6.3'
+
+    //slack
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.slack.api:slack-app-backend:1.22.2'
+    implementation 'com.slack.api:slack-api-model:1.22.2'
+
+    //prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    //log+AOP
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {

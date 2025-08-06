@@ -21,3 +21,9 @@ payment:
 
 firebase:
   base-url: ${BASE_URL}
+
+slack:
+  token: slackslackslack
+
+login:
+  success-url: localhost:3000
