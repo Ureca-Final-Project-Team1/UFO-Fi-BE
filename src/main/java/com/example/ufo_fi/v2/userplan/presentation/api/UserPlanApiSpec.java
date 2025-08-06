@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "UserPlan API", description = "유저 요금제 도메인")
 public interface UserPlanApiSpec {
@@ -41,6 +42,7 @@ public interface UserPlanApiSpec {
     @PutMapping("/user-plan/{userPlanId}")
     ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
+        @RequestParam Long planId,
         @RequestBody UserPlanUpdateReq userPlanUpdateReq
     );
 }
