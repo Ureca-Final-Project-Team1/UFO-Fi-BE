@@ -2,6 +2,7 @@ package com.example.ufo_fi.v2.interestedpost.domain;
 
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,16 @@ public enum InterestedCarriers {
             bitmask |= carrier.getBit();
         }
         return bitmask;
+    }
+
+    public static List<InterestedCarriers> decode(int bitmask) {
+        List<InterestedCarriers> result = new ArrayList<>();
+        for (InterestedCarriers carrier : InterestedCarriers.values()) {
+            if ((bitmask & carrier.getBit()) != 0) {
+                result.add(carrier);
+            }
+        }
+        return result;
     }
 
     public static InterestedCarriers fromCarrier(Carrier carrier) {
