@@ -9,6 +9,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.Date;
 import javax.crypto.SecretKey;
@@ -77,5 +79,15 @@ public class RefreshUtil {
                 .build()
                 .parseSignedClaims(jwt)
                 .getPayload();
+    }
+
+    public void deleteRefreshCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("refresh", "");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setSecure(true);
+        cookie.setDomain(".ufo-fi.store");
+        response.addCookie(cookie);
     }
 }
