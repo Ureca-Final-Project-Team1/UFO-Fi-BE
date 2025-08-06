@@ -29,7 +29,7 @@ public interface UserApiSpec {
 
     @Operation(summary = "회원가입 API", description = "유저의 ROLE과 핸드폰 번호를 가져온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/signup/user-info")
+    @GetMapping("/users/me/user-info")
     ResponseEntity<ResponseBody<UserRoleReadRes>> readUserInfo(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         HttpServletResponse response
@@ -37,21 +37,21 @@ public interface UserApiSpec {
 
     @Operation(summary = "상대방 유저 조회 API", description = "유저의 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/profile/{anotherUserId}")
+    @GetMapping("/users/{anotherUserId}/profile")
     ResponseEntity<ResponseBody<AnotherUserInfoReadRes>> readUser(
         @PathVariable Long anotherUserId
     );
 
     @Operation(summary = "나의 프로필 조회 API", description = "유저 기본 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage")
+    @GetMapping("/users/me/profile")
     ResponseEntity<ResponseBody<UserInfoReadRes>> readMyPageUserInfo(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 
     @Operation(summary = "나의 프로필 수정 API", description = "유저 닉네임을 수정한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PatchMapping("/v1/mypage/nickname")
+    @PatchMapping("/users/me/profile")
     ResponseEntity<ResponseBody<UserNicknameUpdateRes>> updateMyPageUserNicknames(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody @Valid UserNicknameUpdateReq userNicknameUpdateReq
@@ -59,14 +59,14 @@ public interface UserApiSpec {
 
     @Operation(summary = "비활성 사용자 조회 API", description = "정지된 사용자 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/users/reported")
+    @GetMapping("/users/role/reported")
     ResponseEntity<ResponseBody<ReportedUsersReadRes>> readReportedUser(
         @RequestParam int page
     );
 
     @Operation(summary = "사용자 비활성화 풀기 API", description = "정지된 사용자의 비활성화를 푼다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PutMapping("/v1/user/grant-user")
+    @PutMapping("/admin/user/grant-user")
     ResponseEntity<ResponseBody<Void>> updateUserRoleUser(
         @RequestBody GrantUserRoleReq grantUserRoleReq
     );

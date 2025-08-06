@@ -14,11 +14,11 @@ public interface StatisticsApiSpec {
 
     @Operation(summary = "기본 통계 API", description = "기본 통계를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/statistics")
+    @GetMapping("/admin/statistics")
     ResponseEntity<ResponseBody<StatisticsRes>> readStatistics();
 
     @Operation(summary = "비활성화 통계 API", description = "비활성화 관련 통계를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/statistics/reports")
+    @GetMapping("/admin/statistics/reports")
     ResponseEntity<ResponseBody<StatisticsReportsRes>> readStatisticsReports();
 }

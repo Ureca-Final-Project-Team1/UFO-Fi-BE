@@ -30,7 +30,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "판매 게시물 생성 API", description = "거래 게시물을 등록한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/posts")
+    @PostMapping("/posts")
     ResponseEntity<ResponseBody<TradePostCommonRes>> createTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody @Valid TradePostCreateReq request
@@ -38,7 +38,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "게시글 전체 조회 API", description = "거래 게시물을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/posts")
+    @GetMapping("/posts")
     ResponseEntity<ResponseBody<TradePostListRes>> readTradePosts(
         @ParameterObject TradePostQueryReq request,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
@@ -46,7 +46,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "판매 게시물 수정 API", description = "거래 게시물을 수정한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PutMapping("/v1/posts/{postId}")
+    @PutMapping("/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> updateTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId,
@@ -55,7 +55,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "판매 게시물 삭제 API", description = "거래 게시물을 삭제한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("/v1/posts/{postId}")
+    @DeleteMapping("/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostCommonRes>> deleteTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId
@@ -63,7 +63,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "일괄 구매 조회 API", description = "일괄 구매를 위한 조회를 한다.(미완)")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/posts/bulk-purchase")
+    @GetMapping("/posts/bulk-purchase")
     ResponseEntity<ResponseBody<TradePostBulkPurchaseRes>> readBulkPurchase(
         @ParameterObject @Valid TradePostBulkPurchaseReq request,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
@@ -71,7 +71,7 @@ public interface TradePostApiSpec {
 
     @Operation(summary = "판매 게시물 상세 조회 API", description = "상세 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/posts/{postId}")
+    @GetMapping("/posts/{postId}")
     ResponseEntity<ResponseBody<TradePostDetailRes>> readTradePost(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @PathVariable Long postId

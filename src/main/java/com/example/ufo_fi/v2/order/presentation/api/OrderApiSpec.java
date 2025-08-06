@@ -26,28 +26,28 @@ public interface OrderApiSpec {
 
     @Operation(summary = "판매 내역 조회 API", description = "내 판매 내역 목록을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/sale-histories")
+    @GetMapping("/trade-histories/sales")
     ResponseEntity<ResponseBody<SaleHistoriesRes>> readSaleHistories(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 
     @Operation(summary = "구매 내역 조회 API", description = "내 구매 내역을 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/purchase-histories")
+    @GetMapping("/trade-histories/purchases")
     ResponseEntity<ResponseBody<PurchaseHistoriesRes>> readPurchaseHistories(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 
     @Operation(summary = "구매 내역 상세 보기 API", description = "내 구매 내역 상세를 조회한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/purchase-histories/{purchaseHistoryId}")
+    @GetMapping("/trade-histories/{tradeHistoryId}")
     ResponseEntity<ResponseBody<PurchaseHistoryRes>> readPurchaseHistory(
-        @PathVariable(name = "purchaseHistoryId") Long purchaseHistoryId
+        @PathVariable(name = "tradeHistoryId") Long purchaseHistoryId
     );
 
     @Operation(summary = "구매(Zet <-> Data) API", description = "구매한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/posts/purchase")
+    @PostMapping("/trade-posts/purchase")
     ResponseEntity<ResponseBody<TradePostPurchaseRes>> purchase(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody TradePostPurchaseReq purchaseReq
@@ -55,7 +55,7 @@ public interface OrderApiSpec {
 
     @Operation(summary = "일괄 구매 요청 API", description = "일괄 구매를 요청한다.(미완)")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/posts/bulk-purchase")
+    @PostMapping("/trade-posts/bulk-purchase")
     ResponseEntity<ResponseBody<BulkPurchaseConfirmRes>> buyBulkPurchase(
         @RequestBody @Valid TradePostConfirmBulkReq request,
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
