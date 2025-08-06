@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserPlanUpdateReq {
 
-    @Schema(description = "요금제 식별자")
-    private Long planId;
-
     @Schema(description = "요금제 이름")
     private String planName;
 }

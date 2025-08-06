@@ -41,10 +41,11 @@ public class UserPlanController implements UserPlanApiSpec {
     @Override
     public ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(
         DefaultUserPrincipal defaultUserPrincipal,
+        Long planId,
         UserPlanUpdateReq userPlanUpdateReq
     ) {
         return ResponseEntity.ok(
             ResponseBody.success(
-                userPlanService.updateUserPlan(defaultUserPrincipal.getId(), userPlanUpdateReq)));
+                userPlanService.updateUserPlan(defaultUserPrincipal.getId(), planId)));
     }
 }
