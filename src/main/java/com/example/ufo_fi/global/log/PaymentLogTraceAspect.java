@@ -1,9 +1,13 @@
 package com.example.ufo_fi.global.log;
 
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.global.log.meta.BasicLogInfo;
 import com.example.ufo_fi.global.log.meta.PaymentLogMethodTrace;
 import com.example.ufo_fi.global.log.meta.PaymentLogTrace;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.payment.application.FailLogService;
+import com.example.ufo_fi.v2.payment.domain.payment.MetaDataKey;
+import com.example.ufo_fi.v2.payment.domain.payment.StateMetaData;
 import com.example.ufo_fi.v2.payment.domain.payment.entity.FailLog;
 import com.example.ufo_fi.v2.payment.infrastructure.toss.response.ConfirmResult;
 import com.example.ufo_fi.v2.payment.persistence.FailLogRepository;
@@ -26,41 +30,49 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PaymentLogTraceAspect {
 
-    private final FailLogRepository failLogRepository;
+    private final FailLogService failLogService;
+
+    @Pointcut("execution(* com.example.ufo_fi.v2.payment.presentation.PaymentController.confirm(..))")
+    private void paymentLogTraceRequest() {}
 
     @Pointcut("""
-        execution(* com.example.ufo_fi.v2.payment.presentation.PaymentController..*(..)) ||
-        execution(* com.example.ufo_fi.v2.payment.domain.payment.state..*(..)) ||
-        execution(* com.example.ufo_fi.v2.payment.domain.payment.PaymentStateContext.*(..)) ||
-        execution(* com.example.ufo_fi.v2.payment.domain.payment.StateMetaData.*(..))
+        execution(* com.example.ufo_fi.v2.payment.domain.payment.state.ReadyState.proceed(..)) ||
+        execution(* com.example.ufo_fi.v2.payment.domain.payment.state.InProgressState.proceed(..)) ||
+        execution(* com.example.ufo_fi.v2.payment.domain.payment.state.FailState.proceed(..)) ||
+        execution(* com.example.ufo_fi.v2.payment.domain.payment.state.DoneState.proceed(..)) ||
+        execution(* com.example.ufo_fi.v2.payment.domain.payment.state.TimeoutState.proceed(..))
     """)
-    private void paymentLogTraceTarget() {}
+    private void paymentLogTraceStatus() {}
 
-    @Around("paymentLogTraceTarget()")
-    public Object traceLog(ProceedingJoinPoint joinPoint) throws Throwable {
-        PaymentLogTrace logTrace = PaymentLogTraceContext.get();
-
-        boolean isFirst = (logTrace == null);
-        if(isFirst){
-            logTrace = createLogTrace(joinPoint);
-            PaymentLogTraceContext.set(logTrace);
-        }
+    //요청 시작, 요청 끝 basicLogInfo, ConfirmReq를 받아온다. + method Trace     state, 토스, 응답
+    @Around("paymentLogTraceRequest()")
+    public Object tracePaymentRequest(ProceedingJoinPoint joinPoint) throws Throwable {
+        PaymentLogTrace logTrace = createLogTrace(joinPoint);
+        PaymentLogTraceContext.set(logTrace);
 
         methodTrace(logTrace, joinPoint);
 
-        try {
-            Object result = joinPoint.proceed();
+        try{
+            return joinPoint.proceed();
+        } catch (Throwable ex){
+            failLogService.saveFailLog(FailLog.from(logTrace));
+            throw ex;
+        } finally {
+            PaymentLogTraceContext.clear();
+        }
+    }
 
-            if(result instanceof ConfirmResult confirmResult){
-                logTrace.appendConfirmResult(result);
-            }
+    //StateMetaData를 통해 토스의 응답값을 받아온다.
+    @Around("paymentLogTraceStatus()")
+    public Object tracePaymentStatus(ProceedingJoinPoint joinPoint) throws Throwable {
+        PaymentLogTrace logTrace = PaymentLogTraceContext.get();
 
-            return result;
-        } finally{
-            if(isFirst){
-                failLogRepository.save(FailLog.from(logTrace));
-                PaymentLogTraceContext.clear();
-            }
+        methodTrace(logTrace, joinPoint);
+
+        try{
+            return joinPoint.proceed();
+        } finally {
+            extractConfirmResultFromStateMetaData(joinPoint, logTrace);
         }
     }
 
@@ -69,6 +81,23 @@ public class PaymentLogTraceAspect {
         addBasicInfo(paymentLogTrace);
         addConfirmReq(joinPoint, paymentLogTrace);
         return paymentLogTrace;
+    }
+
+    private void extractConfirmResultFromStateMetaData(
+        ProceedingJoinPoint joinPoint,
+        PaymentLogTrace logTrace
+    ) {
+        for (Object arg : joinPoint.getArgs()) {
+            if (arg instanceof StateMetaData metaData) {
+                ConfirmResult confirmResult = metaData.get(
+                    MetaDataKey.CONFIRM_RESULT,
+                    ConfirmResult.class
+                );
+                if (confirmResult != null) {
+                    logTrace.appendConfirmResult(confirmResult);
+                }
+            }
+        }
     }
 
     private void methodTrace(PaymentLogTrace logTrace, ProceedingJoinPoint joinPoint) {
@@ -90,6 +119,7 @@ public class PaymentLogTraceAspect {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
             if (arg instanceof ConfirmReq confirmReq) {
+                paymentLogTrace.appendOrderId(confirmReq);
                 paymentLogTrace.appendConfirmRequest(confirmReq);
             }
         }
