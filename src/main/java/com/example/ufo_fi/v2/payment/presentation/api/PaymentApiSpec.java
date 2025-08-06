@@ -22,7 +22,7 @@ public interface PaymentApiSpec {
 
     @Operation(summary = "충전하기 API", description = "ZET 충전을 시도합니다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/mypage/zet-charges")
+    @PostMapping("/payment")
     ResponseEntity<ResponseBody<PaymentRes>> chargeZet(
             @RequestBody PaymentReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
@@ -31,7 +31,7 @@ public interface PaymentApiSpec {
 
     @Operation(summary = "결제 정보 검증 및 승인 API", description = "결제 정보를 검증하고 최종 결제 승인을 요청합니다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/payment/confirm")
+    @PostMapping("/payment/status")
     ResponseEntity<ResponseBody<ConfirmRes>> confirm(
             @RequestBody ConfirmReq request,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
@@ -39,7 +39,7 @@ public interface PaymentApiSpec {
 
     @Operation(summary = "관리자 zet 복구 API", description = "관리자 권한으로 zet를 복구한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/admin/zet-recovery")
+    @PostMapping("/admin/zet-recovery")
     ResponseEntity<ResponseBody<ZetRecoveryRes>> zetRecovery(
             @RequestBody ZetRecoveryReq zetRecoveryReq,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal

@@ -23,7 +23,7 @@ public interface UserPlanApiSpec {
 
     @Operation(summary = "회원가입 API", description = "유저 정보와 요금제 정보를 포함하여 저장한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/signup")
+    @PostMapping("/user-plan")
     ResponseEntity<ResponseBody<SignupRes>> signup(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody @Valid SignupReq signupReq
@@ -31,14 +31,14 @@ public interface UserPlanApiSpec {
 
     @Operation(summary = "나의 요금제 정보 조회 API", description = "유저의 요금제 정보를 받아온다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/mypage/user-plan")
+    @GetMapping("/user-plan")
     ResponseEntity<ResponseBody<UserPlanReadRes>> readUserPlan(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
     );
 
     @Operation(summary = "요금제 정보 변경 API", description = "유저의 요금제 정보를 변경한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PutMapping("/v1/mypage/plan")
+    @PutMapping("/user-plans/{userPlanId}")
     ResponseEntity<ResponseBody<UserPlanUpdateRes>> updateUserPlan(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         @RequestBody UserPlanUpdateReq userPlanUpdateReq

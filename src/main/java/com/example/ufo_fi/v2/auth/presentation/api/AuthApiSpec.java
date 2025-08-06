@@ -19,7 +19,7 @@ public interface AuthApiSpec {
 
     @Operation(summary = "로그아웃 API", description = "JWT와 Refresh 토큰을 삭제한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("/v1/logout")
+    @PostMapping("/logout")
     ResponseEntity<ResponseBody<Void>> logout(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         HttpServletRequest httpServletRequest,
@@ -29,7 +29,7 @@ public interface AuthApiSpec {
 
     @Operation(summary = "jwt 토큰 갱신 API", description = "jwt 토큰을 갱신한다.")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("/v1/refresh")
+    @GetMapping("/refresh")
     ResponseEntity<ResponseBody<RefreshReissueRes>> reissueRefresh(
         @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal,
         HttpServletRequest request,

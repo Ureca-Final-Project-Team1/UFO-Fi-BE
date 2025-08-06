@@ -25,29 +25,29 @@ public interface BannedWordApiSpec {
 
     @Operation(summary = "금칙어 등록", description = "금칙어 등록 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
-    @PostMapping("v1/admin/bannedword")
+    @PostMapping("/admin/banned-words")
     ResponseEntity<ResponseBody<BannedWordCreateRes>> createBannedWord(
         @Valid @RequestBody BannedWordCreateReq request
     );
 
     @Operation(summary = "금칙어 전체 조회", description = "금칙어 전체 조회 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
-    @GetMapping("v1/admin/bannedword")
+    @GetMapping("/admin/banned-words")
     ResponseEntity<ResponseBody<Page<BannedWordReadRes>>> readBannedWords(
         @Valid @ParameterObject BannedWordReadPageReq request
     );
 
     @Operation(summary = "금칙어 단일 삭제", description = "금칙어 단일 삭제 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("v1/admin/bannedword/{banwordId}")
+    @DeleteMapping("/admin/banned-words/{bannedWordId}")
     ResponseEntity<ResponseBody<BannedWordDeleteRes>> deleteBannedWord(
         @Parameter(description = "삭제할 금칙어 ID")
-        @PathVariable("banwordId") Long id
+        @PathVariable("bannedWordId") Long id
     );
 
     @Operation(summary = "금칙어 일괄 삭제", description = "금칙어 일괄 삭제 : 관리자 로그인 필요")
     @ApiResponse(useReturnTypeSchema = true)
-    @DeleteMapping("v1/admin/bannedword")
+    @DeleteMapping("/admin/banned-words")
     ResponseEntity<ResponseBody<BannedWordBulkDeleteRes>> deleteBannedWords(
         @Parameter(description = "삭제할 금칙어 ID 목록")
         @Valid @RequestBody BannedWordDeleteBulkReq request
