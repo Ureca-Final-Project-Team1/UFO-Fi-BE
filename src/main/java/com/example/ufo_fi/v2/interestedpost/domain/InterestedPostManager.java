@@ -33,4 +33,11 @@ public class InterestedPostManager {
     public List<Long> findMatchedUserIdsWithNotificationEnabled(int zet, int capacity, int carrier, Long sellerId) {
         return interestedPostRepository.findMatchedUserIdsWithNotificationEnabled(zet, capacity, carrier, sellerId);
     }
+
+    public List<InterestedCarriers> decodeCarrierBit(int carrierBit) {
+        if (carrierBit == 0) {
+            return List.of();
+        }
+        return InterestedCarriers.decode(carrierBit);
+    }
 }
