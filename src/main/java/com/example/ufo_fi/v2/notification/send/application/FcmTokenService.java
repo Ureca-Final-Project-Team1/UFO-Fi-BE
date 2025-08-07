@@ -29,53 +29,5 @@ public class FcmTokenService {
         FcmToken fcmToken = fcmManager.saveFcmToken(token, userProxy);
 
         return fcmMapper.toFcmTokenCommonRes(fcmToken);
-        // return new FcmTokenCommonRes(userId);
     }
-// infra 계층으로 분리함
-//    /**
-//     * 멀티 캐스트 (다수 유저용)
-//     */
-//    public void sendMulticastByUserIds(List<Long> userIds, String title, String body, String url) {
-//        List<String> tokens = fcmTokenRepository.findTokensByUserIds(userIds);
-//        if (tokens.isEmpty()) return;
-//
-//        MulticastMessage message = MulticastMessage.builder()
-//                .setNotification(Notification.builder()
-//                        .setTitle(title)
-//                        .setBody(body)
-//                        .build())
-//                .addAllTokens(tokens)
-//                .putData("url", baseUrl + url)
-//                .build();
-//
-//        try {
-//            firebaseMessaging.sendEachForMulticast(message);
-//
-//        } catch (FirebaseMessagingException e) {
-//            throw new GlobalException(NotificationErrorCode.MESSAGE_SEND_FAILED);
-//        }
-//    }
-//
-//    /**
-//     * 유니 캐스트 (단일 유저용)
-//     */
-//    public void sendUnicastByUserId(Long userId, String title, String body, String url) {
-//        Optional<String> tokenOpt = fcmTokenRepository.findByUserId(userId);
-//        tokenOpt.ifPresent(token -> {
-//            Message message = Message.builder()
-//                    .setNotification(Notification.builder()
-//                            .setTitle(title)
-//                            .setBody(body)
-//                            .build())
-//                    .putData("url", baseUrl + url)
-//                    .setToken(token)
-//                    .build();
-//
-//            try {
-//                firebaseMessaging.send(message);
-//            } catch (FirebaseMessagingException e) {
-//                throw new GlobalException(NotificationErrorCode.MESSAGE_SEND_FAILED);
-//            }
-//        });
-//    }
 }

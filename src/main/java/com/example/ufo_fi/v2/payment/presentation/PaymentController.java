@@ -8,6 +8,8 @@ import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.FailLogRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentBackOfficesRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ZetRecoveryRes;
 import lombok.RequiredArgsConstructor;
@@ -55,4 +57,19 @@ public class PaymentController implements PaymentApiSpec {
                 ResponseBody.success(
                         chargeService.zetRecovery(zetRecoveryReq)));
     }
+
+    @Override
+    public ResponseEntity<ResponseBody<PaymentBackOfficesRes>> readPayments() {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                chargeService.readPayments()));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody<FailLogRes>> readFailLog(Long paymentId) {
+        return ResponseEntity.ok(
+            ResponseBody.success(
+                chargeService.readFailLog(paymentId)));
+    }
+
 }

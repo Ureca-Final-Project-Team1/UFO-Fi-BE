@@ -130,8 +130,10 @@ public class OrderService {
      */
     @Transactional
     public BulkPurchaseConfirmRes bulkPurchase(TradePostConfirmBulkReq bulkRequest, Long buyerId) {
+
         PurchaseResult purchaseResult = bulkPurchaseContext.bulkPurchase(
-            bulkRequest.getPostIds(), buyerId
+            bulkRequest.getPostIds(),
+            buyerId
         );
 
         return orderMapper.toTradePostBulkPurchaseConfirmRes(purchaseResult);

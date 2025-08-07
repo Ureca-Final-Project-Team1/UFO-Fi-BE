@@ -18,8 +18,8 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_PRICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "주문 번호의 가격과 요청한 가격이 다릅니다."),
     TOSS_PAYMENT_CONFIRM_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "결제 승인 요청에 실패했습니다."),
     TOSS_PAYMENT_CONFIRM_PARSE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "승인 응답 파싱에 실패했습니다."),
-    TOSS_PAYMENT_CONFIRM_TIME_OUT(HttpStatus.INTERNAL_SERVER_ERROR, "토스와의 통신 시간이 오바되었습니다.")
-    ;
+    TOSS_PAYMENT_CONFIRM_TIME_OUT(HttpStatus.INTERNAL_SERVER_ERROR, "토스와의 통신 시간이 오바되었습니다."),
+    FAIL_LOG_NOT_FOUND(HttpStatus.NOT_FOUND, "fail 로그가 없습니다.");
 
 
     private final HttpStatus httpStatus;

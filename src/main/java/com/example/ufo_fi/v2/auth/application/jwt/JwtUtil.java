@@ -111,11 +111,8 @@ public class JwtUtil {
      * 2. 만료시간을 0으로 해서 바로 만료될 수 있도록 설정한다.
      */
     public void deleteJwtCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("Authorization", null);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        String cookieValue = "Authorization=; Path=/; Max-Age=0; HttpOnly; Domain=.ufo-fi.store; SameSite=None; Secure";
+        response.addHeader("Set-Cookie", cookieValue);
     }
 
     // 1.Authorization 헤더에 값이 있는지 검증

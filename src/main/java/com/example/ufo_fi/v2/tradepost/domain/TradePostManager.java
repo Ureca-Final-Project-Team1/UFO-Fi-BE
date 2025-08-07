@@ -1,5 +1,6 @@
 package com.example.ufo_fi.v2.tradepost.domain;
 
+import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.bannedword.domain.filter.BannedWordFilter;
 import com.example.ufo_fi.v2.plan.domain.Carrier;
 import com.example.ufo_fi.v2.plan.domain.MobileDataType;
@@ -7,7 +8,6 @@ import com.example.ufo_fi.v2.tradepost.exception.TradePostErrorCode;
 import com.example.ufo_fi.v2.tradepost.persistence.TradePostRepository;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostBulkPurchaseReq;
 import com.example.ufo_fi.v2.tradepost.presentation.dto.request.TradePostQueryReq;
-import com.example.ufo_fi.global.exception.GlobalException;
 import com.example.ufo_fi.v2.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class TradePostManager {
 
     public List<TradePost> findSellingPostsByAnotherUser(
         User anotherUser, TradePostStatus tradePostStatus
-    ){
+    ) {
         return tradePostRepository.findAllByUserAndTradePostStatus(anotherUser, tradePostStatus);
     }
 

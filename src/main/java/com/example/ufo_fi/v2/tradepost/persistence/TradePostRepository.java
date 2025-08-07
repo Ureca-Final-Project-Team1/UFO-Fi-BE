@@ -41,5 +41,6 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
         """, nativeQuery = true)
     Long countPendingReportedPosts();
 
-    List<TradePost> findAllByUserAndTradePostStatus(User anotherUser, TradePostStatus tradePostStatus);
+    List<TradePost> findAllByUserAndTradePostStatus(User anotherUser,
+        TradePostStatus tradePostStatus);
 }
