@@ -5,7 +5,6 @@ import static com.example.ufo_fi.v2.tradepost.domain.TradePostStatus.EXPIRED;
 import static com.example.ufo_fi.v2.tradepost.domain.TradePostStatus.REPORTED;
 import static com.example.ufo_fi.v2.tradepost.domain.TradePostStatus.SOLD_OUT;
 
-import com.example.ufo_fi.v2.plan.domain.Plan;
 import com.example.ufo_fi.v2.tradepost.domain.TradePost;
 import com.example.ufo_fi.v2.tradepost.domain.TradePostStatus;
 import com.example.ufo_fi.v2.user.domain.User;
@@ -45,10 +44,18 @@ public class BulkPurchaseFailureHandler {
             return "자신의 상품은 구매할 수 없습니다.";
         }
         TradePostStatus status = tradePost.getTradePostStatus();
-        if (status == DELETED) return "삭제된 상품입니다.";
-        if (status == REPORTED) return "신고된 상품입니다.";
-        if (status == EXPIRED) return "만료된 상품입니다.";
-        if (status == SOLD_OUT) return "판매된 상품입니다.";
+        if (status.equals(DELETED)) {
+            return "삭제된 상품입니다.";
+        }
+        if (status.equals(REPORTED)) {
+            return "신고된 상품입니다.";
+        }
+        if (status.equals(EXPIRED)) {
+            return "만료된 상품입니다.";
+        }
+        if (status.equals(SOLD_OUT)) {
+            return "판매된 상품입니다.";
+        }
         return "알 수 없는 오류로 구매하지 못했습니다.";
     }
 }

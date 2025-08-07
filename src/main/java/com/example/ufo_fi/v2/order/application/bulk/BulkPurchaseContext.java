@@ -20,8 +20,9 @@ public class BulkPurchaseContext {
 
         List<Long> sortedPostIds = postIds.stream().sorted().toList();
 
-        sortedPostIds.forEach(sortedPostId -> {
-            TradePost tradePost = tradePostManager.findByIdWithLock(sortedPostId);
+        List<TradePost> tradePosts = tradePostManager.findAllByIdsWithLock(sortedPostIds);
+
+        tradePosts.forEach(tradePost -> {
             if (!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
                 bulkPurchaseFailureHandler.handleFailure(tradePost, buyerId, purchaseResult);
             } else {
