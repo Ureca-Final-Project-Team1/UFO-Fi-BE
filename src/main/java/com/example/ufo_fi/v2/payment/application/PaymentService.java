@@ -1,7 +1,9 @@
 package com.example.ufo_fi.v2.payment.application;
 
 import com.example.ufo_fi.global.exception.GlobalException;
+import com.example.ufo_fi.v2.payment.domain.backoffice.FailLogManager;
 import com.example.ufo_fi.v2.payment.domain.payment.*;
+import com.example.ufo_fi.v2.payment.domain.payment.entity.FailLog;
 import com.example.ufo_fi.v2.payment.domain.payment.entity.Payment;
 import com.example.ufo_fi.v2.payment.exception.PaymentErrorCode;
 import com.example.ufo_fi.v2.payment.persistence.PaymentRepository;
@@ -9,11 +11,14 @@ import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ConfirmRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.FailLogRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentBackOfficesRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.response.ZetRecoveryRes;
 import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.domain.UserManager;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +32,7 @@ public class PaymentService {
     private final PaymentStateContext paymentStateContext;
     private final EntityManager entityManager;
     private final PaymentManager paymentManager;
+    private final FailLogManager failLogManager;
     private final PaymentMapper paymentMapper;
 
     /**
@@ -65,8 +71,7 @@ public class PaymentService {
     }
 
     private Payment findPayment(String orderId) {
-        return paymentRepository.findByOrderId(orderId)
-                .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
+        return paymentManager.findByOrderId(orderId);
     }
 
     /**
@@ -94,5 +99,20 @@ public class PaymentService {
         payment.changeState(PaymentStatus.DONE);
 
         return paymentMapper.toZetRecoveryRes(userProxy, payment.getStatus());
+    }
+
+    public FailLogRes readFailLog(Long paymentId) {
+        Payment payment = paymentManager.findById(paymentId);
+        String orderId = payment.getOrderId();
+
+        FailLog failLog = failLogManager.findByOrderId(orderId);
+
+        return paymentMapper.toFailLogRes(failLog);
+    }
+
+    public PaymentBackOfficesRes readPayments() {
+        List<Payment> payments = paymentManager.findAllByStatusFailAndTimeout();
+
+        return paymentMapper.toPaymentBackOfficesRes(payments);
     }
 }

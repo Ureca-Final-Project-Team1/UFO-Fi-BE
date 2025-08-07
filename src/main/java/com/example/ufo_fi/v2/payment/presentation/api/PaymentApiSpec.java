@@ -2,6 +2,8 @@ package com.example.ufo_fi.v2.payment.presentation.api;
 
 import com.example.ufo_fi.global.response.ResponseBody;
 import com.example.ufo_fi.v2.auth.application.principal.DefaultUserPrincipal;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.FailLogRes;
+import com.example.ufo_fi.v2.payment.presentation.dto.response.PaymentBackOfficesRes;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ConfirmReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.PaymentReq;
 import com.example.ufo_fi.v2.payment.presentation.dto.request.ZetRecoveryReq;
@@ -13,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -43,5 +47,17 @@ public interface PaymentApiSpec {
     ResponseEntity<ResponseBody<ZetRecoveryRes>> zetRecovery(
             @RequestBody ZetRecoveryReq zetRecoveryReq,
             @AuthenticationPrincipal DefaultUserPrincipal defaultUserPrincipal
+    );
+
+    @Operation(summary = "관리자 payment 리스트 조회", description = "관리자 권한으로 실패 로그가 있는 payments를 조회한다.")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/admin/payments")
+    ResponseEntity<ResponseBody<PaymentBackOfficesRes>> readPayments();
+
+    @Operation(summary = "관리자 payment 상세 조회", description = "관리자 권한으로 fail_log를 조회한다")
+    @ApiResponse(useReturnTypeSchema = true)
+    @GetMapping("/admin/payments/{paymentId}")
+    ResponseEntity<ResponseBody<FailLogRes>> readFailLog(
+        @PathVariable(name = "paymentId") Long paymentId
     );
 }
