@@ -23,6 +23,14 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
         """)
     Optional<TradePost> findByIdWithLock(@Param("postId") Long postId);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        select tp
+        from TradePost tp
+        where tp.id in :postIds
+        """)
+    List<TradePost> findAllByIdInWithLock(@Param("postIds") List<Long> postIds);
+
     List<TradePost> findAllByUser(User readUser);
 
     List<TradePost> findTradePostByTradePostStatus(TradePostStatus tradePostStatus);
@@ -41,5 +49,6 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
         """, nativeQuery = true)
     Long countPendingReportedPosts();
 
-    List<TradePost> findAllByUserAndTradePostStatus(User anotherUser, TradePostStatus tradePostStatus);
+    List<TradePost> findAllByUserAndTradePostStatus(User anotherUser,
+        TradePostStatus tradePostStatus);
 }
