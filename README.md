@@ -123,13 +123,13 @@
 
 ### ✅ 결제 프로세스
 
-#### 🚨 문제상황 - PG사 연동 과정
+### 🚨 문제상황 - PG사 연동 과정
 <img width="350" height="350" alt="image" src="https://github.com/user-attachments/assets/3ee16dcb-95b6-4953-a49b-c25a067a15de" />
 <img width="650" height="530" alt="image" src="https://github.com/user-attachments/assets/e296657f-584c-422e-a050-ab7784c36399" />
 
 <br>
 
-#### 🌈 해결방안 KEYWORD
+### 🌈 해결방안 KEYWORD
 - **멱등성** -> Toss payments 에서 제공하는 pqymentKey로 멱등성 보장, 안전한 재시도 가능
 - **결제 흐름**
 - **예외상황 파악**
@@ -137,24 +137,24 @@
 
 <br>
 
-#### 🌈 결제 흐름: 상태 전이 흐름도
+### 🌈 결제 흐름: 상태 전이 흐름도
 <img width="750" height="630" alt="image" src="https://github.com/user-attachments/assets/b67767fc-9e8f-4a1b-a8bd-ebfaef9f0b12" />
 
 <br>
 
-#### 🌈 예외 상황 파악
+### 🌈 예외 상황 파악
 <img width="500" height="288" alt="image" src="https://github.com/user-attachments/assets/5e7d287f-7fbe-41ea-a9bb-0cefd8ebdba0" />
 <img width="600" height="313" alt="image" src="https://github.com/user-attachments/assets/652e89cc-eec3-4625-adc3-0f42286afb23" />
 
 
 <br>
 
-#### 🌈 Slack 모니터링을 통한 빠른 TimeoutState & FailState 상태 확인 가능**
+### 🌈 Slack 모니터링을 통한 빠른 TimeoutState & FailState 상태 확인 가능
 <img width="650" height="284" alt="image" src="https://github.com/user-attachments/assets/03cf4250-7fda-4b87-9cc8-90a826d0842d" />
 
 <br>
 
-#### 🌈 예외 상황 해결
+### 🌈 예외 상황 해결
 <img width="700" height="280" alt="image" src="https://github.com/user-attachments/assets/53ee7d76-4462-4e69-bafb-f5f7a8b0a39a" />
 
 <br>
@@ -168,12 +168,34 @@
 - **4. ZET 충전 로그 내역 확인 및 ZET 복구 시스템**
 
 <br>
+<br>
 
 ## ✅ 데이터 거래
-- **1. 중복 거래 방지를 위한 락 기반 업데이트**
-- **2. 락 범위(lock scope)와 락 지속 시간(lock duration)을 고려한 개발 트랜잭션 적용**
-- **3. 일괄 구매 시, 데드락 발생 지점 확인 및 순서 보장을 통한 이슈 해결**
+### 🚨 문제 상황 ①
+<img width="500" height="250" alt="image" src="https://github.com/user-attachments/assets/2c141aec-cbfc-491c-bd6e-0a9dffe61b0b" />
 
+<br>
+
+### 🌈 중복 거래 방지를 위한 락 기반 업데이트
+<img width="400" height="301" alt="image" src="https://github.com/user-attachments/assets/6e1827f0-fbf2-4dc0-b2bf-d3c656cf69bc" />
+
+<br>
+
+### 🚨 문제 상황 ② & 🌈 락 범위(lock scope)와 락 지속 시간(lock duration)을 고려한 개발 트랜잭션 적용
+<img width="400" height="228" alt="image" src="https://github.com/user-attachments/assets/e965b0b5-7161-4b2f-a545-63fc183a0d1b" />
+
+<br>
+
+### 🚨 문제 상황 ③
+<img width="600" height="279" alt="image" src="https://github.com/user-attachments/assets/884cce33-3fd8-4cea-b3a5-455a90388bed" />
+
+<br>
+
+### 🌈 일괄 구매 시, 데드락 발생 지점 확인 및 순서 보장을 통한 이슈 해결
+<img width="600" height="262" alt="image" src="https://github.com/user-attachments/assets/70a4e999-2b39-421a-b771-e42873284935" />
+
+
+<br>
 <br>
 
 ## ✅ 일괄구매 판매글 조회 로직 고도화
