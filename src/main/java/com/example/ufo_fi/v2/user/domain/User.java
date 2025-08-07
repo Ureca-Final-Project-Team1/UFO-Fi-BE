@@ -3,9 +3,7 @@ package com.example.ufo_fi.v2.user.domain;
 import com.example.ufo_fi.v2.auth.application.oauth.provider.OAuth2Response;
 import com.example.ufo_fi.v2.auth.domain.Refresh;
 import com.example.ufo_fi.v2.user.domain.profilephoto.ProfilePhoto;
-import com.example.ufo_fi.v2.userplan.domain.UserPlan;
 import com.example.ufo_fi.v2.userplan.presentation.dto.request.UserInfoReq;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -71,9 +69,6 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_photo_id")
     private ProfilePhoto profilePhoto;
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private UserPlan userPlan;
 
     public static User of(OAuth2Response oAuth2Response, Role role, Integer zetAsset) {
         return User.builder()
