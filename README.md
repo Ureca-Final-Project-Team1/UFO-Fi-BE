@@ -130,27 +130,32 @@
 <br>
 
 #### 🌈 해결방안 KEYWORD
-- 멱등성
-- 결제 흐름
-- 예외상황 파악
-- 예외 상황 해결
+- **멱등성** -> Toss payments 에서 제공하는 pqymentKey로 멱등성 보장, 안전한 재시도 가능
+- **결제 흐름**
+- **예외상황 파악**
+- **예외 상황 해결**
 
-  
+<br>
 
-#### 🌈 상태 전이 흐름도
+#### 🌈 결제 흐름: 상태 전이 흐름도
 <img width="750" height="630" alt="image" src="https://github.com/user-attachments/assets/b67767fc-9e8f-4a1b-a8bd-ebfaef9f0b12" />
 
 <br>
 
-#### 🌈 상태 전이 흐름도
+#### 🌈 예외 상황 파악
+<img width="500" height="288" alt="image" src="https://github.com/user-attachments/assets/5e7d287f-7fbe-41ea-a9bb-0cefd8ebdba0" />
+<img width="600" height="313" alt="image" src="https://github.com/user-attachments/assets/652e89cc-eec3-4625-adc3-0f42286afb23" />
 
-- **1. 토스 API를 통한 PG 결제**
-- **2. 토스의 PaymentKey를 통한 멱등성 보장, 안전한 재시도 가능**
-- **3. FailState는 토스 응답이 Exception일 경우를 처리하는 상태**
-- **4. TimeoutState는 토스 응답이 오지 않을 시 처리하는 상태**
+
 <br>
+
 #### 🌈 Slack 모니터링을 통한 빠른 TimeoutState & FailState 상태 확인 가능**
-<img width="750" height="650" alt="image" src="https://github.com/user-attachments/assets/e23493e7-4afd-4ae2-b85c-74da110cb6ad" />
+<img width="650" height="284" alt="image" src="https://github.com/user-attachments/assets/03cf4250-7fda-4b87-9cc8-90a826d0842d" />
+
+<br>
+
+#### 🌈 예외 상황 해결
+<img width="700" height="280" alt="image" src="https://github.com/user-attachments/assets/53ee7d76-4462-4e69-bafb-f5f7a8b0a39a" />
 
 <br>
 
