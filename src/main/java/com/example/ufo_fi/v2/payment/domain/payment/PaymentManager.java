@@ -10,6 +10,8 @@ import com.example.ufo_fi.v2.user.domain.User;
 import com.example.ufo_fi.v2.user.exception.UserErrorCode;
 import com.example.ufo_fi.v2.user.persistence.UserRepository;
 import jakarta.persistence.EntityManager;
+import java.util.Collection;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,5 +68,14 @@ public class PaymentManager {
         if (!((payment.getPrice() / 10) == recoveryZet)) {
             throw new GlobalException(PaymentErrorCode.PAYMENT_AMOUNT_CONFLICT);
         }
+    }
+
+    public List<Payment> findAllByStatusFailAndTimeout() {
+        return paymentRepository.findAllByStatusIn(List.of(PaymentStatus.TIMEOUT, PaymentStatus.FAIL));
+    }
+
+    public Payment findById(Long paymentId) {
+        return paymentRepository.findById(paymentId)
+            .orElseThrow(() -> new GlobalException(PaymentErrorCode.PAYMENT_NOT_FOUND));
     }
 }
