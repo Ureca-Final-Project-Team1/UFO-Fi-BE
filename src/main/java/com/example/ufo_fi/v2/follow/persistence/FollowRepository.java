@@ -21,8 +21,9 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
                 SELECT f
                 FROM Follow f
                 JOIN FETCH f.followerUser u
+                LEFT JOIN FETCH u.profilePhoto pp
                 WHERE f.followingUser.id = :userId
-            """)
+           """)
     List<Follow> findAllFollowersWithUser(@Param("userId") Long userId);
 
 
