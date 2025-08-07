@@ -28,11 +28,6 @@ public class TradePostManager {
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
     }
 
-    public List<TradePost> findByUserIdsWithPlan(List<Long> postIds) {
-
-        return tradePostRepository.findByUserIdsWithPlan(postIds);
-    }
-
     public TradePost findById(Long postId) {
 
         return tradePostRepository.findById(postId)
