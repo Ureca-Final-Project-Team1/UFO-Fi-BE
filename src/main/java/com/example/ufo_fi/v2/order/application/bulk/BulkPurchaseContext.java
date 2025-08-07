@@ -19,7 +19,7 @@ public class BulkPurchaseContext {
         PurchaseResult purchaseResult = new PurchaseResult();
 
         postIds.forEach(postId -> {
-            TradePost tradePost = tradePostManager.findById(postId);
+            TradePost tradePost = tradePostManager.findByIdWithLock(postId);
             if (!tradePost.getTradePostStatus().equals(TradePostStatus.SELLING)) {
                 bulkPurchaseFailureHandler.handleFailure(tradePost, buyerId, purchaseResult);
             } else {
