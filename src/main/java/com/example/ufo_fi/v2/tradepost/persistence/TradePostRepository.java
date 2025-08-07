@@ -27,6 +27,17 @@ public interface TradePostRepository extends JpaRepository<TradePost, Long>, Tra
     @Query("""
         select tp
         from TradePost tp
+        join fetch tp.user u
+        left join fetch u.userPlan up 
+        left join fetch u.profilePhoto pp
+        where tp.id in :postIds
+        """)
+    List<TradePost> findByUserIdsWithPlan(@Param("postIds") List<Long> postIds);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("""
+        select tp
+        from TradePost tp
         where tp.id in :postIds
         """)
     List<TradePost> findAllByIdInWithLock(@Param("postIds") List<Long> postIds);

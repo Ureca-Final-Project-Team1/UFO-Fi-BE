@@ -28,9 +28,9 @@ public class TradePostManager {
             .orElseThrow(() -> new GlobalException(TradePostErrorCode.TRADE_POST_NOT_FOUND));
     }
 
-    public List<TradePost> findAllByIdsWithLock(List<Long> postIds) {
+    public List<TradePost> findByUserIdsWithPlan(List<Long> postIds) {
 
-        return tradePostRepository.findAllByIdInWithLock(postIds);
+        return tradePostRepository.findByUserIdsWithPlan(postIds);
     }
 
     public TradePost findById(Long postId) {
